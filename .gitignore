@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+ENV/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# 环境变量 & 密钥
+.env
+.env.local
+*.pem
+*.key
+
+# 日志
+logs/*.log
+data/scheduler.log
+
+# 运行时数据（每次启动会重新生成）
+data/auto_predictions.json
+data/my_numbers.json
+data/backup/
+
+# Claude Code 本地配置（用户私有，不应提交）
+.claude/
+
+# 编辑器 / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# PyInstaller
+build/
+dist/
+*.spec
+
+# 测试产物
+test_data/output/
+*.tmp
+*.bak

@@ -1,0 +1,29 @@
+# 双色球预测平台 - Python 依赖
+# 版本已锁定，确保环境一致性
+
+# Web 框架
+Flask==3.0.3
+Werkzeug==3.0.3
+
+# HTTP 请求库
+requests==2.32.3
+urllib3==2.2.2
+
+# HTML 解析
+beautifulsoup4==4.12.3
+lxml==5.2.2
+
+# 速率限制
+Flask-Limiter==3.8.0
+limits==3.13.0
+
+# 反爬虫对抗
+playwright==1.48.0
+playwright-stealth==1.0.6
+fake-useragent==1.5.1
+
+# 数据处理（已移除 numpy，使用内置函数替代）
+# numpy==1.26.4  # 不再需要
+
+# 可选：生产环境部署
+# gunicorn==22.0.0

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统诊断 - 简化版</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #E60012; }
+        h2 { color: #333; font-size: 1.2rem; margin-bottom: 10px; }
+        .ok { color: #2e7d32; }
+        .error { color: #c62828; }
+        pre { background: #1e1e1e; color: #0f0; padding: 15px; border-radius: 4px; font-family: monospace; font-size: 0.85rem; max-height: 300px; overflow-y: auto; }
+        button { padding: 10px 20px; background: #E60012; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 5px; font-size: 1rem; }
+        button:hover { background: #CC0010; }
+        .test-result { margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>🔧 系统诊断工具 - 简化版</h1>
+
+    <div class="card">
+        <h2>1. 基础环境检查</h2>
+        <div id="env-check">检查中...</div>
+    </div>
+
+    <div class="card">
+        <h2>2. JS 文件可访问性测试</h2>
+        <button onclick="testJSFiles()">测试 JS 文件</button>
+        <div id="js-result" class="test-result"></div>
+    </div>
+
+    <div class="card">
+        <h2>3. 模块导入测试</h2>
+        <button onclick="testImport()">测试模块导入</button>
+        <div id="import-result" class="test-result"></div>
+    </div>
+
+    <div class="card">
+        <h2>4. 控制台日志</h2>
+        <pre id="log">=== 系统诊断启动 ===</pre>
+    </div>
+
+    <div class="card">
+        <h2>5. 操作</h2>
+        <button onclick="clearCache()">清除缓存并刷新</button>
+        <button onclick="location.href='/'">返回主页</button>
+    </div>
+
+    <script>
+        const log = (msg) => {
+            const logEl = document.getElementById('log');
+            logEl.textContent += '\n' + msg;
+            logEl.scrollTop = logEl.scrollHeight;
+        };
+
+        // 环境检查
+        async function checkEnv() {
+            const result = document.getElementById('env-check');
+            let html = '';
+
+            try {
+                const resp = await fetch('/api/history?page=1');
+                const data = await resp.json();
+                html += `<div class="ok">✓ Flask API 正常 (${data.data?.length || 0} 条记录)</div>`;
+                log('Flask API 正常');
+            } catch (e) {
+                html += `<div class="error">✗ Flask API 失败：${e.message}</div>`;
+                log('Flask API 失败：' + e.message);
+            }
+
+            result.innerHTML = html;
+        }
+
+        // JS 文件测试
+        async function testJSFiles() {
+            const result = document.getElementById('js-result');
+            result.innerHTML = '测试中...';
+            log('开始 JS 文件测试...');
+
+            const files = [
+                { name: 'app.js', url: '/static/js/app.js' },
+                { name: 'predict.js', url: '/static/js/modules/predict.js' },
+                { name: 'history.js', url: '/static/js/modules/history.js' },
+                { name: 'dataManager.js', url: '/static/js/modules/dataManager.js' },
+                { name: 'api.js', url: '/static/js/modules/api.js' },
+            ];
+
+            let html = '<div>';
+            for (const file of files) {
+                try {
+                    const resp = await fetch(file.url);
+                    if (resp.ok) {
+                        const size = resp.headers.get('content-length') || 'unknown';
+                        const contentType = resp.headers.get('content-type') || 'unknown';
+                        html += `<div class="ok">✓ ${file.name}: ${resp.status} (${size} bytes, type: ${contentType})</div>`;
+                        log(`${file.name}: OK (${size} bytes)`);
+                    } else {
+                        html += `<div class="error">✗ ${file.name}: ${resp.status}</div>`;
+                        log(`${file.name}: FAIL (${resp.status})`);
+                    }
+                } catch (e) {
+                    html += `<div class="error">✗ ${file.name}: ${e.message}</div>`;
+                    log(`${file.name}: ERROR - ${e.message}`);
+                }
+            }
+            html += '</div>';
+            result.innerHTML = html;
+            log('JS 文件测试完成');
+        }
+
+        // 模块导入测试
+        async function testImport() {
+            const result = document.getElementById('import-result');
+            result.innerHTML = '测试中...';
+            log('开始模块导入测试...');
+
+            const modules = [
+                { name: 'api.js', path: '/static/js/modules/api.js' },
+                { name: 'utils.js', path: '/static/js/modules/utils.js' },
+            ];
+
+            let html = '<div>';
+            for (const mod of modules) {
+                try {
+                    const module = await import(mod.path + '?t=' + Date.now());
+                    const exports = Object.keys(module);
+                    html += `<div class="ok">✓ ${mod.name}: ${exports.length} exports (${exports.join(', ')})</div>`;
+                    log(`${mod.name}: OK - ${exports.join(', ')}`);
+                } catch (e) {
+                    html += `<div class="error">✗ ${mod.name}: ${e.message}</div>`;
+                    log(`${mod.name}: ERROR - ${e.message}`);
+                }
+            }
+            html += '</div>';
+            result.innerHTML = html;
+            log('模块导入测试完成');
+        }
+
+        function clearCache() {
+            if (confirm('确定要清除缓存并刷新页面吗？')) {
+                localStorage.clear();
+                sessionStorage.clear();
+                location.reload(true);
+            }
+        }
+
+        // 自动运行
+        checkEnv();
+        log('请点击按钮进行测试');
+    </script>
+</body>
+</html>

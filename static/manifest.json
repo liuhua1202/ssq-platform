@@ -1,0 +1,24 @@
+{
+    "name": "双色球预测平台",
+    "short_name": "双色球",
+    "description": "基于历史数据分析与智能算法的号码预测系统",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f0f9ff",
+    "theme_color": "#6366f1",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/static/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/static/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

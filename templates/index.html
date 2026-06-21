@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="description" content="双色球预测平台 - 基于历史数据分析与智能算法的号码预测系统">
+    <title>双色球预测平台 - Bunny Scholar 风格</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- PWA 支持 -->
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+    <!-- 暗色模式切换按钮 -->
+    <button id="theme-toggle" class="theme-toggle-btn" title="切换暗色/亮色模式">
+        🌙
+    </button>
+    
+    <div class="container">
+        <header>
+            <h1>双色球预测平台</h1>
+            <p class="subtitle">基于历史数据分析与智能算法的号码预测系统</p>
+        </header>
+
+        <!-- 导航标签 -->
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="predict">📊 号码预测</button>
+            <button class="tab-btn" data-tab="history">📜 历史数据</button>
+            <button class="tab-btn" data-tab="analysis">📈 数据分析</button>
+            <button class="tab-btn" data-tab="my-numbers">⭐ 我的号码</button>
+            <button class="tab-btn" data-tab="check">🔍 号码检查</button>
+            <button class="tab-btn" data-tab="guide">📚 数据管理</button>
+        </nav>
+
+        <!-- 号码预测 -->
+        <section id="predict" class="tab-content active">
+            <div class="card">
+                <h2>选择预测算法</h2>
+                <div class="algorithm-select">
+                    <select id="algorithm">
+                        <option value="comprehensive">综合推荐（推荐）</option>
+                        <option value="weighted_random">加权随机算法</option>
+                        <option value="normal_distribution">正态分布模型</option>
+                        <option value="genetic_algorithm">遗传算法</option>
+                        <option value="monte_carlo">蒙特卡洛模拟</option>
+                        <option value="smart_recommendation">智能推荐</option>
+                        <option value="zone_distribution">区间分布算法</option>
+                        <option value="consecutive_analysis">连号分析算法</option>
+                        <option value="same_tail_analysis">同尾号算法</option>
+                        <option value="prime_composite">质合数算法</option>
+                        <option value="big_small_analysis">大中小号算法</option>
+                        <option value="markov_chain">马尔可夫链算法</option>
+                        <option value="kmeans_clustering">K 均值聚类</option>
+                    </select>
+                    <input type="number" id="generations" value="5" min="1" max="20" placeholder="生成注数">
+                    <button data-action="generatePrediction" class="btn-primary">生成预测号码</button>
+                </div>
+            </div>
+
+            <div id="prediction-results"></div>
+        </section>
+
+        <!-- 我的号码 -->
+        <section id="my-numbers" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>我的收藏号码</h2>
+                    <button data-action="clearMyNumbers" class="btn-secondary" style="background: #ffebee; color: #c62828; border-color: #ffcdd2;">清空所有</button>
+                </div>
+            </div>
+            <div id="my-numbers-results">
+                <div class="loading">正在加载</div>
+            </div>
+        </section>
+
+        <!-- 数据分析 -->
+        <section id="analysis" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>数据统计分析</h2>
+                    <button data-action="loadAnalysis" class="btn-secondary">刷新分析</button>
+                </div>
+            </div>
+
+            <div id="analysis-results">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>🔥 热号</h3>
+                        <div id="hot-numbers" class="numbers-display"></div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>❄️ 冷号</h3>
+                        <div id="cold-numbers" class="numbers-display"></div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>📊 遗漏统计</h3>
+                        <div id="missing-stats" class="numbers-display"></div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🔵 蓝球分析</h3>
+                        <div id="blue-analysis" class="numbers-display"></div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>奇偶比分布</h3>
+                    <div id="odd-even-chart"></div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>和值分布</h3>
+                    <div id="sum-chart"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 历史数据 -->
+        <section id="history" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>历史开奖数据</h2>
+                    <button data-action="loadHistory" class="btn-secondary">刷新</button>
+                </div>
+            </div>
+
+            <div id="history-results">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>期号</th>
+                            <th>开奖日期</th>
+                            <th>红球</th>
+                            <th>蓝球</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 号码分析 -->
+        <section id="check" class="tab-content">
+            <div class="card">
+                <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+                    <!-- 左侧：号码分析输入 -->
+                    <div style="flex: 1; min-width: 300px;">
+                        <h2>号码分析</h2>
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 16px;">
+                            分析您的号码与历史开奖数据的匹配情况，了解号码的历史表现。
+                        </p>
+                        <div class="check-input">
+                            <div class="input-group">
+                                <label>红球 (6 个，1-33)</label>
+                                <input type="text" id="check-red" placeholder="例如：5 10 15 20 25 30" maxlength="50">
+                            </div>
+                            <div class="input-group">
+                                <label>蓝球 (1 个，1-16)</label>
+                                <input type="number" id="check-blue" min="1" max="16" placeholder="例如：8">
+                            </div>
+                            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                                <button data-action="checkNumbers" class="btn-primary">分析号码</button>
+                                <button data-action="autoCheckMyNumbers" class="btn-secondary" style="border-color: var(--primary-color); color: var(--primary-color);">🔍 自动检查收藏号码</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：中奖规则说明 -->
+                    <div style="flex: 1; min-width: 400px; border-left: 1px solid var(--border-light); padding-left: 24px;">
+                        <h3 style="margin-bottom: 12px; color: var(--text-primary);">🎯 双色球中奖规则</h3>
+                        <table class="prize-rules-table">
+                            <thead>
+                                <tr>
+                                    <th>奖级</th>
+                                    <th>中奖条件</th>
+                                    <th>奖金说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="prize-level level-1">一等奖</span></td>
+                                    <td>
+                                        <div class="prize-balls">
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball blue">●</span>
+                                        </div>
+                                    </td>
+                                    <td>浮动奖金，最高 1000 万元</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prize-level level-2">二等奖</span></td>
+                                    <td>
+                                        <div class="prize-balls">
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball gray">●</span>
+                                        </div>
+                                    </td>
+                                    <td>浮动奖金，通常数十万元</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prize-level level-3">三等奖</span></td>
+                                    <td>
+                                        <div class="prize-balls">
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball blue">●</span>
+                                        </div>
+                                    </td>
+                                    <td>固定奖金 3000 元</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prize-level level-4">四等奖</span></td>
+                                    <td>
+                                        <div class="prize-balls">
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                        </div>
+                                        <div class="prize-balls" style="margin-top: 4px;">
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball blue">●</span>
+                                        </div>
+                                    </td>
+                                    <td>固定奖金 200 元</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prize-level level-5">五等奖</span></td>
+                                    <td>
+                                        <div class="prize-balls">
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                        </div>
+                                        <div class="prize-balls" style="margin-top: 4px;">
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball blue">●</span>
+                                        </div>
+                                    </td>
+                                    <td>固定奖金 10 元</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prize-level level-6">六等奖</span></td>
+                                    <td>
+                                        <div class="prize-balls">
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball blue">●</span>
+                                        </div>
+                                        <div class="prize-balls" style="margin-top: 4px;">
+                                            <span class="ball red">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball blue">●</span>
+                                        </div>
+                                        <div class="prize-balls" style="margin-top: 4px;">
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball blue">●</span>
+                                        </div>
+                                    </td>
+                                    <td>固定奖金 5 元</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="prize-level level-fu">福运奖</span></td>
+                                    <td>
+                                        <div class="prize-balls">
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball red">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                            <span class="ball gray">●</span>
+                                        </div>
+                                    </td>
+                                    <td>固定奖金 5 元</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="check-results" class="results-grid"></div>
+        </section>
+
+        <!-- 数据管理 -->
+        <section id="guide" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>📚 数据管理指南</h2>
+                </div>
+                <div style="padding: 20px;">
+                    <div style="background: #e3f2fd; padding: 16px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #2196f3;">
+                        <h4 style="margin-bottom: 8px; color: #1976d2;">💡 重要提示</h4>
+                        <p style="color: #555; margin: 0;">
+                            本平台仅支持手动导入历史数据，请从官方网站或其他数据源获取数据后手动导入。
+                        </p>
+                    </div>
+
+                    <h3 style="margin-top: 24px;">📥 手动导入历史数据</h3>
+                    <p style="color: #666; margin: 12px 0;">支持 JSON、CSV、TXT 格式，也可直接粘贴网页表格数据</p>
+
+                    <div style="background: #f5f5f5; padding: 16px; border-radius: 8px; margin: 12px 0;">
+                        <h4 style="margin-bottom: 12px;">支持的数据格式</h4>
+
+                        <div style="margin-bottom: 16px;">
+                            <strong>JSON 格式（推荐）:</strong>
+                            <pre style="background: #fff; padding: 12px; border-radius: 4px; overflow-x: auto; font-size: 0.85rem; margin-top: 8px;">[
+  {
+    "issue": "2024001",
+    "red_balls": [5, 10, 15, 20, 25, 30],
+    "blue_ball": 8,
+    "date": "2024-01-02"
+  },
+  {
+    "issue": "2024002",
+    "red_balls": [3, 8, 17, 22, 28, 31],
+    "blue_ball": 12,
+    "date": "2024-01-04"
+  }
+]</pre>
+                        </div>
+
+                        <div style="margin-bottom: 16px;">
+                            <strong>CSV 格式:</strong>
+                            <pre style="background: #fff; padding: 12px; border-radius: 4px; overflow-x: auto; font-size: 0.85rem; margin-top: 8px;">issue,date,red_balls,blue_ball
+2024001,2024-01-02,"5,10,15,20,25,30",8
+2024002,2024-01-04,"3,8,17,22,28,31",12</pre>
+                        </div>
+
+                        <div style="margin-bottom: 16px;">
+                            <strong>TXT 格式:</strong>
+                            <pre style="background: #fff; padding: 12px; border-radius: 4px; overflow-x: auto; font-size: 0.85rem; margin-top: 8px;">2024001,2024-01-02,5,10,15,20,25,30,8
+2024002,2024-01-04,3,8,17,22,28,31,12</pre>
+                            <p style="color: #888; font-size: 0.85rem; margin-top: 8px;">格式：期号,开奖日期,红球 1,红球 2,红球 3,红球 4,红球 5,红球 6,蓝球</p>
+                        </div>
+                    </div>
+
+                    <div style="background: #e8f5e9; padding: 16px; border-radius: 8px; margin: 12px 0;border-left: 4px solid #2e7d32;">
+                        <h4 style="margin-bottom: 12px; color: #2e7d32;">📥 获取历史数据的渠道</h4>
+                        <ul style="color: #555;margin: 8px 0 0 20px; line-height: 2;">
+                            <li><strong>中国福彩网官网</strong> - https://www.cwl.gov.cn/ygkj/wqkjgg/ssq/</li>
+                            <li><strong>500 彩票网</strong> - https://kaijiang.500.com/ssq.shtml</li>
+                            <li><strong>其他公开数据源</strong> - 选择可信的彩票数据网站</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin: 20px 0; padding: 16px; background: #fff3e0; border-radius: 8px; border-left: 4px solid #ff9800;">
+                        <h4 style="margin-bottom: 12px; color: #e65100;">⚠️ 数据导入注意事项</h4>
+                        <ul style="color: #555;margin: 8px 0 0 20px; line-height: 1.8;">
+                            <li> 红球必须是 6 个 1-33 之间的不重复数字</li>
+                            <li> 蓝球必须是 1 个 1-16 之间的数字</li>
+                            <li> 期号格式建议为 YYYYXXX（如 2024001）</li>
+                            <li> 日期格式为 YYYY-MM-DD（如 2024-01-02）</li>
+                            <li> 系统会自动去重，相同期号保留最新导入的数据</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据管理面板 -->
+            <div id="data-management" class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h2>🔧 数据管理</h2>
+                </div>
+                <div style="padding: 20px;">
+                    <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <button data-action="createBackup" class="btn-secondary">创建备份</button>
+                        <button data-action="loadBackups" class="btn-secondary">刷新备份列表</button>
+                        <button data-action="clearAllData" class="btn-secondary" style="background: #ffebee; color: #c62828; border-color: #ffcdd2;">清空数据</button>
+                    </div>
+                    <h3 style="margin-bottom: 12px;">备份文件列表</h3>
+                    <div id="backups-list">
+                        <p style="color: #999; text-align: center; padding: 40px;">暂无备份文件</p>
+                    </div>
+
+                    <h3 style="margin: 20px 0 12px;">🌐 在线获取开奖信息</h3>
+                    <div style="padding: 16px; background: #e8f5e9; border-radius: 8px; margin-bottom: 16px;">
+                        <p style="color: #2e7d32; font-size: 0.9rem; margin-bottom: 12px;">
+                            从福彩网官方获取最新一期或全部历史开奖信息
+                        </p>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+                            <button data-action="fetchLatestLottery" class="btn-primary" style="background: #10b981; border-color: #10b981;">🔔 获取最新一期</button>
+                            <button data-action="fetchAllHistory" class="btn-primary" style="background: #2196f3; border-color: #2196f3;">📥 获取所有历史数据</button>
+                        </div>
+                        <p style="color: #666; font-size: 0.85rem; margin-top: 12px;">
+                            💡 数据来源：中国福彩网 (https://www.cwl.gov.cn)
+                        </p>
+                    </div>
+
+                    <h3 style="margin: 20px 0 12px;">📤 导出数据</h3>
+                    <div style="padding: 16px; background: #e8f5e9; border-radius: 8px; margin-bottom: 16px;">
+                        <p style="color: #2e7d32; font-size: 0.9rem; margin-bottom: 12px;">
+                            支持导出收藏号码和历史数据，格式包括 JSON、CSV、TXT
+                        </p>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+                            <div class="input-group" style="flex: 0 0 auto; margin: 0;">
+                                <select id="export-format" style="padding: 10px 16px; border-radius: 8px; border: 1px solid #c8e6c9; background: #fff; font-size: 0.9rem; cursor: pointer; min-width: 120px;">
+                                    <option value="json">JSON 格式</option>
+                                    <option value="csv">CSV 格式</option>
+                                    <option value="txt">TXT 格式</option>
+                                </select>
+                            </div>
+                            <button data-action="exportMyNumbers" class="btn-primary" style="background: #10b981; border-color: #10b981;">导出收藏号码</button>
+                            <button data-action="exportHistory" class="btn-primary" style="background: #10b981; border-color: #10b981;">导出历史数据</button>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 20px 0 12px;">导入历史数据</h3>
+                    <div style="padding: 16px; background: #f5f5f5; border-radius: 8px; margin-bottom: 16px;">
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 12px;">
+                            支持格式：JSON、CSV、TXT（每行格式：期号，红球 1,红球 2,红球 3,红球 4,红球 5,红球 6,蓝球）
+                        </p>
+                        <input type="file" id="import-file" accept=".json,.csv,.txt" style="margin-bottom: 12px;">
+                        <button data-action="importData" class="btn-primary">导入数据</button>
+                    </div>
+
+                    <h3 style="margin: 20px 0 12px;">📋 粘贴导入（推荐）</h3>
+                    <div style="padding: 16px; background: #e3f2fd; border-radius: 8px;">
+                        <p style="color: #1976d2; font-size: 0.9rem; margin-bottom: 12px;">
+                            从网页复制表格数据，直接粘贴到下方文本框中即可导入。
+                        </p>
+                        <textarea id="import-text" rows="8" style="width: 100%; padding: 12px; border: 1px solid #90caf9; border-radius: 8px; font-family: monospace; font-size: 0.85rem; resize: vertical;" placeholder="粘贴示例：
+期号	开奖日期	开奖号码	...
+2026033	2026-03-26(四)	36132128296	..."></textarea>
+                        <div style="margin-top: 12px; display: flex; gap: 12px;">
+                            <button data-action="importTextData" class="btn-primary">立即导入</button>
+                            <button data-action="clearImportText" class="btn-secondary">清空</button>
+                        </div>
+                        <p style="color: #666; font-size: 0.85rem; margin-top: 12px;">
+                            💡 提示：支持从福彩网、500 彩票网等网站直接复制表格数据
+                        </p>
+                    </div>
+
+                    <div style="margin-top: 20px; padding: 16px; background: #fff3e0; border-radius: 8px; border-left: 3px solid #ff9800;">
+                        <h4 style="margin-bottom: 8px; color: #e65100; font-size: 0.95rem;">⚠️ 数据操作提示</h4>
+                        <ul style="color: #666; font-size: 0.85rem; margin: 8px 0 0 20px; line-height: 1.8;">
+                            <li>清空数据前请先创建备份</li>
+                            <li>清空后可从备份文件恢复数据</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>🌟团结各界热心社会福利事业的人士，发扬社会主义人道主义精神，筹集社会福利资金，兴办残疾人、老年人、孤儿等福利事业和帮助有困难的人。</p>
+        </footer>
+    </div>
+
+    <script type="module" src="/static/js/app.js?v=20260429"></script>
+    
+    <!-- 暗色模式切换脚本 -->
+    <script>
+        // 主题切换
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggle.textContent = '☀️';
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+        
+        // PWA 注册
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then(reg => console.log('Service Worker 注册成功'))
+                    .catch(err => console.log('Service Worker 注册失败:', err));
+            });
+        }
+    </script>
+</body>
+</html>
