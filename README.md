@@ -2,6 +2,20 @@
 
 基于历史数据分析与智能算法的号码预测系统
 
+> ## ⚠️ 重要声明 / Disclaimer
+>
+> **本项目仅供娱乐和学习用途。**
+>
+> - 双色球彩票开奖结果是**完全独立、等概率**的随机事件，不存在任何可被预测、计算或破解的规律。
+> - 本项目提供的所有"预测""推荐""算法分析"结果均为基于历史数据的**统计学演示**，**不具备任何真实预测能力**，亦不构成任何投注建议。
+> - 请勿将本项目用于实际彩票投注，**理性购彩，量力而行，远离赌博**。
+> - 使用本项目所产生的一切后果由使用者自行承担，与作者无关。
+>
+> ---
+>
+> **This project is for entertainment and learning purposes only.**
+> Lottery draws are independent random events. All "predictions" and "recommendations" produced by this project are statistical demonstrations based on historical data, have **no real predictive power**, and do **not** constitute any betting advice. Please gamble responsibly.
+
 > **v2.1 完全优化版**：14 种预测算法、模块化架构、性能提升 90%、完整日志监控
 
 ---
