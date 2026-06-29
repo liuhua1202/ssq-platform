@@ -1,9 +1,11 @@
 """
 K 均值聚类算法
 将历史数据聚类，找出相似模式
+
+实现说明: 用内置统计函数替代 numpy, 无 numpy 依赖.
 """
 import random
-import numpy as np
+import statistics
 from typing import List, Dict
 from collections import Counter
 from src.algorithms.base import BaseAlgorithm
@@ -60,11 +62,13 @@ class KMeansClusteringAlgorithm(BaseAlgorithm):
         for record in data[:100]:
             red_balls = record.get('red_balls', [])
             if len(red_balls) == 6:
+                # 标准差: statistics.stdev 需要至少 2 个点, 0/1 个点时退化为 0
+                std_val = statistics.stdev(red_balls) if len(red_balls) > 1 else 0
                 features.append({
                     'red_balls': red_balls,
                     'sum': sum(red_balls),
                     'mean': sum(red_balls) / 6,
-                    'std': np.std(red_balls) if len(red_balls) > 0 else 0
+                    'std': std_val
                 })
 
         if not features:

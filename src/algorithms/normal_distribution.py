@@ -1,8 +1,10 @@
 """
 正态分布模型
 基于和值的正态分布生成组合
+
+实现说明: 使用 random.gauss() 替代 numpy.random.normal(),
+无需 numpy 依赖.
 """
-import numpy as np
 import random
 from typing import List, Dict
 from src.algorithms.base import BaseAlgorithm
@@ -23,7 +25,8 @@ class NormalDistributionAlgorithm(BaseAlgorithm):
 
         results = []
         for _ in range(generations):
-            target_sum = int(np.random.normal(mean_sum, std_sum))
+            # random.gauss(mu, sigma) 等价于 numpy.random.normal(mu, sigma)
+            target_sum = int(random.gauss(mean_sum, std_sum))
             target_sum = max(21, min(180, target_sum))
 
             red_balls = self._generate_balls_with_sum(target_sum)
@@ -71,5 +74,6 @@ class NormalDistributionAlgorithm(BaseAlgorithm):
 
     def _generate_blue_ball_normal(self) -> int:
         """基于正态分布生成蓝球"""
-        blue = int(np.random.normal(8.5, 4.5))
+        # random.gauss(mu=8.5, sigma=4.5) 等价于 numpy.random.normal(8.5, 4.5)
+        blue = int(random.gauss(8.5, 4.5))
         return max(1, min(16, blue))
