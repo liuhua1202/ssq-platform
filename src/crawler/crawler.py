@@ -23,6 +23,7 @@ from bs4 import BeautifulSoup
 from .backup import BackupManager
 from .parser import IssueParser
 from .fetcher import CWLFetcher
+from .sanity import is_valid_lottery_data
 
 logger = logging.getLogger(__name__)
 
@@ -142,7 +143,19 @@ class Crawler:
     # ============================================================
 
     def fetch_latest_lottery(self) -> Dict:
-        """从多个来源获取最新一期开奖信息 (支持备用数据源)."""
+        """从多个来源获取最新一期开奖信息 (支持备用数据源).
+
+        数据源优先级 (按可靠性):
+          1. 500彩票网开奖页面 (HTML 结构稳定, 但常被反爬截断)
+          2. 福彩官网 (cwl.gov.cn) - 注意此站有反爬墙 (返回 403 时需 Playwright)
+
+        注意: 中彩网 (zhcw.com) 已移除 - 它是 Vue SPA, requests 拿到的只是骨架 HTML
+        + Vue 模板占位符, BeautifulSoup 解析会误把 loader/demo 元素当作开奖数据.
+
+        返回:
+          成功: {'success': True, 'issue', 'date', 'red_balls', 'blue_ball', 'source': ...}
+          失败: {'success': False, 'message': ...}
+        """
         sources = [
             {
                 'name': '500彩票网开奖页面',
@@ -151,14 +164,8 @@ class Crawler:
                 'headers': self._default_headers()
             },
             {
-                'name': '中彩网',
-                'url': 'http://www.zhcw.com/ssq/',
-                'encoding': 'utf-8',
-                'headers': self._default_headers()
-            },
-            {
                 'name': '福彩官网',
-                'url': 'https://www.cwl.gov.cn/ygkj/kjgg/ssq/',
+                'url': 'https://www.cwl.gov.cn/ygkj/wqkjgg/ssq/',
                 'encoding': 'utf-8',
                 'headers': self._default_headers()
             },
@@ -174,7 +181,26 @@ class Crawler:
                     source['url'], source['encoding'], source['headers']
                 )
                 if result['success']:
+                    # sanity check: 拒绝 SPA loader / demo / maxlength attribute 误判
+                    issue = result.get('issue')
+                    red_balls = result.get('red_balls', [])
+                    blue_ball = result.get('blue_ball')
+                    raw_html = result.get('_raw_html', '')
+
+                    if not is_valid_lottery_data(issue, red_balls, blue_ball, raw_html):
+                        message = (
+                            f"sanity check 拒绝: 期号={issue}, 红球={red_balls}, "
+                            f"蓝球={blue_ball} (疑似 SPA loader / demo 数据)"
+                        )
+                        logger.warning(f"{source['name']} {message}")
+                        failed_sources.append(source['name'])
+                        last_error = message
+                        continue
+
                     logger.info(f"成功从 {source['name']} 获取数据")
+                    # 移除内部字段
+                    result.pop('_raw_html', None)
+                    result['source'] = source['name']
                     return result
 
                 failed_sources.append(source['name'])
@@ -188,7 +214,8 @@ class Crawler:
 
         error_detail = (
             f"所有数据源均获取失败. 失败源: {', '.join(failed_sources)}. "
-            f"最后错误: {last_error}"
+            f"最后错误: {last_error}. "
+            f"提示: 源站可能有反爬墙, 可尝试安装 playwright/curl_cffi 后再试."
         )
         logger.error(error_detail)
         return {'success': False, 'message': error_detail}
@@ -205,10 +232,37 @@ class Crawler:
             'Accept-Language': 'zh-CN,zh;q=0.9',
         }
 
-    def _fetch_latest_from_source(self, url: str, encoding: str, headers: dict) -> Dict:
-        """从指定 URL 获取最新开奖信息 (requests 单次调用)."""
+    @staticmethod
+    def _http_get_with_tls_spoof(url: str, headers: dict, timeout: int = 15):
+        """HTTP GET, curl_cffi 优先 (TLS 指纹伪造), 回退 requests.
+
+        抛出的异常:
+          - requests.RequestException (或其子类): 网络错误, 4xx/5xx
+          - 其他: 不可恢复错误
+        """
+        # 优先 curl_cffi
         try:
-            response = requests.get(url, headers=headers, timeout=15)
+            from curl_cffi import requests as curl_requests
+            logger.debug(f"使用 curl_cffi 抓取: {url}")
+            return curl_requests.get(
+                url, headers=headers, impersonate="chrome120", timeout=timeout
+            )
+        except ImportError:
+            logger.debug("curl_cffi 未安装, 回退到标准 requests")
+        except Exception as e:
+            logger.warning(f"curl_cffi 失败, 回退 requests: {e}")
+
+        # 回退: 标准 requests
+        return requests.get(url, headers=headers, timeout=timeout)
+
+    def _fetch_latest_from_source(self, url: str, encoding: str, headers: dict) -> Dict:
+        """从指定 URL 获取最新开奖信息 (curl_cffi 优先, 回退 requests).
+
+        curl_cffi 通过模拟 Chrome 120 的 TLS 指纹来绕过反爬墙,
+        对国内彩票站反爬更有效 (500网, cwl.gov.cn 等).
+        """
+        try:
+            response = self._http_get_with_tls_spoof(url, headers, timeout=15)
             response.raise_for_status()
 
             # 处理编码问题
@@ -294,12 +348,14 @@ class Crawler:
             valid_issue = bool(issue) and re.match(r'^\d{5,7}$', issue)
 
             if len(red_balls) == 6 and blue_ball and valid_issue:
+                # 把原始 html 传给 sanity check (用来检测 SPA loader / demo)
                 return {
                     'success': True,
                     'issue': issue,
                     'date': date,
                     'red_balls': sorted(red_balls),
-                    'blue_ball': blue_ball
+                    'blue_ball': blue_ball,
+                    '_raw_html': html  # 临时, sanity check 后会移除
                 }
 
             return {
