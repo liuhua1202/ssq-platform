@@ -1,0 +1,151 @@
+# ============================================================
+# 双色球预测平台 - 项目元数据 + 工具配置
+# ============================================================
+# 这是 PEP 621 标准的项目配置文件
+# 同时配置 black (代码格式化), pytest (测试运行), mypy (类型检查)
+# ============================================================
+
+[project]
+name = "ssq-platform"
+version = "2.2.0"
+description = "双色球预测平台 - 基于历史数据分析与智能算法的号码预测系统"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "ssq-platform contributors" },
+]
+requires-python = ">=3.10"
+keywords = ["lottery", "prediction", "data-analysis", "flask"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Games/Entertainment",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+
+# 核心依赖 (在 requirements.txt 中固定版本)
+dependencies = [
+    "Flask>=3.0.3",
+    "Flask-Limiter>=3.8.0",
+    "requests>=2.32.3",
+    "beautifulsoup4>=4.12.3",
+    "lxml>=5.2.2",
+    "playwright>=1.48.0",
+    "playwright-stealth>=1.0.6",
+    "fake-useragent>=1.5.1",
+]
+
+[project.optional-dependencies]
+# 生产部署
+production = ["gunicorn>=22.0.0"]
+# 开发工具
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "pip-audit>=2.0",
+    "flake8>=6.0",
+    "black>=23.0",
+    "mypy>=1.0",
+]
+# 反爬虫增强
+anti_bot = ["curl_cffi>=0.6"]
+
+[project.urls]
+"Homepage" = "https://github.com/your-repo/ssq-platform"
+"Bug Tracker" = "https://github.com/your-repo/ssq-platform/issues"
+
+# ============================================================
+# Black 配置 (代码格式化)
+# ============================================================
+
+[tool.black]
+line-length = 120
+target-version = ["py310", "py311", "py312"]
+include = '\.pyi?$'
+exclude = '''
+(
+    /(
+        \.git
+    | build
+    | dist
+    | venv
+    | \.venv
+    )/
+)
+'''
+
+# ============================================================
+# Pytest 配置 (测试运行器)
+# ============================================================
+
+[tool.pytest.ini_options]
+# 最小 unittest 风格 (兼容现有 unittest 测试)
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+# 测试发现
+addopts = [
+    "-v",
+    "--tb=short",
+    "--strict-markers",
+    # 不收集: __pycache__ / 旧的 test_*.bat
+    "--ignore=tests/run_tests.bat",
+    "--ignore=tests/__pycache__",
+]
+# 标记
+markers = [
+    "integration: 集成测试, 启动 Flask app",
+    "network: 网络层测试 (mock)",
+    "slow: 慢测试 (>5s)",
+]
+# 警告过滤
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+# ============================================================
+# Mypy 配置 (静态类型检查)
+# ============================================================
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = false
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = false
+ignore_missing_imports = true
+# 排除目录
+exclude = [
+    "tests/",
+    "docs/",
+    "data/",
+    "logs/",
+]
+
+# ============================================================
+# Coverage 配置 (测试覆盖率, 可选)
+# ============================================================
+
+[tool.coverage.run]
+source = ["src", "app.py", "config.py"]
+omit = [
+    "tests/*",
+    "scripts/*",
+    "docs/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+show_missing = true
+precision = 1

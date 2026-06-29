@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>系统诊断 - 简化版</title>
+    {% if api_token %}
+    <script>
+        window.__API_TOKEN__ = {{ api_token|tojson }};
+        window.__API_TOKEN_REQUIRED__ = true;
+    </script>
+    {% else %}
+    <script>
+        window.__API_TOKEN__ = null;
+        window.__API_TOKEN_REQUIRED__ = false;
+    </script>
+    {% endif %}
     <style>
         body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
         .card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }

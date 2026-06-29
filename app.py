@@ -112,6 +112,16 @@ crawler = Crawler()
 app.logger.info("Crawler 模块已初始化")
 
 
+# 模板上下文 - 注入 API_TOKEN (供前端 JS 读取, 自动加到 X-API-Token 头)
+# 安全说明: 这是单用户/学习项目方案; 多人系统不应把 token 直接暴露给前端 JS,
+# 应改为 cookie/会话鉴权.
+@app.context_processor
+def inject_api_token():
+    return {
+        'api_token': app.config.get('API_TOKEN')
+    }
+
+
 @app.before_request
 def record_start_time():
     """记录请求开始时间（用于性能监控）"""

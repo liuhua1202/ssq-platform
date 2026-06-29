@@ -1,0 +1,60 @@
+# .dockerignore - 排除不需要进入 Docker 镜像的文件
+# 参考: https://docs.docker.com/engine/reference/builder/#dockerignore-file
+
+# Git / 版本控制
+.git/
+.gitignore
+.gitattributes
+
+# Python 字节码 / 缓存
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.mypy_cache/
+
+# 虚拟环境
+venv/
+env/
+.venv/
+ENV/
+
+# 测试文件 (在 CI 中单独跑, 不需要进镜像)
+tests/
+test_data/
+
+# 文档 / 截图 (运行时不需要)
+docs/
+
+# 编辑器 / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# 临时 / 备份 / 日志
+*.log
+*.tmp
+*.bak
+*.spec
+build/
+dist/
+
+# 环境配置 (敏感)
+.env
+.env.local
+
+# 运行时数据 (在镜像内生成)
+data/
+logs/
+
+# Docker 自身
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# CI 配置
+.github/

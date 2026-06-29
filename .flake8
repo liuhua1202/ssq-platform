@@ -1,0 +1,32 @@
+[flake8]
+# 配置文件最大行宽: 120 字符 (避免过长的行)
+max-line-length = 120
+
+# 排除目录
+exclude =
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    build,
+    dist,
+    .pytest_cache,
+    .mypy_cache,
+    logs,
+    data,
+    docs,
+
+# 每个文件允许的最大复杂度 (McCabe)
+max-complexity = 15
+
+# 忽略特定规则 (项目特定):
+#   E203 / W503: 不允许在 : 前/后空格 (与 black 冲突)
+#   E501: 行过长 (已在 max-line-length 中处理)
+#   E402: 模块级 import 不在文件顶部 (测试中常见)
+#   E731: 不允许 lambda 赋值 (项目有自定义使用)
+ignore =
+    E203,
+    W503,
+    E501,
+    E402,
+    E731

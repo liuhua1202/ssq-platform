@@ -1,22 +1,51 @@
 /**
  * API 请求封装模块
  * 优化版本：添加重试机制、超时控制、错误处理
+ * v2.1: 自动注入 X-API-Token 鉴权头
  */
 
 const API_BASE = '';
 const DEFAULT_TIMEOUT = 30000;  // 30 秒超时（批量获取需要更长时间）
 const DEFAULT_RETRY_COUNT = 2;  // 重试次数（减少到 2 次避免等待过久）
 
+// ----------------------------------------------------------------------
+// 鉴权 (X-API-Token)
+// ----------------------------------------------------------------------
+// 由 templates/index.html 通过 Jinja 注入:
+//   window.__API_TOKEN__ = "<token>"   生产模式
+//   window.__API_TOKEN__ = null         开发模式 (无需鉴权)
+// 仅在需要时获取, 调用时机越早越好 (本文件应在 <head> 早期被加载).
+function getApiToken() {
+    if (typeof window === 'undefined') return null;
+    return window.__API_TOKEN__ || null;
+}
+
 /**
- * 带超时的 fetch
+ * 给 fetch options 自动注入 X-API-Token 头 (如果 token 已设置).
+ * 注意: 始终注入同源头, 后端在 dev 模式下 (API_TOKEN=None) 会忽略.
+ */
+function withAuthHeaders(options = {}) {
+    const token = getApiToken();
+    if (!token) return options;
+    return {
+        ...options,
+        headers: {
+            ...(options.headers || {}),
+            'X-API-Token': token
+        }
+    };
+}
+
+/**
+ * 带超时的 fetch (内部用, 自动注入 X-API-Token)
  */
 async function fetchWithTimeout(url, options = {}, timeout = DEFAULT_TIMEOUT) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
-    
+
     try {
         const response = await fetch(url, {
-            ...options,
+            ...withAuthHeaders(options),
             signal: controller.signal
         });
         return response;

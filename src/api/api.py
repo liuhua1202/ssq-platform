@@ -128,91 +128,64 @@ def api_error_handler(operation_name: str):
 @api_bp.route('/history')
 def get_history():
     """获取历史数据（带缓存）"""
-    try:
-        data = _get_cached_history()
-        page = request.args.get('page', 1, type=int)
-        page_size = request.args.get('page_size', 50, type=int)
+    data = _get_cached_history()
+    page = request.args.get('page', 1, type=int)
+    page_size = request.args.get('page_size', 50, type=int)
 
-        # 限制 page_size 范围（提高上限以支持前端本地分页）
-        page_size = min(max(page_size, 1), 2000)
+    # 限制 page_size 范围（提高上限以支持前端本地分页）
+    page_size = min(max(page_size, 1), 2000)
 
-        start = (page - 1) * page_size
-        end = start + page_size
+    start = (page - 1) * page_size
+    end = start + page_size
 
-        logger.info(f"获取历史数据：page={page}, page_size={page_size}, total={len(data)}")
+    logger.info(f"获取历史数据：page={page}, page_size={page_size}, total={len(data)}")
 
-        return jsonify({
-            'success': True,
-            'total': len(data),
-            'page': page,
-            'page_size': page_size,
-            'data': data[start:end]
-        })
-    except Exception as e:
-        logger.error(f"获取历史数据失败：{e}")
-        return jsonify({
-            'success': False,
-            'message': f'获取历史数据失败：{str(e)}'
-        }), 500
-
-
+    return jsonify({
+        'success': True,
+        'total': len(data),
+        'page': page,
+        'page_size': page_size,
+        'data': data[start:end]
+    })
 @api_error_handler('获取原始历史数据')
 @api_bp.route('/history/raw')
 def get_history_raw():
     """获取原始历史数据（用于导出）"""
-    try:
-        data = _get_cached_history()
-        return jsonify({
-            'success': True,
-            'data': data,
-            'count': len(data)
-        })
-    except Exception as e:
-        logger.error(f"获取原始历史数据失败：{e}")
-        return jsonify({
-            'success': False,
-            'message': f'获取数据失败：{str(e)}'
-        }), 500
-
-
+    data = _get_cached_history()
+    return jsonify({
+        'success': True,
+        'data': data,
+        'count': len(data)
+    })
 @api_error_handler('分析数据')
 @api_bp.route('/analysis')
 def get_analysis():
     """获取分析报告（带缓存）"""
-    try:
-        data = _get_cached_history()
-        if not data:
-            return jsonify({
-                'success': False,
-                'message': '暂无历史数据，请先更新数据'
-            })
-
-        # 使用缓存的分析结果
-        cache_key = f"comprehensive_analysis:{len(data)}"
-        cached = analysis_cache.get(cache_key)
-        if cached:
-            logger.info("分析结果缓存命中")
-            cached['cached'] = True
-            return jsonify(cached)
-
-        logger.info("开始分析数据...")
-        analyzer = Analyzer(data)
-        analysis = analyzer.get_comprehensive_analysis()
-        analysis['cached'] = False
-        
-        # 缓存分析结果
-        analysis_cache.set(cache_key, analysis, ttl=300)
-        logger.info(f"分析完成，已缓存，共 {len(data)} 条记录")
-
-        return jsonify(analysis)
-    except Exception as e:
-        logger.error(f"分析数据失败：{e}")
+    data = _get_cached_history()
+    if not data:
         return jsonify({
             'success': False,
-            'message': f'分析失败：{str(e)}'
-        }), 500
+            'message': '暂无历史数据，请先更新数据'
+        })
 
+    # 使用缓存的分析结果
+    cache_key = f"comprehensive_analysis:{len(data)}"
+    cached = analysis_cache.get(cache_key)
+    if cached:
+        logger.info("分析结果缓存命中")
+        cached['cached'] = True
+        return jsonify(cached)
 
+    logger.info("开始分析数据...")
+    analyzer = Analyzer(data)
+    analysis = analyzer.get_comprehensive_analysis()
+    analysis['cached'] = False
+        
+    # 缓存分析结果
+    analysis_cache.set(cache_key, analysis, ttl=300)
+    logger.info(f"分析完成，已缓存，共 {len(data)} 条记录")
+
+    return jsonify(analysis)
 @api_error_handler('生成预测')
 @api_bp.route('/predict', methods=['POST'])
 @require_api_token
@@ -270,41 +243,32 @@ def predict():
 @api_bp.route('/statistics')
 def get_statistics():
     """获取统计信息（带缓存）"""
-    try:
-        data = _get_cached_history()
-        if not data:
-            return jsonify({
-                'success': False,
-                'message': '暂无历史数据'
-            })
-
-        # 使用缓存
-        cache_key = f"statistics:{len(data)}"
-        cached = analysis_cache.get(cache_key)
-        if cached:
-            return jsonify(cached)
-
-        analyzer = Analyzer(data)
-        stats = {
-            'hot_numbers': analyzer.get_hot_numbers(),
-            'cold_numbers': analyzer.get_cold_numbers(),
-            'missing_stats': analyzer.get_missing_stats(),
-            'odd_even': analyzer.get_odd_even_ratio(),
-            'sum_analysis': analyzer.get_sum_analysis(),
-            'blue_ball': analyzer.get_blue_ball_analysis(),
-            'consecutive': analyzer.get_consecutive_numbers_analysis()
-        }
-
-        analysis_cache.set(cache_key, stats, ttl=300)
-        return jsonify(stats)
-    except Exception as e:
-        logger.error(f"获取统计信息失败：{e}")
+    data = _get_cached_history()
+    if not data:
         return jsonify({
             'success': False,
-            'message': f'获取统计信息失败：{str(e)}'
-        }), 500
+            'message': '暂无历史数据'
+        })
 
+    # 使用缓存
+    cache_key = f"statistics:{len(data)}"
+    cached = analysis_cache.get(cache_key)
+    if cached:
+        return jsonify(cached)
 
+    analyzer = Analyzer(data)
+    stats = {
+        'hot_numbers': analyzer.get_hot_numbers(),
+        'cold_numbers': analyzer.get_cold_numbers(),
+        'missing_stats': analyzer.get_missing_stats(),
+        'odd_even': analyzer.get_odd_even_ratio(),
+        'sum_analysis': analyzer.get_sum_analysis(),
+        'blue_ball': analyzer.get_blue_ball_analysis(),
+        'consecutive': analyzer.get_consecutive_numbers_analysis()
+    }
+
+    analysis_cache.set(cache_key, stats, ttl=300)
+    return jsonify(stats)
 @api_error_handler('检查号码')
 @api_bp.route('/check', methods=['POST'])
 @require_api_token
@@ -312,159 +276,123 @@ def get_statistics():
 @validate_required_fields(['red_balls', 'blue_ball'])
 def check_numbers():
     """检查用户输入号码与历史数据的匹配情况"""
-    try:
-        req_data = request.json
-        red_balls = req_data.get('red_balls', [])
-        blue_ball = req_data.get('blue_ball')
+    req_data = request.json
+    red_balls = req_data.get('red_balls', [])
+    blue_ball = req_data.get('blue_ball')
 
-        # 验证红球
-        if not isinstance(red_balls, list) or len(red_balls) != 6:
-            return jsonify({'success': False, 'message': '红球必须是 6 个'}), 400
+    # 验证红球
+    if not isinstance(red_balls, list) or len(red_balls) != 6:
+        return jsonify({'success': False, 'message': '红球必须是 6 个'}), 400
 
-        if not all(isinstance(r, int) and 1 <= r <= 33 for r in red_balls):
-            return jsonify({'success': False, 'message': '红球必须在 1-33 范围内'}), 400
+    if not all(isinstance(r, int) and 1 <= r <= 33 for r in red_balls):
+        return jsonify({'success': False, 'message': '红球必须在 1-33 范围内'}), 400
 
-        # 验证蓝球
-        if not isinstance(blue_ball, int) or not 1 <= blue_ball <= 16:
-            return jsonify({'success': False, 'message': '蓝球必须在 1-16 范围内'}), 400
+    # 验证蓝球
+    if not isinstance(blue_ball, int) or not 1 <= blue_ball <= 16:
+        return jsonify({'success': False, 'message': '蓝球必须在 1-16 范围内'}), 400
 
-        data = _get_cached_history()
-        red_balls_sorted = sorted(red_balls)
-        matches = []
+    data = _get_cached_history()
+    red_balls_sorted = sorted(red_balls)
+    matches = []
 
-        for record in data:
-            hist_reds = set(record.get('red_balls', []))
-            hist_blue = record.get('blue_ball')
+    for record in data:
+        hist_reds = set(record.get('red_balls', []))
+        hist_blue = record.get('blue_ball')
 
-            red_match = len(set(red_balls_sorted) & hist_reds)
-            blue_match = (blue_ball == hist_blue)
+        red_match = len(set(red_balls_sorted) & hist_reds)
+        blue_match = (blue_ball == hist_blue)
 
-            if red_match >= 3 or blue_match:
-                matches.append({
-                    'issue': record.get('issue'),
-                    'date': record.get('date'),
-                    'red_match': red_match,
-                    'blue_match': blue_match,
-                    'historical_numbers': {
-                        'red_balls': list(hist_reds),
-                        'blue_ball': hist_blue
-                    }
-                })
+        if red_match >= 3 or blue_match:
+            matches.append({
+                'issue': record.get('issue'),
+                'date': record.get('date'),
+                'red_match': red_match,
+                'blue_match': blue_match,
+                'historical_numbers': {
+                    'red_balls': list(hist_reds),
+                    'blue_ball': hist_blue
+                }
+            })
 
-        matches.sort(key=lambda x: (x['red_match'], x['blue_match']), reverse=True)
+    matches.sort(key=lambda x: (x['red_match'], x['blue_match']), reverse=True)
 
-        logger.info(f"号码检查完成：{red_balls_sorted}+{blue_ball}, 匹配 {len(matches)} 条")
+    logger.info(f"号码检查完成：{red_balls_sorted}+{blue_ball}, 匹配 {len(matches)} 条")
         
-        return jsonify({
-            'success': True,
-            'your_numbers': {
-                'red_balls': red_balls_sorted,
-                'blue_ball': blue_ball
-            },
-            'best_matches': matches[:10],
-            'total_checked': len(data)
-        })
-    except Exception as e:
-        logger.error(f"号码检查失败：{e}")
-        return jsonify({
-            'success': False,
-            'message': f'检查失败：{str(e)}'
-        }), 500
-
-
+    return jsonify({
+        'success': True,
+        'your_numbers': {
+            'red_balls': red_balls_sorted,
+            'blue_ball': blue_ball
+        },
+        'best_matches': matches[:10],
+        'total_checked': len(data)
+    })
 @api_error_handler('创建备份')
 @api_bp.route('/backup', methods=['POST'])
 @require_api_token
 def create_backup():
     """手动创建数据备份"""
-    try:
-        logger.info("手动创建备份")
-        crawler.create_backup()
-        return jsonify({
-            'success': True,
-            'message': '备份创建成功'
-        })
-    except Exception as e:
-        logger.error(f"创建备份失败：{e}")
-        return jsonify({
-            'success': False,
-            'message': f'备份失败：{str(e)}'
-        }), 500
-
-
+    logger.info("手动创建备份")
+    crawler.create_backup()
+    return jsonify({
+        'success': True,
+        'message': '备份创建成功'
+    })
 @api_error_handler('获取备份列表')
 @api_bp.route('/backups', methods=['GET'])
 def get_backups():
     """获取备份文件列表"""
-    try:
-        if not os.path.exists(crawler.backup_dir):
-            return jsonify({'success': True, 'backups': []})
+    if not os.path.exists(crawler.backup_dir):
+        return jsonify({'success': True, 'backups': []})
 
-        backup_files = []
-        for f in sorted(os.listdir(crawler.backup_dir), reverse=True):
-            if f.endswith('.json'):
-                filepath = os.path.join(crawler.backup_dir, f)
-                stat = os.stat(filepath)
-                backup_files.append({
-                    'filename': f,
-                    'size': stat.st_size,
-                    'created': datetime.fromtimestamp(stat.st_ctime).strftime('%Y-%m-%d %H:%M:%S')
-                })
+    backup_files = []
+    for f in sorted(os.listdir(crawler.backup_dir), reverse=True):
+        if f.endswith('.json'):
+            filepath = os.path.join(crawler.backup_dir, f)
+            stat = os.stat(filepath)
+            backup_files.append({
+                'filename': f,
+                'size': stat.st_size,
+                'created': datetime.fromtimestamp(stat.st_ctime).strftime('%Y-%m-%d %H:%M:%S')
+            })
 
-        return jsonify({
-            'success': True,
-            'backups': backup_files
-        })
-    except Exception as e:
-        logger.error(f"获取备份列表失败：{e}")
-        return jsonify({
-            'success': False,
-            'message': f'获取备份列表失败：{str(e)}'
-        }), 500
-
-
+    return jsonify({
+        'success': True,
+        'backups': backup_files
+    })
 @api_error_handler('删除备份')
 @require_api_token
 @api_bp.route('/backup/<filename>', methods=['DELETE'])
 def delete_backup(filename):
     """删除指定的备份文件"""
-    try:
-        # 防止路径遍历攻击: 取 basename
-        safe_filename = os.path.basename(filename)
-        if not safe_filename.endswith('.json'):
-            return jsonify({
-                'success': False,
-                'message': '无效的备份文件'
-            }), 400
-
-        backup_path = os.path.join(crawler.backup_dir, safe_filename)
-        # 确认路径仍在 backup_dir 之下
-        if not os.path.abspath(backup_path).startswith(os.path.abspath(crawler.backup_dir)):
-            return jsonify({
-                'success': False,
-                'message': '非法的备份文件路径'
-            }), 400
-
-        if not os.path.exists(backup_path):
-            return jsonify({
-                'success': False,
-                'message': '备份文件不存在'
-            }), 404
-
-        os.remove(backup_path)
-        logger.info(f"删除备份：{safe_filename}")
-        return jsonify({
-            'success': True,
-            'message': f'备份文件 "{safe_filename}" 已删除'
-        })
-    except Exception as e:
-        logger.error(f"删除备份失败：{e}")
+    # 防止路径遍历攻击: 取 basename
+    safe_filename = os.path.basename(filename)
+    if not safe_filename.endswith('.json'):
         return jsonify({
             'success': False,
-            'message': f'删除失败：{str(e)}'
-        }), 500
+            'message': '无效的备份文件'
+        }), 400
 
+    backup_path = os.path.join(crawler.backup_dir, safe_filename)
+    # 确认路径仍在 backup_dir 之下
+    if not os.path.abspath(backup_path).startswith(os.path.abspath(crawler.backup_dir)):
+        return jsonify({
+            'success': False,
+            'message': '非法的备份文件路径'
+        }), 400
 
+    if not os.path.exists(backup_path):
+        return jsonify({
+            'success': False,
+            'message': '备份文件不存在'
+        }), 404
+
+    os.remove(backup_path)
+    logger.info(f"删除备份：{safe_filename}")
+    return jsonify({
+        'success': True,
+        'message': f'备份文件 "{safe_filename}" 已删除'
+    })
 @api_error_handler('恢复备份')
 @api_bp.route('/restore', methods=['POST'])
 @require_api_token
@@ -472,38 +400,29 @@ def delete_backup(filename):
 @validate_required_fields(['filename'])
 def restore_backup():
     """从备份文件恢复数据"""
-    try:
-        req_data = request.json
-        filename = req_data.get('filename')
+    req_data = request.json
+    filename = req_data.get('filename')
 
-        backup_path = os.path.join(crawler.backup_dir, filename)
-        if not os.path.exists(backup_path):
-            return jsonify({
-                'success': False,
-                'message': '备份文件不存在'
-            }), 404
-
-        logger.info(f"恢复备份：{filename}")
-        crawler.create_backup()
-        shutil.copy2(backup_path, crawler.history_file)
-        
-        # 清除缓存
-        _clear_history_cache()
-        analysis_cache.clear()
-        prediction_cache.clear()
-
-        return jsonify({
-            'success': True,
-            'message': '数据恢复成功'
-        })
-    except Exception as e:
-        logger.error(f"恢复备份失败：{e}")
+    backup_path = os.path.join(crawler.backup_dir, filename)
+    if not os.path.exists(backup_path):
         return jsonify({
             'success': False,
-            'message': f'恢复失败：{str(e)}'
-        }), 500
+            'message': '备份文件不存在'
+        }), 404
 
+    logger.info(f"恢复备份：{filename}")
+    crawler.create_backup()
+    shutil.copy2(backup_path, crawler.history_file)
+        
+    # 清除缓存
+    _clear_history_cache()
+    analysis_cache.clear()
+    prediction_cache.clear()
 
+    return jsonify({
+        'success': True,
+        'message': '数据恢复成功'
+    })
 @api_error_handler('导入数据')
 @api_bp.route('/import', methods=['POST'])
 @require_api_token
@@ -713,152 +632,125 @@ def import_data():
 @validate_json_required
 def import_text_data():
     """从文本导入历史数据"""
-    try:
-        req_data = request.json or {}
-        text_data = req_data.get('text', '')
+    req_data = request.json or {}
+    text_data = req_data.get('text', '')
 
-        # 验证输入长度
-        if not text_data:
-            return jsonify({
-                'success': False,
-                'message': '请提供文本数据'
-            }), 400
-
-        if len(text_data) > 4194304:  # 限制 4096KB (4MB)
-            return jsonify({
-                'success': False,
-                'message': '文本数据过大，请限制在 4096KB 以内'
-            }), 400
-
-        new_records = []
-        lines = text_data.strip().split('\n')
-
-        # 限制行数
-        if len(lines) > 5000:
-            return jsonify({
-                'success': False,
-                'message': '行数过多，请限制在 5000 行以内'
-            }), 400
-
-        for line in lines:
-            line = line.strip()
-            if not line:
-                continue
-
-            if '期号' in line or '开奖号码' in line or '注数' in line:
-                continue
-
-            try:
-                if '\t' in line:
-                    parts = line.split('\t')
-                    if len(parts) >= 3:
-                        record = crawler.parse_web_copy({
-                            'issue': parts[0].strip(),
-                            'date': parts[1].strip() if len(parts) > 1 else None,
-                            'balls': parts[2].strip() if len(parts) > 2 else None
-                        })
-                        if record:
-                            new_records.append(record)
-                else:
-                    parts = line.split(',')
-                    if len(parts) >= 8:
-                        record = crawler.parse_record({
-                            'issue': parts[0],
-                            'red_balls': parts[1:7],
-                            'blue_ball': parts[7]
-                        })
-                        if record:
-                            new_records.append(record)
-            except Exception:
-                continue
-
-        if not new_records:
-            return jsonify({
-                'success': False,
-                'message': '未能解析任何数据，请检查格式是否正确'
-            }), 400
-
-        existing = _get_cached_history()
-        existing_issues = {item['issue']: item for item in existing}
-
-        for record in new_records:
-            existing_issues[record['issue']] = record
-
-        existing = list(existing_issues.values())
-        existing.sort(key=lambda x: x['issue'], reverse=True)
-        crawler.save_history(existing)
-        
-        # 清除缓存
-        _clear_history_cache()
-        analysis_cache.clear()
-        prediction_cache.clear()
-
-        logger.info(f"文本导入成功：{len(new_records)} 条记录")
-        return jsonify({
-            'success': True,
-            'message': f'成功导入 {len(new_records)} 条记录',
-            'new_records_count': len(new_records),
-            'total_records': len(existing)
-        })
-
-    except Exception as e:
-        logger.error(f"文本导入失败：{e}")
+    # 验证输入长度
+    if not text_data:
         return jsonify({
             'success': False,
-            'message': f'导入失败：{str(e)}'
-        }), 500
+            'message': '请提供文本数据'
+        }), 400
 
+    if len(text_data) > 4194304:  # 限制 4096KB (4MB)
+        return jsonify({
+            'success': False,
+            'message': '文本数据过大，请限制在 4096KB 以内'
+        }), 400
+
+    new_records = []
+    lines = text_data.strip().split('\n')
+
+    # 限制行数
+    if len(lines) > 5000:
+        return jsonify({
+            'success': False,
+            'message': '行数过多，请限制在 5000 行以内'
+        }), 400
+
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+
+        if '期号' in line or '开奖号码' in line or '注数' in line:
+            continue
+
+        try:
+            if '\t' in line:
+                parts = line.split('\t')
+                if len(parts) >= 3:
+                    record = crawler.parse_web_copy({
+                        'issue': parts[0].strip(),
+                        'date': parts[1].strip() if len(parts) > 1 else None,
+                        'balls': parts[2].strip() if len(parts) > 2 else None
+                    })
+                    if record:
+                        new_records.append(record)
+            else:
+                parts = line.split(',')
+                if len(parts) >= 8:
+                    record = crawler.parse_record({
+                        'issue': parts[0],
+                        'red_balls': parts[1:7],
+                        'blue_ball': parts[7]
+                    })
+                    if record:
+                        new_records.append(record)
+        except Exception:
+            continue
+
+    if not new_records:
+        return jsonify({
+            'success': False,
+            'message': '未能解析任何数据，请检查格式是否正确'
+        }), 400
+
+    existing = _get_cached_history()
+    existing_issues = {item['issue']: item for item in existing}
+
+    for record in new_records:
+        existing_issues[record['issue']] = record
+
+    existing = list(existing_issues.values())
+    existing.sort(key=lambda x: x['issue'], reverse=True)
+    crawler.save_history(existing)
+        
+    # 清除缓存
+    _clear_history_cache()
+    analysis_cache.clear()
+    prediction_cache.clear()
+
+    logger.info(f"文本导入成功：{len(new_records)} 条记录")
+    return jsonify({
+        'success': True,
+        'message': f'成功导入 {len(new_records)} 条记录',
+        'new_records_count': len(new_records),
+        'total_records': len(existing)
+    })
 
 @api_error_handler('清空历史数据')
 @api_bp.route('/clear-data', methods=['POST'])
 @require_api_token
 def clear_history_data():
     """清空历史数据"""
-    try:
-        # 清空数据时不自动创建备份，避免产生多余的备份文件
-        crawler.save_history([], backup=False)
-        _clear_history_cache()
-        analysis_cache.clear()
-        prediction_cache.clear()
+    # 清空数据时不自动创建备份，避免产生多余的备份文件
+    crawler.save_history([], backup=False)
+    _clear_history_cache()
+    analysis_cache.clear()
+    prediction_cache.clear()
 
-        logger.warning("历史数据已清空")
-        return jsonify({
-            'success': True,
-            'message': '历史数据已清空',
-            'warning': '请刷新页面或清除浏览器缓存以更新显示'
-        })
-
-    except Exception as e:
-        logger.error(f"清空数据失败：{e}")
-        return jsonify({
-            'success': False,
-            'message': f'清空失败：{str(e)}'
-        }), 500
-
+    logger.warning("历史数据已清空")
+    return jsonify({
+        'success': True,
+        'message': '历史数据已清空',
+        'warning': '请刷新页面或清除浏览器缓存以更新显示'
+    })
 
 @api_error_handler('获取最新数据')
 @api_bp.route('/latest', methods=['GET'])
 def get_latest():
     """获取最新开奖数据"""
-    try:
-        data = _get_cached_history()
-        if data:
-            return jsonify({
-                'success': True,
-                'latest': data[0]
-            })
+    data = _get_cached_history()
+    if data:
         return jsonify({
-            'success': False,
-            'message': '暂无数据'
+            'success': True,
+            'latest': data[0]
         })
-    except Exception as e:
-        logger.error(f"获取最新数据失败：{e}")
-        return jsonify({
-            'success': False,
-            'message': f'获取失败：{str(e)}'
-        }), 500
-
-
+    return jsonify({
+        'success': False,
+        'message': '暂无数据'
+    })
 @api_error_handler('抓取最新开奖')
 @api_bp.route('/fetch-latest', methods=['POST'])
 @require_api_token
@@ -1035,336 +927,266 @@ def get_prize_level(red_match: int, blue_match: bool) -> str:
 @require_api_token
 def auto_check_my_numbers():
     """自动检查收藏号码是否中奖"""
-    try:
-        req_data = request.json or {}
-        my_numbers = req_data.get('my_numbers', [])
+    req_data = request.json or {}
+    my_numbers = req_data.get('my_numbers', [])
 
-        if not my_numbers:
-            my_numbers_file = config.MY_NUMBERS_FILE
-            if os.path.exists(my_numbers_file):
-                with open(my_numbers_file, 'r', encoding='utf-8') as f:
-                    my_numbers = json.load(f)
-            else:
-                return jsonify({
-                    'success': False,
-                    'message': '没有收藏号码'
-                }), 400
-
-        data = _get_cached_history()
-        if not data:
+    if not my_numbers:
+        my_numbers_file = config.MY_NUMBERS_FILE
+        if os.path.exists(my_numbers_file):
+            with open(my_numbers_file, 'r', encoding='utf-8') as f:
+                my_numbers = json.load(f)
+        else:
             return jsonify({
                 'success': False,
-                'message': '暂无历史数据'
+                'message': '没有收藏号码'
             }), 400
 
-        latest = data[0]
-        latest_reds = set(latest["red_balls"])
-        latest_blue = latest["blue_ball"]
-
-        winners = []
-        for item in my_numbers:
-            red_balls = set(item["red_balls"])
-            blue_ball = item["blue_ball"]
-
-            red_match = len(red_balls & latest_reds)
-            blue_match = blue_ball == latest_blue
-
-            # 只统计真正中奖的号码（福运奖/六等奖及以上）
-            prize_level = get_prize_level(red_match, blue_match)
-            if prize_level != "未中奖":
-                winners.append({
-                    "number": item,
-                    "red_match": red_match,
-                    "blue_match": blue_match,
-                    "prize_level": prize_level,
-                    "latest_issue": latest.get("issue"),
-                    "latest_date": latest.get("date")
-                })
-
-        logger.info(f"自动检查中奖：检查 {len(my_numbers)} 注，中奖 {len(winners)} 注")
-
-        return jsonify({
-            'success': True,
-            'latest_issue': latest.get("issue"),
-            'latest_date': latest.get("date"),
-            'latest_numbers': {
-                'red_balls': latest["red_balls"],
-                'blue_ball': latest["blue_ball"]
-            },
-            'total_checked': len(my_numbers),
-            'winners': winners
-        })
-
-    except Exception as e:
-        logger.error(f"自动检查中奖失败：{e}")
+    data = _get_cached_history()
+    if not data:
         return jsonify({
             'success': False,
-            'message': f'检查失败：{str(e)}'
-        }), 500
+            'message': '暂无历史数据'
+        }), 400
 
+    latest = data[0]
+    latest_reds = set(latest["red_balls"])
+    latest_blue = latest["blue_ball"]
+
+    winners = []
+    for item in my_numbers:
+        red_balls = set(item["red_balls"])
+        blue_ball = item["blue_ball"]
+
+        red_match = len(red_balls & latest_reds)
+        blue_match = blue_ball == latest_blue
+
+        # 只统计真正中奖的号码（福运奖/六等奖及以上）
+        prize_level = get_prize_level(red_match, blue_match)
+        if prize_level != "未中奖":
+            winners.append({
+                "number": item,
+                "red_match": red_match,
+                "blue_match": blue_match,
+                "prize_level": prize_level,
+                "latest_issue": latest.get("issue"),
+                "latest_date": latest.get("date")
+            })
+
+    logger.info(f"自动检查中奖：检查 {len(my_numbers)} 注，中奖 {len(winners)} 注")
+
+    return jsonify({
+        'success': True,
+        'latest_issue': latest.get("issue"),
+        'latest_date': latest.get("date"),
+        'latest_numbers': {
+            'red_balls': latest["red_balls"],
+            'blue_ball': latest["blue_ball"]
+        },
+        'total_checked': len(my_numbers),
+        'winners': winners
+    })
 
 @api_error_handler('获取收藏号码')
 @api_bp.route('/my-numbers', methods=['GET'])
 def get_my_numbers_file():
     """获取收藏号码"""
-    try:
-        my_numbers_file = config.MY_NUMBERS_FILE
-        if os.path.exists(my_numbers_file):
-            with open(my_numbers_file, 'r', encoding='utf-8') as f:
-                my_numbers = json.load(f)
-            return jsonify({
-                'success': True,
-                'numbers': my_numbers
-            })
+    my_numbers_file = config.MY_NUMBERS_FILE
+    if os.path.exists(my_numbers_file):
+        with open(my_numbers_file, 'r', encoding='utf-8') as f:
+            my_numbers = json.load(f)
         return jsonify({
             'success': True,
-            'numbers': []
+            'numbers': my_numbers
         })
-    except Exception as e:
-        logger.error(f"获取收藏号码失败：{e}")
-        return jsonify({
-            'success': False,
-            'message': f'获取失败：{str(e)}'
-        }), 500
-
-
+    return jsonify({
+        'success': True,
+        'numbers': []
+    })
 @api_error_handler('保存收藏号码')
 @api_bp.route('/my-numbers', methods=['POST'])
 @require_api_token
 @validate_json_required
 def save_my_numbers_file():
     """保存收藏号码"""
-    try:
-        req_data = request.json or {}
-        my_numbers = req_data.get('numbers', [])
+    req_data = request.json or {}
+    my_numbers = req_data.get('numbers', [])
 
-        # 验证数据
-        if not isinstance(my_numbers, list):
-            return jsonify({
-                'success': False,
-                'message': 'numbers 必须是数组'
-            }), 400
-        
-        if len(my_numbers) > 100:  # 限制最多 100 注
-            return jsonify({
-                'success': False,
-                'message': '最多保存 100 注号码'
-            }), 400
-
-        my_numbers_file = config.MY_NUMBERS_FILE
-        os.makedirs(os.path.dirname(config.MY_NUMBERS_FILE), exist_ok=True)
-
-        with open(my_numbers_file, 'w', encoding='utf-8') as f:
-            json.dump(my_numbers, f, ensure_ascii=False, indent=2)
-
-        logger.info(f"保存收藏号码：{len(my_numbers)} 注")
-        return jsonify({
-            'success': True,
-            'message': f'已保存 {len(my_numbers)} 个号码'
-        })
-    except Exception as e:
-        logger.error(f"保存收藏号码失败：{e}")
+    # 验证数据
+    if not isinstance(my_numbers, list):
         return jsonify({
             'success': False,
-            'message': f'保存失败：{str(e)}'
-        }), 500
+            'message': 'numbers 必须是数组'
+        }), 400
+        
+    if len(my_numbers) > 100:  # 限制最多 100 注
+        return jsonify({
+            'success': False,
+            'message': '最多保存 100 注号码'
+        }), 400
 
+    my_numbers_file = config.MY_NUMBERS_FILE
+    os.makedirs(os.path.dirname(config.MY_NUMBERS_FILE), exist_ok=True)
 
+    with open(my_numbers_file, 'w', encoding='utf-8') as f:
+        json.dump(my_numbers, f, ensure_ascii=False, indent=2)
+
+    logger.info(f"保存收藏号码：{len(my_numbers)} 注")
+    return jsonify({
+        'success': True,
+        'message': f'已保存 {len(my_numbers)} 个号码'
+    })
 @api_error_handler('导出收藏号码')
 @api_bp.route('/export/my-numbers', methods=['GET'])
 def export_my_numbers():
     """导出收藏号码，支持 JSON、CSV、TXT 格式"""
-    try:
-        format_type = request.args.get('format', 'json').lower()
-        my_numbers_file = config.MY_NUMBERS_FILE
+    format_type = request.args.get('format', 'json').lower()
+    my_numbers_file = config.MY_NUMBERS_FILE
 
-        if os.path.exists(my_numbers_file):
-            with open(my_numbers_file, 'r', encoding='utf-8') as f:
-                my_numbers = json.load(f)
-        else:
-            my_numbers = []
+    if os.path.exists(my_numbers_file):
+        with open(my_numbers_file, 'r', encoding='utf-8') as f:
+            my_numbers = json.load(f)
+    else:
+        my_numbers = []
 
-        if format_type == 'json':
-            return jsonify({
-                'success': True,
-                'data': my_numbers,
-                'count': len(my_numbers)
-            })
+    if format_type == 'json':
+        return jsonify({
+            'success': True,
+            'data': my_numbers,
+            'count': len(my_numbers)
+        })
 
-        elif format_type == 'csv':
-            # 生成 CSV 格式
-            csv_lines = ['key,red_balls,blue_ball,algorithm,remark,saved_at']
-            for item in my_numbers:
-                red_balls = ','.join(map(str, item.get('red_balls', [])))
-                csv_lines.append(f"{item.get('key', '')},{red_balls},{item.get('blue_ball', '')},{item.get('algorithm', '')},{item.get('remark', '')},{item.get('saved_at', '')}")
-
-            return jsonify({
-                'success': True,
-                'format': 'csv',
-                'content': '\n'.join(csv_lines),
-                'count': len(my_numbers)
-            })
-
-        elif format_type == 'txt':
-            # 生成 TXT 格式（每行：红球 1,红球 2,红球 3,红球 4,红球 5,红球 6,蓝球）
-            txt_lines = []
-            for item in my_numbers:
-                red_balls = ','.join(map(str, item.get('red_balls', [])))
-                blue_ball = item.get('blue_ball', '')
-                txt_lines.append(f"{red_balls},{blue_ball}")
-
-            return jsonify({
-                'success': True,
-                'format': 'txt',
-                'content': '\n'.join(txt_lines),
-                'count': len(my_numbers)
-            })
+    elif format_type == 'csv':
+        # 生成 CSV 格式
+        csv_lines = ['key,red_balls,blue_ball,algorithm,remark,saved_at']
+        for item in my_numbers:
+            red_balls = ','.join(map(str, item.get('red_balls', [])))
+            csv_lines.append(f"{item.get('key', '')},{red_balls},{item.get('blue_ball', '')},{item.get('algorithm', '')},{item.get('remark', '')},{item.get('saved_at', '')}")
 
         return jsonify({
-            'success': False,
-            'message': f'不支持的导出格式：{format_type}'
-        }), 400
+            'success': True,
+            'format': 'csv',
+            'content': '\n'.join(csv_lines),
+            'count': len(my_numbers)
+        })
 
-    except Exception as e:
-        logger.error(f"导出收藏号码失败：{e}")
+    elif format_type == 'txt':
+        # 生成 TXT 格式（每行：红球 1,红球 2,红球 3,红球 4,红球 5,红球 6,蓝球）
+        txt_lines = []
+        for item in my_numbers:
+            red_balls = ','.join(map(str, item.get('red_balls', [])))
+            blue_ball = item.get('blue_ball', '')
+            txt_lines.append(f"{red_balls},{blue_ball}")
+
         return jsonify({
-            'success': False,
-            'message': f'导出失败：{str(e)}'
-        }), 500
+            'success': True,
+            'format': 'txt',
+            'content': '\n'.join(txt_lines),
+            'count': len(my_numbers)
+        })
 
+    return jsonify({
+        'success': False,
+        'message': f'不支持的导出格式：{format_type}'
+    }), 400
 
 @api_error_handler('导出历史数据')
 @api_bp.route('/export/history', methods=['GET'])
 def export_history():
     """导出历史数据，支持 JSON、CSV、TXT 格式"""
-    try:
-        format_type = request.args.get('format', 'json').lower()
-        data = _get_cached_history()
+    format_type = request.args.get('format', 'json').lower()
+    data = _get_cached_history()
 
-        if format_type == 'json':
-            return jsonify({
-                'success': True,
-                'data': data,
-                'count': len(data)
-            })
+    if format_type == 'json':
+        return jsonify({
+            'success': True,
+            'data': data,
+            'count': len(data)
+        })
 
-        elif format_type == 'csv':
-            # 生成 CSV 格式（标准列格式：期号, 日期, 红1, 红2, 红3, 红4, 红5, 红6, 蓝）
-            csv_lines = ['issue,date,red1,red2,red3,red4,red5,red6,blue']
-            for item in data:
-                red_balls = item.get('red_balls', [])
-                # 补齐 6 个红球（防止数据异常）
-                while len(red_balls) < 6:
-                    red_balls.append('')
-                csv_lines.append(f"{item.get('issue', '')},{item.get('date', '')},{','.join(map(str, red_balls[:6]))},{item.get('blue_ball', '')}")
-
-            return jsonify({
-                'success': True,
-                'format': 'csv',
-                'content': '\n'.join(csv_lines),
-                'count': len(data)
-            })
-
-        elif format_type == 'txt':
-            # 生成 TXT 格式（标准列格式：期号, 日期, 红1, 红2, 红3, 红4, 红5, 红6, 蓝）
-            txt_lines = []
-            for item in data:
-                issue = item.get('issue', '')
-                date = item.get('date', '')
-                red_balls = item.get('red_balls', [])
-                blue_ball = item.get('blue_ball', '')
-                
-                # 补齐 6 个红球
-                while len(red_balls) < 6:
-                    red_balls.append('')
-                
-                # 格式：期号, 日期, 红1, 红2, 红3, 红4, 红5, 红6, 蓝
-                txt_lines.append(f"{issue},{date},{','.join(map(str, red_balls[:6]))},{blue_ball}")
-
-            return jsonify({
-                'success': True,
-                'format': 'txt',
-                'content': '\n'.join(txt_lines),
-                'count': len(data)
-            })
+    elif format_type == 'csv':
+        # 生成 CSV 格式（标准列格式：期号, 日期, 红1, 红2, 红3, 红4, 红5, 红6, 蓝）
+        csv_lines = ['issue,date,red1,red2,red3,red4,red5,red6,blue']
+        for item in data:
+            red_balls = item.get('red_balls', [])
+            # 补齐 6 个红球（防止数据异常）
+            while len(red_balls) < 6:
+                red_balls.append('')
+            csv_lines.append(f"{item.get('issue', '')},{item.get('date', '')},{','.join(map(str, red_balls[:6]))},{item.get('blue_ball', '')}")
 
         return jsonify({
-            'success': False,
-            'message': f'不支持的导出格式：{format_type}'
-        }), 400
+            'success': True,
+            'format': 'csv',
+            'content': '\n'.join(csv_lines),
+            'count': len(data)
+        })
 
-    except Exception as e:
-        logger.error(f"导出历史数据失败：{e}")
+    elif format_type == 'txt':
+        # 生成 TXT 格式（标准列格式：期号, 日期, 红1, 红2, 红3, 红4, 红5, 红6, 蓝）
+        txt_lines = []
+        for item in data:
+            issue = item.get('issue', '')
+            date = item.get('date', '')
+            red_balls = item.get('red_balls', [])
+            blue_ball = item.get('blue_ball', '')
+                
+            # 补齐 6 个红球
+            while len(red_balls) < 6:
+                red_balls.append('')
+                
+            # 格式：期号, 日期, 红1, 红2, 红3, 红4, 红5, 红6, 蓝
+            txt_lines.append(f"{issue},{date},{','.join(map(str, red_balls[:6]))},{blue_ball}")
+
         return jsonify({
-            'success': False,
-            'message': f'导出失败：{str(e)}'
-        }), 500
+            'success': True,
+            'format': 'txt',
+            'content': '\n'.join(txt_lines),
+            'count': len(data)
+        })
 
+    return jsonify({
+        'success': False,
+        'message': f'不支持的导出格式：{format_type}'
+    }), 400
 
 @api_error_handler('健康检查')
 @api_bp.route('/health')
 def health_check():
     """健康检查"""
-    try:
-        from src.cache import analysis_cache, prediction_cache, history_cache
+    from src.cache import analysis_cache, prediction_cache, history_cache
         
-        data = _get_cached_history()
-        return jsonify({
-            'status': 'healthy',
-            'timestamp': datetime.now().isoformat(),
-            'data_records': len(data) if data else 0,
-            'cache': {
-                'analysis': analysis_cache.stats(),
-                'prediction': prediction_cache.stats(),
-                'history': history_cache.stats()
-            }
-        })
-    except Exception as e:
-        logger.error(f"健康检查失败：{e}")
-        return jsonify({
-            'status': 'unhealthy',
-            'error': str(e)
-        }), 500
-
-
+    data = _get_cached_history()
+    return jsonify({
+        'status': 'healthy',
+        'timestamp': datetime.now().isoformat(),
+        'data_records': len(data) if data else 0,
+        'cache': {
+            'analysis': analysis_cache.stats(),
+            'prediction': prediction_cache.stats(),
+            'history': history_cache.stats()
+        }
+    })
 @api_error_handler('获取缓存统计')
 @api_bp.route('/cache/stats', methods=['GET'])
 def get_cache_stats():
     """获取缓存统计信息"""
-    try:
-        return jsonify({
-            'success': True,
-            'analysis_cache': analysis_cache.stats(),
-            'prediction_cache': prediction_cache.stats(),
-            'history_cache': history_cache.stats()
-        })
-    except Exception as e:
-        logger.error(f"获取缓存统计失败：{e}")
-        return jsonify({
-            'success': False,
-            'message': f'获取缓存统计失败：{str(e)}'
-        }), 500
-
-
+    return jsonify({
+        'success': True,
+        'analysis_cache': analysis_cache.stats(),
+        'prediction_cache': prediction_cache.stats(),
+        'history_cache': history_cache.stats()
+    })
 @api_error_handler('清除缓存')
 @api_bp.route('/cache/clear', methods=['POST'])
 @require_api_token
 def clear_cache():
     """清除所有缓存"""
-    try:
-        _clear_history_cache()
-        analysis_cache.clear()
-        prediction_cache.clear()
-        history_cache.clear()
+    _clear_history_cache()
+    analysis_cache.clear()
+    prediction_cache.clear()
+    history_cache.clear()
         
-        logger.info("所有缓存已清除")
-        return jsonify({
-            'success': True,
-            'message': '所有缓存已清除'
-        })
-    except Exception as e:
-        logger.error(f"清除缓存失败：{e}")
-        return jsonify({
-            'success': False,
-            'message': f'清除缓存失败：{str(e)}'
-        }), 500
+    logger.info("所有缓存已清除")
+    return jsonify({
+        'success': True,
+        'message': '所有缓存已清除'
+    })

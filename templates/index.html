@@ -13,6 +13,23 @@
     <!-- PWA 支持 -->
     <link rel="manifest" href="/static/manifest.json">
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+
+    <!-- API Token 注入: 由 app.py context_processor 提供 -->
+    {% if api_token %}
+    <script>
+        // Token 通过服务端模板注入, 仅当后端配置了 API_TOKEN 时存在.
+        // Dev 模式下后端不注入此变量, 前端无需带 token.
+        window.__API_TOKEN__ = {{ api_token|tojson }};
+        window.__API_TOKEN_REQUIRED__ = true;
+    </script>
+    {% else %}
+    <script>
+        window.__API_TOKEN__ = null;
+        window.__API_TOKEN_REQUIRED__ = false;
+    </script>
+    {% endif %}
+    <!-- 注意: api.js 是 ES module, 由 app.js 通过 import() 动态加载,
+         不能用 <script src="..."> 加载 (会重复执行并违反 module 语义) -->
 </head>
 <body>
     <!-- 暗色模式切换按钮 -->

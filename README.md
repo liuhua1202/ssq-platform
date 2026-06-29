@@ -175,15 +175,30 @@ ssq-platform/
 │   │   └── kmeans_clustering.py
 │   ├── analyzer.py              # 数据分析（频次 / 遗漏 / 和值 / AC）
 │   ├── cache.py                 # 内存缓存（TTL + LRU）
-│   ├── crawler.py               # 多源爬虫 + 数据持久化
-│   ├── online_fetcher.py        # 500 网专用 fetcher
+│   ├── crawler/                  # 多源爬虫包（拆分后的模块化结构）
+│   │   ├── __init__.py           #   向后兼容 re-export (Crawler, CrawlState)
+│   │   ├── state.py              #   CrawlState - 防阻塞 + 60s 缓存
+│   │   ├── backup.py             #   BackupManager - 备份/清理/恢复
+│   │   ├── parser.py             #   IssueParser - 期号/记录解析 (纯函数)
+│   │   ├── fetcher.py            #   CWLFetcher - 网络层 (curl_cffi + playwright)
+│   │   └── crawler.py            #   Crawler - 顶层协调器
 │   └── predictor.py             # 算法调度器 + LRU 实例缓存
 │
-├── tests/
-│   └── test_core.py             # 单元测试（23 项）
+├── tests/                         # 单元测试（104 项）
+│   ├── test_core.py              #   核心: Analyzer/Predictor/Cache (23 项)
+│   ├── test_additional.py        #   额外: CrawlState/Config/装饰器 (30 项)
+│   ├── test_integration.py       #   集成: Flask test_client 端到端 (17 项)
+│   ├── test_network.py           #   网络: parser/backup/fetcher 单测 (34 项)
+│   └── run_tests.bat             #   一键测试脚本
 │
 ├── scripts/
-│   └── test_online_fetch.py     # 在线抓取诊断脚本
+│   └── cleanup_api_excepts.py    # api.py try/except 自动清理脚本
+│
+├── .github/workflows/test.yml    # CI: Matrix 测试 (3 OS × 3 Python)
+├── Dockerfile                    # 生产环境多阶段构建
+├── .dockerignore                 # Docker 排除规则
+├── .flake8 / pyproject.toml      # Lint + 项目元数据配置
+├── CHANGELOG.md                  # 版本变更日志
 │
 ├── templates/
 │   ├── index.html               # 主页面（单页应用）
