@@ -13,7 +13,12 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from src.api.api import api_bp
 from src.crawler import Crawler
-from config import SECRET_KEY, LOGGING_CONFIG, WEB_CONFIG, check_security_config
+import config
+from config import (
+    LOGGING_CONFIG, WEB_CONFIG,
+    ensure_security_config,
+    LIMITER_STORAGE_URI,
+)
 
 def setup_logging(app):
     """配置日志系统"""
@@ -73,13 +78,18 @@ base_path = get_base_path()
 template_folder = os.path.join(base_path, 'templates')
 static_folder = os.path.join(base_path, 'static')
 
+# Startup security check (runs under gunicorn / flask run / python app.py)
+# 生产环境 SECRET_KEY 未设置或为默认字符串时会直接 raise SystemExit
+ensure_security_config()
+
 app = Flask(__name__, template_folder=template_folder, static_folder=static_folder)
 app.config['DATA_DIR'] = os.path.join(base_path, 'data')
 app.config['LOGS_DIR'] = os.path.join(base_path, 'logs')
 
 # 配置
 app.config['JSON_AS_ASCII'] = False
-app.config['SECRET_KEY'] = SECRET_KEY
+app.config['SECRET_KEY'] = config.SECRET_KEY
+app.config['API_TOKEN'] = config.API_TOKEN
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 最大 16MB
 
 # 初始化速率限制器
@@ -87,7 +97,7 @@ limiter = Limiter(
     app=app,
     key_func=get_remote_address,
     default_limits=["200 per day", "50 per hour"],
-    storage_uri="memory://",
+    storage_uri=config.LIMITER_STORAGE_URI,
     strategy="fixed-window"
 )
 
@@ -203,9 +213,6 @@ if __name__ == '__main__':
     os.makedirs('data', exist_ok=True)
     os.makedirs('data/backup', exist_ok=True)
     os.makedirs('logs', exist_ok=True)
-
-    # 安全检查
-    check_security_config()
 
     # 启动应用
     app.logger.info("=" * 50)

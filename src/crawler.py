@@ -16,6 +16,100 @@ from typing import List, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
+
+# ============================================================
+# 爬虫状态管理 - 防止请求线程被同步爬虫卡死
+# ============================================================
+
+import threading
+from datetime import datetime, timedelta
+
+
+class CrawlState:
+    """线程安全的爬虫状态管理.
+
+    功能:
+      - 单线程执行: 同一时刻只有一个 fetch 在跑 (Lock)
+      - 结果缓存: 最近一次成功结果缓存 60s, 重复请求直接返回缓存
+      - 防抖: 避免恶意/频繁触发爬虫导致对方站点反爬升级
+
+    使用场景:
+      - /api/fetch-latest 和 /api/fetch-history 端点
+    """
+
+    DEFAULT_CACHE_TTL = 60  # 秒
+
+    def __init__(self):
+        self._lock = threading.Lock()
+        self._last_result = None
+        self._last_fetched_at = None
+        self._cache_ttl = self.DEFAULT_CACHE_TTL
+
+    def try_acquire(self) -> bool:
+        """非阻塞获取锁. 成功返回 True, 失败 (锁被占用) 返回 False."""
+        return self._lock.acquire(blocking=False)
+
+    def release(self) -> None:
+        """释放锁. 调用方必须先成功 try_acquire."""
+        try:
+            self._lock.release()
+        except RuntimeError:
+            # 锁已经被释放过 (try_acquire 返回 False 时不能 release)
+            pass
+
+    def get_cached(self):
+        """获取缓存结果. 如果没缓存或已过期, 返回 None."""
+        if self._last_result is None or self._last_fetched_at is None:
+            return None
+        age = (datetime.now() - self._last_fetched_at).total_seconds()
+        if age > self._cache_ttl:
+            return None
+        return self._last_result
+
+    def cache_result(self, result) -> None:
+        """缓存成功的结果."""
+        self._last_result = result
+        self._last_fetched_at = datetime.now()
+
+    def invalidate(self) -> None:
+        """清空缓存."""
+        self._last_result = None
+        self._last_fetched_at = None
+
+    def get_status(self) -> dict:
+        """获取当前状态 (用于 /health 等监控端点).
+
+        使用非阻塞 acquire 测试, 避免与持有锁的线程死锁.
+        """
+        # 非阻塞 acquire: 如果当前没人持有, 我们能拿到, 则不 busy
+        # 如果已经有人持有, 非阻塞 acquire 失败, 则 busy
+        got_lock = self._lock.acquire(blocking=False)
+        if got_lock:
+            self._lock.release()
+            is_busy = False
+        else:
+            is_busy = True
+        age = None
+        if self._last_fetched_at:
+            age = (datetime.now() - self._last_fetched_at).total_seconds()
+        return {
+            'is_busy': is_busy,
+            'last_fetched_at': self._last_fetched_at.isoformat() if self._last_fetched_at else None,
+            'last_result_age_seconds': age,
+            'cache_ttl': self._cache_ttl,
+            'has_cached_result': self._last_result is not None
+        }
+
+
+# 全局单例
+_crawl_state = CrawlState()
+
+
+def get_crawl_state() -> CrawlState:
+    """获取全局爬虫状态单例."""
+    return _crawl_state
+
+
 # 可选依赖导入
 try:
     from fake_useragent import UserAgent
@@ -63,6 +157,24 @@ class Crawler:
         # 确保目录存在
         os.makedirs(self.data_dir, exist_ok=True)
         os.makedirs(self.backup_dir, exist_ok=True)
+
+    # ============================================================
+    # Public API - 暴露给 api.py 调用的方法
+    # 内部仍保留 _ 前缀方法作为私有实现
+    # ============================================================
+
+    def create_backup(self) -> None:
+        """Public wrapper for _create_backup. 创建当前数据的备份."""
+        self._create_backup()
+
+    def parse_record(self, record):
+        """Public wrapper for _parse_record. 解析单条 JSON/CSV 导入记录."""
+        return self._parse_record(record)
+
+    def parse_web_copy(self, data):
+        """Public wrapper for _parse_web_copy. 解析从网页直接复制的数据."""
+        return self._parse_web_copy(data)
+
 
     def fetch_latest_lottery(self) -> Dict:
         """从多个来源获取最新一期开奖信息（支持备用数据源）"""
@@ -345,7 +457,7 @@ class Crawler:
                 last_error = result.get('message', '未知错误')
             except Exception as e:
                 last_error = str(e)
-                print(f"来源 {source['url']} 获取失败：{e}")
+                logger.warning(f"来源 {source['url']} 获取失败：{e}")
                 continue
 
         return {
@@ -595,13 +707,13 @@ class Crawler:
             try:
                 with open(self.history_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                    print(f"已加载 {len(data)} 条历史数据")
+                    logger.info(f"已加载 {len(data)} 条历史数据")
                     return data
             except Exception as e:
-                print(f"加载历史数据失败：{e}")
+                logger.warning(f"加载历史数据失败：{e}")
                 return self._restore_from_backup()
         else:
-            print("历史数据文件不存在，将创建新文件")
+            logger.info("历史数据文件不存在，将创建新文件")
             return []
 
     def _restore_from_backup(self) -> List[Dict]:
@@ -619,10 +731,10 @@ class Crawler:
         try:
             with open(backup_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-                print(f"从备份文件恢复 {len(data)} 条历史数据")
+                logger.info(f"从备份文件恢复 {len(data)} 条历史数据")
                 return data
         except Exception as e:
-            print(f"从备份恢复失败：{e}")
+            logger.warning(f"从备份恢复失败：{e}")
             return []
 
     def save_history(self, data: List[Dict], backup: bool = True) -> None:
@@ -636,7 +748,7 @@ class Crawler:
         with open(self.history_file, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
-        print(f"历史数据已保存：{len(data)} 条记录")
+        logger.info(f"历史数据已保存：{len(data)} 条记录")
 
     def _create_backup(self) -> None:
         """创建当前数据的备份"""
@@ -648,10 +760,10 @@ class Crawler:
 
         try:
             shutil.copy2(self.history_file, backup_file)
-            print(f"已创建备份：{backup_file}")
+            logger.info(f"已创建备份：{backup_file}")
             self._cleanup_old_backups()
         except Exception as e:
-            print(f"创建备份失败：{e}")
+            logger.warning(f"创建备份失败：{e}")
 
     def _cleanup_old_backups(self, keep_count: int = 5) -> None:
         """清理旧备份文件"""
@@ -663,7 +775,7 @@ class Crawler:
         while len(backup_files) > keep_count:
             oldest = backup_files.pop(0)
             os.remove(os.path.join(self.backup_dir, oldest))
-            print(f"已删除旧备份：{oldest}")
+            logger.info(f"已删除旧备份：{oldest}")
 
     def _parse_web_copy(self, data: Dict) -> Optional[Dict]:
         """
@@ -714,7 +826,7 @@ class Crawler:
             }
 
         except Exception as e:
-            print(f"解析网页复制数据失败：{e}")
+            logger.warning(f"解析网页复制数据失败：{e}")
             return None
 
     def _parse_seven_numbers(self, s: str) -> Optional[List[int]]:
@@ -1034,17 +1146,20 @@ class Crawler:
             
             # 3. 找球号 (剩下的数字中，筛选 1-33 和 1-16)
             # 逻辑：跳过期号，跳过日期，剩下的如果是 1-2 位数字，且范围符合，就是球号
+            # 3. 找球号 - 基于位置过滤 (跳过已知的 issue/date 成员)
+            # 注意: 不再按值范围过滤, 因为 1-12 也是合法的球号
+            skip_set = set()
+            if issue:
+                skip_set.add(issue)
+            if date:
+                for part in date.split('-'):
+                    skip_set.add(part)
+                    skip_set.add(part.lstrip('0') or '0')
+
             temp_balls = []
             for n in nums:
-                if n == issue:
+                if n in skip_set:
                     continue
-                if len(n) == 8 and n.startswith('20'): # 跳过 8 位日期
-                    continue
-                if len(n) == 4 and n.startswith('20'): # 跳过 4 位年份
-                    continue
-                if len(n) == 2 and n in ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']: # 跳过可能的月份/日期碎片
-                     continue
-                
                 val = int(n)
                 if 1 <= val <= 33:
                     temp_balls.append(val)
@@ -1065,160 +1180,8 @@ class Crawler:
 
         return records
 
-    def _fetch_cwl_html(self, url: str) -> Optional[str]:
-        """三层抓取策略"""
-        # Layer 1: requests 直接请求（最快）
-        try:
-            html = self._fetch_with_requests(url)
-            if html and len(html) > 2000:  # 基础完整性校验
-                return html
-        except Exception as e:
-            logger.debug(f"福彩网 requests 失败: {e}")
-
-        # Layer 2: Playwright 兜底（最稳）
-        try:
-            html = self._fetch_with_playwright(url)
-            if html and len(html) > 2000:
-                return html
-        except Exception as e:
-            logger.error(f"福彩网 Playwright 失败: {e}")
-
-        return None
-
-    def _fetch_with_requests(self, url: str) -> str:
-        """Layer 1: 模拟真实浏览器会话"""
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-            'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Referer': 'https://www.cwl.gov.cn/',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1',
-        }
-        session = requests.Session()
-        # 先访问首页获取基础 Cookie
-        session.get('https://www.cwl.gov.cn/', headers=headers, timeout=10)
-        time.sleep(random.uniform(0.5, 1.5))
-        
-        resp = session.get(url, headers=headers, timeout=15)
-        resp.raise_for_status()
-        return resp.text
-
-    def _fetch_with_playwright(self, url: str) -> Optional[str]:
-        """Layer 2: 无头浏览器渲染（应对 JS 反爬）"""
-        try:
-            from playwright.sync_api import sync_playwright
-        except ImportError:
-            logger.error("Playwright 未安装，请运行: pip install playwright && playwright install chromium")
-            return None
-
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            context = browser.new_context(
-                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                viewport={'width': 1920, 'height': 1080},
-                locale='zh-CN'
-            )
-            page = context.new_page()
-            page.goto(url, wait_until='networkidle', timeout=20000)
-            # 等待表格或关键元素加载
-            try:
-                page.wait_for_selector('table, .list-table, .data-table', timeout=8000)
-            except:
-                pass
-            time.sleep(1)
-            html = page.content()
-            browser.close()
-            return html
-
-    def _parse_cwl_html(self, html: str) -> List[Dict]:
-        """解析福彩网 HTML，兼容多种结构"""
-        soup = BeautifulSoup(html, 'html.parser')
-        records = []
-
-        # 策略 1: 查找标准表格
-        tables = soup.find_all('table')
-        for table in tables:
-            rows = table.find_all('tr')
-            for row in rows:
-                cells = row.find_all(['td', 'th'])
-                if len(cells) >= 4:
-                    record = self._extract_record_from_cells(cells)
-                    if record:
-                        records.append(record)
-
-        # 策略 2: 查找 div 列表结构（部分页面使用）
-        if not records:
-            items = soup.find_all(['div', 'li'], class_=re.compile(r'item|row|record|lottery', re.I))
-            for item in items:
-                text = item.get_text(strip=True)
-                record = self._extract_record_from_text(text)
-                if record:
-                    records.append(record)
-
-        # 去重（以期号为准）
-        seen = set()
-        unique_records = []
-        for r in records:
-            if r['issue'] not in seen:
-                seen.add(r['issue'])
-                unique_records.append(r)
-
-        return unique_records
-
-    def _extract_record_from_cells(self, cells) -> Optional[Dict]:
-        """从表格单元格提取数据"""
-        try:
-            issue = cells[0].get_text(strip=True)
-            date = cells[1].get_text(strip=True)
-            balls_text = cells[2].get_text(strip=True)
-            
-            # 提取所有数字
-            balls = re.findall(r'\d+', balls_text)
-            if len(balls) < 7:
-                return None
-                
-            red_balls = [int(b) for b in balls[:6]]
-            blue_ball = int(balls[6])
-            
-            # 严格校验范围
-            if not (all(1 <= r <= 33 for r in red_balls) and 1 <= blue_ball <= 16):
-                return None
-                
-            return {
-                'issue': issue,
-                'date': date[:10] if len(date) >= 10 else date,
-                'red_balls': red_balls,
-                'blue_ball': blue_ball
-            }
-        except Exception:
-            return None
-
-    def _extract_record_from_text(self, text: str) -> Optional[Dict]:
-        """从纯文本提取数据（兼容非表格结构）"""
-        # 匹配模式：期号 + 日期 + 7个数字
-        match = re.search(r'(\d{5,7})\s*[-/年]?\s*(\d{4}[-/年]?\d{1,2}[-/月]?\d{1,2})?.*?(\d[\s,]*\d[\s,]*\d[\s,]*\d[\s,]*\d[\s,]*\d[\s,]*\d)', text)
-        if not match:
-            return None
-            
-        issue = match.group(1)
-        date = match.group(2) or ''
-        balls_str = match.group(3)
-        balls = re.findall(r'\d+', balls_str)
-        
-        if len(balls) < 7:
-            return None
-            
-        red_balls = [int(b) for b in balls[:6]]
-        blue_ball = int(balls[6])
-        
-        if not (all(1 <= r <= 33 for r in red_balls) and 1 <= blue_ball <= 16):
-            return None
-            
-        return {
-            'issue': issue,
-            'date': date[:10].replace('年', '-').replace('月', '-').replace('日', ''),
-            'red_balls': red_balls,
-            'blue_ball': blue_ball
-        }
+    # 注意: 以下方法已被移除以避免重复定义:
+    # - _fetch_cwl_html (L889 版本保留, 含 curl_cffi 优化)
+    # - _fetch_with_requests (L909 版本保留, 含 curl_cffi 优化)
+    # - _fetch_with_playwright (L948 版本保留, 含 stealth_sync 优化)
+    # - _parse_cwl_html / _extract_record_from_cells / _extract_record_from_text (未使用, 已删除)

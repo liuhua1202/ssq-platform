@@ -1,5 +1,10 @@
 # 双色球预测平台配置文件
 import os
+import secrets
+
+
+# 已知的默认值 - 用于检测泄露的密钥
+_LEGACY_DEFAULT_KEY = 'ssq-prediction-platform-2026-dev-only'
 
 # 红球范围
 RED_BALL_MIN = 1
@@ -14,12 +19,7 @@ BLUE_BALL_COUNT = 1
 # 数据存储路径
 DATA_DIR = "data"
 HISTORY_FILE = "data/history.json"
-
-# 存储配置（可选 json 或 sqlite）
-STORAGE_CONFIG = {
-    "type": os.environ.get('STORAGE_TYPE', 'json'),  # json 或 sqlite
-    "data_dir": "data"
-}
+MY_NUMBERS_FILE = "data/my_numbers.json"  # 收藏号码 (api 层使用)
 
 # 爬虫配置
 CRAWLER_CONFIG = {
@@ -44,27 +44,73 @@ WEB_CONFIG = {
     "debug": os.environ.get('FLASK_DEBUG', 'True').lower() == 'true'
 }
 
-# 安全配置
-SECRET_KEY = os.environ.get('SECRET_KEY', 'ssq-prediction-platform-2026-dev-only')
+# 安全配置 - SECRET_KEY 不再有默认字符串, 必须显式设置
+# 启动时调用 ensure_security_config() 校验/生成
+_raw_secret_key = os.environ.get('SECRET_KEY')
+if _raw_secret_key:
+    SECRET_KEY = _raw_secret_key
+else:
+    SECRET_KEY = None  # 启动时再决定
 
-# 生产环境安全检查
-def check_security_config():
-    """检查安全配置，生产环境必须设置安全的 SECRET_KEY"""
-    import warnings
-    
-    # 检查是否使用默认密钥
-    if SECRET_KEY == 'ssq-prediction-platform-2026-dev-only':
-        # 开发环境允许使用默认密钥
-        debug = os.environ.get('FLASK_DEBUG', 'True').lower() == 'true'
+
+def ensure_security_config() -> bool:
+    """
+    启动时检查 SECRET_KEY 配置.
+
+    规则:
+      1. 如果 SECRET_KEY 已设置且不是已知默认值 -> 通过
+      2. 如果 SECRET_KEY 是已知默认值 (旧代码遗留) ->
+         - DEBUG 模式: 警告一次
+         - 生产模式: 直接 raise SystemExit 拒绝启动
+      3. 如果 SECRET_KEY 未设置 (None) ->
+         - DEBUG 模式: 自动生成临时密钥 + 警告 (开发友好)
+         - 生产模式: raise SystemExit 拒绝启动
+
+    Returns:
+        True 如果配置安全, False 表示使用了弱密钥但允许继续 (仅 DEBUG)
+    """
+    global SECRET_KEY
+    debug = WEB_CONFIG['debug']
+
+    if SECRET_KEY is None:
+        # 未设置密钥
         if not debug:
-            warnings.warn(
-                '⚠️ 警告：生产环境使用默认 SECRET_KEY！\n'
-                '请设置环境变量：set SECRET_KEY=your-secure-random-key\n'
-                '或使用 Python 生成：python -c "import secrets; print(secrets.token_hex(32))"',
-                RuntimeWarning
+            raise SystemExit(
+                '\n[SECURITY] 生产环境必须设置 SECRET_KEY 环境变量.\n'
+                '生成方法: python -c "import secrets; print(secrets.token_hex(32))"\n'
+                '然后设置: set SECRET_KEY=<生成的密钥>  (Windows)\n'
+                '       或 export SECRET_KEY=<生成的密钥>  (Linux/Mac)\n'
             )
-            return False
+        # DEBUG 模式自动生成临时密钥
+        SECRET_KEY = secrets.token_hex(32)
+        print(
+            '\n[WARNING] SECRET_KEY 未设置, 已自动生成临时密钥用于开发环境.'
+            '\n          此密钥每次重启会变化, 请勿用于生产部署.'
+            '\n          生产部署请显式设置 SECRET_KEY 环境变量.\n'
+        )
+        return False
+
+    if SECRET_KEY == _LEGACY_DEFAULT_KEY:
+        # 旧代码中的默认值, 绝不能用于生产
+        if not debug:
+            raise SystemExit(
+                '\n[SECURITY] SECRET_KEY 使用了已知的默认字符串, 生产环境禁止使用.\n'
+                '请设置环境变量: export SECRET_KEY=$(python -c "import secrets; print(secrets.token_hex(32))")\n'
+            )
+        print(
+            '\n[WARNING] SECRET_KEY 使用了已知的默认字符串, 仅在 DEBUG 模式下被允许.'
+            '\n          生产部署前请设置唯一的 SECRET_KEY.\n'
+        )
+        return False
+
     return True
+
+
+# 保留旧函数名作为别名, 向后兼容 (被 app.py / 其他脚本可能调用)
+def check_security_config() -> bool:
+    """向后兼容的别名. 建议使用 ensure_security_config()."""
+    return ensure_security_config()
+
 
 # 日志配置
 LOGGING_CONFIG = {
@@ -75,11 +121,20 @@ LOGGING_CONFIG = {
     "backup_count": 5
 }
 
-# API 配置（预留，供后续实现速率限制等功能使用）
+# API 配置
 API_CONFIG = {
     "rate_limit": int(os.environ.get('API_RATE_LIMIT', '60')),  # 每分钟请求数
     "max_json_size": int(os.environ.get('MAX_JSON_SIZE', '1024')),  # KB
 }
+
+# 限流器存储后端
+# 默认内存 (单进程); 多进程 / 多 worker 必须改 Redis
+# 例如: redis://localhost:6379/0  或  redis://:password@host:6379/1
+LIMITER_STORAGE_URI = os.environ.get('LIMITER_STORAGE_URI', 'memory://')
+
+# 写操作鉴权 Token (None 表示不要求鉴权, 仅开发模式合理)
+# 生产部署必须设置, 见 README
+API_TOKEN = os.environ.get('API_TOKEN', None)
 
 
 def get_base_path():

@@ -14,7 +14,6 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from src.analyzer import Analyzer
 from src.predictor import Predictor
 from src.cache import DataCache, analysis_cache, prediction_cache
-from src.storage import JSONStorage, SQLiteStorage
 
 
 class TestAnalyzer(unittest.TestCase):
@@ -165,101 +164,6 @@ class TestCache(unittest.TestCase):
         self.assertGreater(stats['hits'], 0)
 
 
-class TestStorage(unittest.TestCase):
-    """存储层测试"""
-    
-    def setUp(self):
-        self.test_data_dir = 'test_data'
-        os.makedirs(self.test_data_dir, exist_ok=True)
-        
-        self.test_records = [
-            {
-                'issue': '2024001',
-                'date': '2024-01-02',
-                'red_balls': [5, 10, 15, 20, 25, 30],
-                'blue_ball': 8
-            }
-        ]
-    
-    def tearDown(self):
-        """清理测试文件"""
-        import shutil
-        import time
-        
-        # 等待 SQLite 连接关闭
-        time.sleep(0.5)
-        
-        if os.path.exists(self.test_data_dir):
-            try:
-                shutil.rmtree(self.test_data_dir)
-            except PermissionError:
-                # Windows 下可能无法立即删除，忽略错误
-                pass
-    
-    def test_json_storage(self):
-        """测试 JSON 存储"""
-        storage = JSONStorage(self.test_data_dir)
-        
-        # 保存数据
-        storage.save_history(self.test_records)
-        
-        # 加载数据
-        loaded = storage.load_history()
-        self.assertEqual(len(loaded), 1)
-        self.assertEqual(loaded[0]['issue'], '2024001')
-    
-    def test_json_add_record(self):
-        """测试添加记录"""
-        storage = JSONStorage(self.test_data_dir)
-        
-        record = {
-            'issue': '2024002',
-            'date': '2024-01-04',
-            'red_balls': [1, 2, 3, 4, 5, 6],
-            'blue_ball': 10
-        }
-        
-        storage.add_record(record)
-        loaded = storage.load_history()
-        self.assertEqual(len(loaded), 1)
-    
-    def test_sqlite_storage(self):
-        """测试 SQLite 存储"""
-        storage = SQLiteStorage(self.test_data_dir)
-        
-        # 保存数据
-        storage.save_history(self.test_records)
-        
-        # 加载数据
-        loaded = storage.load_history()
-        self.assertEqual(len(loaded), 1)
-        self.assertEqual(loaded[0]['issue'], '2024001')
-    
-    def test_sqlite_add_record(self):
-        """测试 SQLite 添加记录"""
-        storage = SQLiteStorage(self.test_data_dir)
-        
-        record = {
-            'issue': '2024002',
-            'date': '2024-01-04',
-            'red_balls': [1, 2, 3, 4, 5, 6],
-            'blue_ball': 10
-        }
-        
-        storage.add_record(record)
-        loaded = storage.load_history()
-        self.assertEqual(len(loaded), 1)
-    
-    def test_clear_history(self):
-        """测试清空历史"""
-        storage = JSONStorage(self.test_data_dir)
-        storage.save_history(self.test_records)
-        
-        storage.clear_history()
-        loaded = storage.load_history()
-        self.assertEqual(len(loaded), 0)
-
-
 class TestPredictor(unittest.TestCase):
     """预测器测试"""
     
@@ -380,7 +284,6 @@ def run_tests():
     # 添加测试
     suite.addTests(loader.loadTestsFromTestCase(TestAnalyzer))
     suite.addTests(loader.loadTestsFromTestCase(TestCache))
-    suite.addTests(loader.loadTestsFromTestCase(TestStorage))
     suite.addTests(loader.loadTestsFromTestCase(TestPredictor))
     suite.addTests(loader.loadTestsFromTestCase(TestInputValidation))
     

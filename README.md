@@ -1,543 +1,340 @@
-# 双色球预测平台 v2.1
+# 双色球预测平台 · SSQ Prediction Platform
 
-基于历史数据分析与智能算法的号码预测系统
+[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white)](#-本地开发)
+[![Flask](https://img.shields.io/badge/Flask-3.0-000000?logo=flask)](https://flask.palletsprojects.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)](#-本地开发)
 
-> ## ⚠️ 重要声明 / Disclaimer
->
-> **本项目仅供娱乐和学习用途。**
->
-> - 双色球彩票开奖结果是**完全独立、等概率**的随机事件，不存在任何可被预测、计算或破解的规律。
-> - 本项目提供的所有"预测""推荐""算法分析"结果均为基于历史数据的**统计学演示**，**不具备任何真实预测能力**，亦不构成任何投注建议。
-> - 请勿将本项目用于实际彩票投注，**理性购彩，量力而行，远离赌博**。
-> - 使用本项目所产生的一切后果由使用者自行承担，与作者无关。
->
-> ---
->
-> **This project is for entertainment and learning purposes only.**
-> Lottery draws are independent random events. All "predictions" and "recommendations" produced by this project are statistical demonstrations based on historical data, have **no real predictive power**, and do **not** constitute any betting advice. Please gamble responsibly.
+基于 **Flask + Playwright** 的双色球历史数据抓取与号码预测 Web 平台。仅供**娱乐**和**统计学习**用途。
 
-> **v2.1 完全优化版**：14 种预测算法、模块化架构、性能提升 90%、完整日志监控
+> ⚠️ **重要免责声明**
+> 彩票是**纯随机事件**，任何算法都无法预测中奖号码。本项目提供的所有"预测"功能均为**统计学娱乐**，
+> 不构成任何投注建议。请理性看待结果，**未满 18 周岁请勿使用**，**理性购彩**。
+> 项目作者不承担因使用本工具产生的任何损失。
 
----
+---## ✨ 特性
 
-## 🚀 快速开始
+- 🕷️ **多源爬虫** — 500 彩票网 / 中彩网 / 福彩官网，自动 fallback，**Playwright 兜底** JS 渲染
+- 🧮 **13 种预测算法** — 加权随机、马尔可夫链、K-Means 聚类、遗传算法、蒙特卡洛、综合推荐等
+- 📊 **历史数据分析** — 热号 / 冷号 / 遗漏值 / 和值分布 / 奇偶比 / 连号 / AC 指数
+- 💾 **收藏号码 + 自动对奖** — 一键检查最新一期是否中奖，奖金等级自动判定
+- 📥 **多格式导入导出** — JSON / CSV / TXT 历史数据，UTF-8 编码
+- 🔒 **基础鉴权** — 写操作要求 `X-API-Token` header（开发模式可选）
+- 📱 **响应式 UI** — 桌面 / 平板 / 手机自适应，静态资源按类型缓存
+- 🪟 **可打包** — PyInstaller 打成单文件 `.exe`，双击即用
 
-### 方式一：使用发布版本（无需安装 Python）
+---## 📦 快速开始
 
-1. 复制 `发布版本` 文件夹到任意位置
-2. 双击运行 `启动.bat`
-3. 浏览器自动打开 http://localhost:5000
+### 环境要求
 
-### 方式二：源代码运行（需要 Python）
+- **Python 3.9+**（推荐 3.11）
+- **pip** 包管理
+- **Playwright 浏览器**（仅首次运行爬虫时需要）
+
+### 安装
 
 ```bash
-# 安装依赖
+git clone https://github.com/liuhua1202/ssq-platform.git
+cd ssq-platform
+
+# 推荐：虚拟环境
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# Linux/Mac: source .venv/bin/activate
+
 pip install -r requirements.txt
 
-# 启动应用
+# 仅当需要抓取数据时才装：
+playwright install chromium
+```
+
+### 启动
+
+```bash
+# 方式一：直接启动（开发模式，会自动生成临时 SECRET_KEY）
 python app.py
+
+# 方式二：Windows 一键
+start.bat
 ```
 
-### 访问平台
+打开浏览器访问 `http://localhost:5000`。
 
-打开浏览器访问：**http://localhost:5000**
-
-### 首次使用（重要！）
-
-首次使用请清除浏览器缓存：
-1. 按 `Ctrl + Shift + Delete`
-2. 选择"缓存的图像和文件"
-3. 点击"清除数据"
-4. 或强制刷新：`Ctrl + F5`
-
----
-
-## 📦 发布说明
-
-### 发布版本内容
-
-`发布版本`文件夹包含：
-- `SSQPredictor.exe` - 主程序 (约 28MB)
-- `启动.bat` - 一键启动脚本
-- `templates/` - 页面模板
-- `static/` - 静态资源
-- `data/` - 数据文件
-
-### 重新打包
-
-如需重新打包，运行：
-```bash
-python -m PyInstaller --onefile --name "SSQPredictor" \
-    --add-data "templates;templates" \
-    --add-data "static;static" \
-    --add-data "data;data" \
-    app.py
-```
-
----
-
-## 📋 目录
-
-- [功能特点](#-功能特点)
-- [14 种预测算法](#14-种预测算法)
-- [使用指南](#-使用指南)
-- [数据导入格式](#-数据导入格式)
-- [奖级规则](#-奖级规则)
-- [技术架构](#-技术架构)
-- [性能指标](#-性能指标)
-- [常见问题](#-常见问题)
-- [故障排除](#-故障排除)
-
----
-
-## ✨ 功能特点
-
-- **14 种预测算法**: 综合推荐、加权随机、遗传算法、蒙特卡洛等
-- **历史数据分析**: 热号、冷号、遗漏值、奇偶比、和值分析
-- **号码检查**: 检查您的号码与历史数据的匹配情况
-- **收藏号码**: 保存心仪的号码到浏览器和服务器
-- **数据管理**: 备份、恢复、导入历史数据（支持 JSON/CSV/TXT 格式）
-- **导出功能**: 支持导出收藏号码和历史数据为 JSON 格式
-- **健康检查**: 实时监控系统状态和缓存命中率
-- **性能监控**: 追踪慢请求，便于性能优化
-- **Web 界面**: 美观的 Switch 主题 UI 设计
-
----
-
-## 🔮 14 种预测算法
-
-| 算法名称 | 说明 | 适用场景 |
-|---------|------|---------|
-| **综合推荐** | 整合多种算法的最佳推荐 | ⭐ 首选推荐 |
-| 加权随机 | 基于热冷号权重生成 | 随机选择 |
-| 正态分布 | 基于和值正态分布模型 | 追求均衡 |
-| 遗传算法 | 通过进化优化最优组合 | 寻找最优 |
-| 蒙特卡洛 | 大量模拟找出高概率组合 | 概率分析 |
-| 智能推荐 | 基于遗漏值和趋势分析 | 追冷防热 |
-| 区间分布 | 三区平衡分析 | 区间搭配 |
-| 连号分析 | 连号规律分析 | 关注连号 |
-| 同尾号 | 同尾数规律分析 | 尾数选择 |
-| 质合数 | 质数合数比分析 | 特殊形态 |
-| 大中小号 | 大小号分布分析 | 跨度选择 |
-| 马尔可夫链 | 状态转移概率分析 | 趋势分析 |
-| K 均值聚类 | 数据聚类模式识别 | 模式识别 |
-
----
-
-## 📖 使用指南
-
-### 号码预测
-
-1. 点击"号码预测"标签
-2. 选择算法（推荐"综合推荐"）
-3. 设置生成注数（默认 5 注）
-4. 点击"生成预测号码"
-5. 点击"收藏"保存心仪号码
-
-### 历史数据
-
-- 查看历史开奖记录（300 条）
-- 支持分页浏览（每页 50 条）
-- 点击"数据管理"可导入/备份/恢复
-
-### 数据分析
-
-查看统计信息：
-- 🔥 **热号**：出现频率最高的号码
-- ❄️ **冷号**：出现频率最低的号码
-- 📊 **遗漏统计**：当前遗漏值最大的号码
-- 🔵 **蓝球分析**：蓝球的热号和冷号
-
-### 号码分析
-
-1. 输入 6 个红球（1-33）和 1 个蓝球（1-16）
-2. 点击"分析号码"
-3. 查看与历史数据的匹配情况和历史匹配记录
-
-### 我的号码
-
-- 查看收藏的号码
-- 显示算法和备注信息
-- 可删除不需要的号码
-
-### 数据管理
-
-- **备份**: 创建当前数据的备份
-- **恢复**: 从备份文件恢复数据
-- **导入**: 支持 JSON/CSV/TXT 格式
-- **清空**: 清空所有历史数据（谨慎使用）
-
-### 导出功能
-
-- **导出收藏号码**: JSON 格式
-- **导出历史数据**: JSON 格式
-
----
-
-## 📥 数据导入格式
-
-### JSON 格式（推荐）
-
-```json
-[
-  {
-    "issue": "2024001",
-    "red_balls": [5, 10, 15, 20, 25, 30],
-    "blue_ball": 8,
-    "date": "2024-01-02"
-  }
-]
-```
-
-### CSV 格式
-
-```csv
-issue,red_balls,blue_ball,date
-2024001,"5,10,15,20,25,30",8,2024-01-02
-```
-
-### TXT 格式
-
-```
-2024001,5,10,15,20,25,30,8
-2024002,3,8,17,22,28,31,12
-```
-
-### 网页表格粘贴
-
-从福彩网或 500 彩票网复制表格数据，直接粘贴到"粘贴导入"文本框即可。
-
----
-
-## 🏆 奖级规则
-
-| 奖级 | 中奖条件 | 说明 |
-|-----|---------|------|
-| 一等奖 | 6 红 + 1 蓝 | 选中全部 7 个号码 |
-| 二等奖 | 6 红 + 0 蓝 | 选中全部红球 |
-| 三等奖 | 5 红 + 1 蓝 | 选中 5 个红球和蓝球 |
-| 四等奖 | 5 红 + 0 蓝 或 4 红 + 1 蓝 | |
-| 五等奖 | 4 红 + 0 蓝 或 3 红 + 1 蓝 | |
-| 六等奖 | 0-2 红 + 1 蓝 | 仅选中蓝球 |
-
----
-
-## 🏗️ 技术架构
-
-### 后端
-
-- **框架**: Flask 3.0+
-- **架构**: Blueprint 蓝图模式
-- **缓存**: 多级数据缓存（分析/预测/历史）
-- **算法**: 14 种独立算法模块
-- **日志**: 完整日志系统（支持轮转）
-- **监控**: 性能监控、健康检查
-
-### 前端
-
-- **架构**: ES6 模块化
-- **主题**: Switch 配色（#E60012 红）
-- **模块**: 10 个功能模块
-- **重试**: API 请求自动重试（3 次）
-- **存储**: localStorage 容量管理
-
-### 目录结构
-
-```
-双色球平台/
-├── app.py                  # Flask 主应用
-├── config.py               # 配置文件
-├── requirements.txt        # Python 依赖
-├── start.bat               # 快速启动脚本
-├── README.md               # 本文件
-├── docs/                   # 文档目录
-│   ├── USAGE_GUIDE.md      # 详细使用指南
-│   ├── QUICK_FIX.md        # 快速故障排除
-│   ├── TROUBLESHOOTING.md  # 技术诊断指南
-│   └── ...                 # 其他文档
-├── src/
-│   ├── algorithms/         # 14 种算法实现
-│   │   ├── base.py         # 算法基类
-│   │   ├── comprehensive.py    # 综合推荐
-│   │   ├── weighted_random.py  # 加权随机
-│   │   ├── genetic.py          # 遗传算法
-│   │   ├── monte_carlo.py      # 蒙特卡洛
-│   │   └── ... (共 14 个)
-│   ├── api/
-│   │   └── api.py          # API 蓝图 (19 个端点)
-│   ├── cache.py            # 数据缓存层
-│   ├── analyzer.py         # 数据分析
-│   ├── predictor.py        # 预测接口
-│   └── crawler.py          # 数据加载
-├── static/
-│   ├── style.css           # Switch 主题样式
-│   └── js/
-│       ├── app.js          # 主入口
-│       └── modules/
-│           ├── api.js          # API 封装
-│           ├── loading.js      # 加载状态管理
-│           ├── predict.js      # 预测模块
-│           ├── history.js      # 历史数据模块
-│           ├── analysis.js     # 分析模块
-│           ├── check.js        # 号码检查模块
-│           ├── myNumbers.js    # 收藏管理模块
-│           ├── dataManager.js  # 数据管理模块
-│           ├── export.js       # 导出模块
-│           └── utils.js        # 工具函数
-├── templates/
-│   └── index.html          # Web 界面
-└── data/
-    ├── history.json        # 历史数据
-    ├── my_numbers.json     # 收藏号码
-    └── backup/             # 备份文件目录
-```
-
----
-
-## 📈 性能指标
-
-| 指标 | 优化前 | 优化后 | 提升 |
-|------|--------|--------|------|
-| API 响应时间 (带缓存) | ~500ms | ~50ms | **90% ↓** |
-| 预测生成时间 | ~200ms | ~120ms | **40% ↓** |
-| 页面加载时间 | ~2.5s | ~1.0s | **60% ↓** |
-| 内存占用 | ~180MB | ~100MB | **44% ↓** |
-| 依赖包大小 | ~35MB | ~5MB | **86% ↓** |
-| 缓存命中率 | ~40% | ~85% | **112% ↑** |
-
----
-
-## ❓ 常见问题
-
-### Q: 点击按钮没有反应？
-
-**A**: 可能是浏览器缓存问题
-1. 按 `F12` 打开开发者工具
-2. 查看 Console 是否有错误
-3. 清除缓存或强制刷新 (`Ctrl + F5`)
-4. 重启浏览器
-
-### Q: 提示"暂无历史数据"？
-
-**A**: 需要导入历史数据
-1. 访问"历史数据"标签
-2. 点击"数据管理"
-3. 选择导入文件或粘贴文本
-
-### Q: 如何导出收藏号码？
-
-**A**: 在"我的号码"页面点击"导出"按钮，或通过 API：
-```bash
-curl http://localhost:5000/api/export/my-numbers
-```
-
-### Q: 如何查看系统状态？
-
-**A**: 访问健康检查端点：
-```bash
-curl http://localhost:5000/api/health
-```
-
-### Q: 缓存统计在哪里查看？
-
-**A**: 访问缓存统计端点：
-```bash
-curl http://localhost:5000/api/cache/stats
-```
-
----
-
-## 🔧 故障排除
-
-### 问题：无法正常生成预测数据
-
-**快速诊断**：
-```bash
-# 运行诊断工具
-docs/diagnose.bat
-
-# 或测试后端
-python -c "from app import app; print('OK')"
-```
-
-**解决方案**：
-
-1. **清除浏览器缓存**（最常见）
-   - Windows: `Ctrl + Shift + Delete`
-   - 选择"缓存的图像和文件"
-   - 点击"清除数据"
-
-2. **检查浏览器控制台**
-   - 按 `F12` 打开开发者工具
-   - 查看 Console 标签的错误信息
-   - 查看 Network 标签中 API 请求状态
-
-3. **重启 Flask 应用**
-   - 停止当前运行中的应用（Ctrl+C）
-   - 重新启动：`python app.py`
-
-### 问题：提示"暂无历史数据"
-
-**解决方案**：
-1. 检查 `data/history.json` 文件是否存在
-2. 如果文件为空或不存在，需要导入历史数据
-3. 访问"历史数据" -> "数据管理" -> 导入数据
-
-### 问题：API 请求失败
-
-**检查步骤**：
-1. 确认 Flask 应用已启动
-2. 检查 Network 标签中请求状态码
-   - `200`: 正常
-   - `404`: 后端未启动或路由错误
-   - `500`: 服务器内部错误
-3. 查看 Flask 日志输出
-
-### 回退方案
-
-如果新版本有问题，可以查看 `docs/` 目录中的详细文档获取帮助。
-
----
-
-## 🌐 API 端点
-
-### 数据查询
-
-| 端点 | 方法 | 说明 |
-|------|------|------|
-| `/api/history` | GET | 获取历史数据（分页） |
-| `/api/history/raw` | GET | 获取原始历史数据 |
-| `/api/latest` | GET | 获取最新开奖数据 |
-| `/api/analysis` | GET | 获取分析报告 |
-| `/api/statistics` | GET | 获取统计信息 |
-
-### 预测功能
-
-| 端点 | 方法 | 说明 |
-|------|------|------|
-| `/api/predict` | POST | 生成预测号码 |
-| `/api/check` | POST | 检查号码匹配情况 |
-
-### 收藏管理
-
-| 端点 | 方法 | 说明 |
-|------|------|------|
-| `/api/my-numbers` | GET | 获取收藏号码 |
-| `/api/my-numbers` | POST | 保存收藏号码 |
-| `/api/auto-check` | POST | 自动检查中奖 |
-
-### 数据管理
-
-| 端点 | 方法 | 说明 |
-|------|------|------|
-| `/api/backup` | POST | 创建备份 |
-| `/api/backups` | GET | 获取备份列表 |
-| `/api/backup/<filename>` | DELETE | 删除备份 |
-| `/api/restore` | POST | 恢复备份 |
-| `/api/import` | POST | 导入文件数据 |
-| `/api/import-text` | POST | 导入文本数据 |
-| `/api/clear-data` | POST | 清空历史数据 |
-
-### 导出功能
-
-| 端点 | 方法 | 说明 |
-|------|------|------|
-| `/api/export/my-numbers` | GET | 导出收藏号码 |
-| `/api/export/history` | GET | 导出历史数据 |
-
-### 系统监控
-
-| 端点 | 方法 | 说明 |
-|------|------|------|
-| `/api/health` | GET | 健康检查 |
-| `/api/cache/stats` | GET | 缓存统计 |
-| `/api/cache/clear` | POST | 清除所有缓存 |
-
----
-
-## ⚙️ 配置说明
-
-### 环境变量
+### 运行测试
 
 ```bash
-# Windows
-set SECRET_KEY=your-secret-key-here
-set FLASK_DEBUG=False
-set LOG_LEVEL=INFO
+python tests/test_core.py
+```
 
-# Linux/Mac
-export SECRET_KEY=your-secret-key-here
+---## 🚀 生产部署
+
+⚠️ **生产模式必须设置两个环境变量**，否则启动直接 `SystemExit`：
+
+| 变量 | 说明 | 生成方法 |
+|---|---|---|
+| `SECRET_KEY` | Flask session 签名密钥 | `python -c "import secrets; print(secrets.token_hex(32))"` |
+| `API_TOKEN` | 写操作 API 鉴权 token | `python -c "import secrets; print(secrets.token_urlsafe(32))"` |
+| `FLASK_DEBUG` | 必须设为 `False` | 直接 `export FLASK_DEBUG=False` |
+| `LOG_LEVEL` | 日志级别（默认 INFO） | `INFO` / `WARNING` / `ERROR` |
+
+### Gunicorn（推荐）
+
+```bash
+pip install gunicorn
+
+export SECRET_KEY=$(python -c "import secrets; print(secrets.token_hex(32))")
+export API_TOKEN=$(python -c "import secrets; print(secrets.token_urlsafe(32))")
 export FLASK_DEBUG=False
-export LOG_LEVEL=INFO
+
+gunicorn -w 2 -b 0.0.0.0:5000 app:app
+```### Docker（参考）
+
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt \
+ && playwright install --with-deps chromium
+COPY . .
+ENV FLASK_DEBUG=False
+# SECRET_KEY 和 API_TOKEN 通过 -e 或 .env 注入
+EXPOSE 5000
+CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "app:app"]
 ```
 
-### 配置文件 (config.py)
+### Windows 单文件打包
 
-```python
-# 安全配置
-SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-key')
+```bash
+pip install pyinstaller
+pyinstaller --onefile --add-data "templates;templates" --add-data "static;static" app.py
+# 产物：dist/app.exe
+```
 
-# 日志配置
-LOGGING_CONFIG = {
-    "level": "INFO",
-    "file": "logs/app.log",
-    "max_bytes": 10 * 1024 * 1024,  # 10MB
-    "backup_count": 5
-}
+---## 🔐 鉴权说明
+
+从 **v2.1** 起，所有写操作 / 算力消耗端点都受 `X-API-Token` 保护。
+
+| 模式 | `API_TOKEN` 环境变量 | 行为 |
+|---|---|---|
+| 开发（默认） | 未设置 | 写操作放行，logger.debug 提示 |
+| 生产 | 已设置 | 缺少/错误 `X-API-Token` 头 → `401 Unauthorized` |
+
+前端调用示例：
+
+```javascript
+// static/js/api.js
+const resp = await fetch('/api/predict', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-API-Token': window.__API_TOKEN__
+  },
+  body: JSON.stringify({ algorithm: 'comprehensive', generations: 5 })
+});
+```
+
+被保护的端点：`/predict` `/check` `/auto-check` `/backup` `/restore` `/import` `/import-text` `/clear-data` `/my-numbers` `/fetch-latest` `/fetch-history` `/cache/clear`。读操作（GET）无需 token。
+
+---## 🏗️ 技术栈
+
+- **[Flask 3.0](https://flask.palletsprojects.com/)** — Web 框架
+- **[Flask-Limiter](https://flask-limiter.readthedocs.io/)** — 全局限流（`200/天, 50/小时`，开发模式默认内存存储，生产建议配 Redis）
+- **[Playwright + playwright-stealth](https://playwright.dev/python/)** — 反爬虫对抗 + JS 渲染兜底
+- **[beautifulsoup4](https://www.crummy.com/software/BeautifulSoup/)** — HTML 解析
+- **[fake-useragent](https://github.com/fake-useragent/fake-useragent)** — UA 随机化
+- **自研内存缓存** — TTL + LRU 淘汰，零外部依赖
+- **PyInstaller** — Windows 单文件打包（可选）
+
+---## 📂 项目结构
+
+```
+ssq-platform/
+├── app.py                       # Flask 主应用 + 蓝图注册 + 速率限制
+├── config.py                    # 配置常量 + 启动安全检查
+├── start.bat                    # Windows 一键启动
+├── requirements.txt             # 锁定版本依赖
+├── README.md
+├── LICENSE                      # MIT
+│
+├── src/
+│   ├── api/api.py               # /api/* 蓝图（23 个端点）
+│   ├── algorithms/              # 13 种预测算法实现
+│   │   ├── base.py              #   基类 + 加权采样工具
+│   │   ├── weighted_random.py   #   加权随机
+│   │   ├── normal_distribution.py
+│   │   ├── genetic.py           #   遗传算法
+│   │   ├── monte_carlo.py       #   蒙特卡洛
+│   │   ├── comprehensive.py     #   综合推荐
+│   │   ├── smart_recommendation.py
+│   │   ├── zone_distribution.py
+│   │   ├── consecutive_analysis.py
+│   │   ├── same_tail_analysis.py
+│   │   ├── prime_composite.py
+│   │   ├── big_small_analysis.py
+│   │   ├── markov_chain.py
+│   │   └── kmeans_clustering.py
+│   ├── analyzer.py              # 数据分析（频次 / 遗漏 / 和值 / AC）
+│   ├── cache.py                 # 内存缓存（TTL + LRU）
+│   ├── crawler.py               # 多源爬虫 + 数据持久化
+│   ├── online_fetcher.py        # 500 网专用 fetcher
+│   └── predictor.py             # 算法调度器 + LRU 实例缓存
+│
+├── tests/
+│   └── test_core.py             # 单元测试（23 项）
+│
+├── scripts/
+│   └── test_online_fetch.py     # 在线抓取诊断脚本
+│
+├── templates/
+│   ├── index.html               # 主页面（单页应用）
+│   └── diagnose.html
+│
+├── static/
+│   ├── css/style.css            # 主题样式
+│   ├── js/                      # JS 模块
+│   └── manifest.json            # PWA manifest
+│
+├── docs/                        # 文档 / 截图
+├── data/                        # 运行时数据（gitignore）
+│   ├── history.json             #   历史开奖数据
+│   ├── my_numbers.json          #   收藏号码
+│   └── backup/                  #   自动备份（保留最近 5 份）
+└── logs/                        # 运行时日志（gitignore）
+```
+
+---## 📝 API 一览
+
+| Method | Path | 用途 | 鉴权 |
+|---|---|---|---|
+| GET | `/` | 主页面 | — |
+| GET | `/diagnose` | 诊断页面 | — |
+| GET | `/api/health` | 健康检查 | — |
+| GET | `/api/history` | 历史数据（带分页） | — |
+| GET | `/api/history/raw` | 原始历史（导出用） | — |
+| GET | `/api/analysis` | 综合分析报告 | — |
+| POST | `/api/predict` | 生成预测 | ✅ |
+| GET | `/api/statistics` | 统计信息 | — |
+| POST | `/api/check` | 检查号码与历史匹配 | ✅ |
+| POST | `/api/auto-check` | 自动对奖 | ✅ |
+| GET | `/api/latest` | 最新一期 | — |
+| POST | `/api/fetch-latest` | 抓取最新一期 | ✅ |
+| POST | `/api/fetch-history` | 抓取历史数据 | ✅ |
+| POST | `/api/backup` | 创建备份 | ✅ |
+| GET | `/api/backups` | 备份列表 | — |
+| DELETE | `/api/backup/` | 删除指定备份 | ✅ |
+| POST | `/api/restore` | 从备份恢复 | ✅ |
+| POST | `/api/import` | 导入（JSON/CSV/TXT） | ✅ |
+| POST | `/api/import-text` | 导入（粘贴文本） | ✅ |
+| POST | `/api/clear-data` | 清空历史 | ✅ |
+| GET/POST | `/api/my-numbers` | 收藏号码读写 | POST ✅ |
+| GET | `/api/export/my-numbers` | 导出收藏 | — |
+| GET | `/api/export/history` | 导出历史 | — |
+| GET | `/api/cache/stats` | 缓存统计 | — |
+| POST | `/api/cache/clear` | 清空缓存 | ✅ |
+
+---### 调用示例
+
+```bash
+# 生成 5 注综合推荐预测
+curl -X POST http://localhost:5000/api/predict \
+  -H "Content-Type: application/json" \
+  -H "X-API-Token: $API_TOKEN" \
+  -d '{"algorithm": "comprehensive", "generations": 5}'
+
+# 抓取最新一期开奖
+curl -X POST http://localhost:5000/api/fetch-latest \
+  -H "X-API-Token: $API_TOKEN"
+
+# 检查号码 [3, 6, 13, 21, 28, 29] + 蓝球 6 的历史匹配
+curl -X POST http://localhost:5000/api/check \
+  -H "Content-Type: application/json" \
+  -H "X-API-Token: $API_TOKEN" \
+  -d '{"red_balls": [3, 6, 13, 21, 28, 29], "blue_ball": 6}'
+```
+
+---## 📋 v2.1 变更摘要
+
+相比 v2.0，本版本以 **bugfix + 安全加固** 为主：
+
+### 修复
+
+- **crawler.py 方法重复定义** — 4 个方法（`_fetch_cwl_html` / `_fetch_with_requests` / `_fetch_with_playwright` / `_parse_cwl_html`）定义了两次，Python 取最后一份掩盖 bug。删除重复版本，仅保留含 curl_cffi 优化的实现。文件从 1224 行 → 1072 行
+- **`/api/backup/` DELETE 路由 bug** — 路径尾 `/` + Flask 默认 `strict_slashes=True` 导致永远 404。改为 `/backup/` + `os.path.basename` 路径遍历防御
+- **`_parse_cwl_html_robust` 月份过滤吃掉合法红球** — 旧代码按值范围 `1-12` 过滤"月份碎片"，但 01-12 也是合法红球。改为基于位置的 `skip_set`，只跳过已知 `issue/date` 成员
+- **analyzer.get_missing_stats 数据顺序依赖** — 函数假设 `self.data` 已按期号降序，新增防御性排序 + 显式 docstring
+
+### 安全
+
+- **`SECRET_KEY` 启动校验** — 移除硬编码默认值字符串；DEBUG 模式自动生成 64 字符临时密钥 + warn；生产模式未设 / 用默认值 → `raise SystemExit` 拒绝启动
+- **写操作 API_TOKEN 鉴权** — 13 个写 / 计算端点加 `@require_api_token` 装饰器，校验 `X-API-Token` header；开发模式放行，生产模式必须设置 `API_TOKEN` 环境变量
+- **`import config` 替代 `from config import SECRET_KEY`** — 修复 `ensure_security_config()` 自动生成后本地变量未刷新的问题
+
+### 清理
+
+- **删除 `src/storage.py` 死代码**（222 行 + TestStorage 测试）— 设计了 JSONStorage / SQLiteStorage 抽象层但全项目无人调用，删除后 codebase 更干净
+
+---## 🐛 故障排查
+
+**Q: 启动报 `[SECURITY] 生产环境必须设置 SECRET_KEY`**
+
+A: 你要么忘了设置 `FLASK_DEBUG=False`，要么没设 `SECRET_KEY`。生产部署必须显式设置：
+
+```bash
+export FLASK_DEBUG=False
+export SECRET_KEY=$(python -c "import secrets; print(secrets.token_hex(32))")
 ```
 
 ---
 
-## 📝 更新日志
+**Q: 写操作返回 401 Unauthorized**
 
-### v2.1 (2026-04-03)
-- ✅ 修复缓存 TTL 逻辑错误
-- ✅ 添加 API 端点缓存机制
-- ✅ 添加日志记录系统
-- ✅ 添加环境变量支持
-- ✅ 完善异常处理
-- ✅ 改进前端模块加载
-- ✅ 添加输入验证
-- ✅ 优化缓存装饰器
-- ✅ 算法实例缓存优化
-- ✅ 前端 API 重试机制
-- ✅ 移除 numpy 依赖
-- ✅ localStorage 容量管理
-- ✅ 遗传算法优化
-- ✅ 健康检查端点
-- ✅ 统一加载状态管理
-- ✅ 性能监控
+A: `API_TOKEN` 已设置但请求没带 `X-API-Token` 头，或 token 不匹配。前端代码：
 
-### v2.0 (2026-03-29)
-- ✅ 全面重构代码结构
-- ✅ 新增 14 种预测算法
-- ✅ JavaScript 模块化
-- ✅ Switch 主题配色
-- ✅ 新增数据导出功能
-- ✅ 性能提升 80%
+```javascript
+fetch('/api/predict', {
+  headers: { 'X-API-Token': '<你的 token>' }
+});
+```
 
 ---
 
-## ⚠️ 注意事项
+**Q: 爬虫抓取失败**
 
-1. 本平台仅供娱乐参考
-2. 彩票有风险，购买需谨慎
-3. 请勿沉迷，理性购彩
-4. 数据仅供参考，不保证准确性
+A: 500 彩票网 / 中彩网经常更新反爬策略，可能需要：
+1. 检查 `playwright install chromium` 是否完成
+2. 查看 `logs/app.log` 详细错误
+3. 如果用了 VPN / 代理，可能被识别
 
----
-
-## 📚 更多文档
-
-详细文档请查看 `docs/` 目录：
-
-- `docs/USAGE_GUIDE.md` - 详细使用指南
-- `docs/QUICK_FIX.md` - 快速故障排除
-- `docs/TROUBLESHOOTING.md` - 技术诊断指南
-- `docs/OPTIMIZATION_COMPLETE.md` - 优化总结报告
+> ⚠️ **法律提示**：高频爬取第三方网站可能违反其服务条款 / robots.txt。请控制频率（默认 `delay=1s`），并将本工具定位为**个人学习**用途。
 
 ---
 
-**版本**: v2.1 (完全优化版)  
-**更新日期**: 2026-04-03  
-**平台评分**: ⭐⭐⭐⭐⭐ (95/100)
+**Q: `pip install` 报 `playwright` 错误**
+
+A: Windows 上 `playwright install chromium` 会下载 ~150MB 浏览器二进制。如果下载慢，可设置：
+
+```bash
+set PLAYWRIGHT_DOWNLOAD_HOST=https://npmmirror.com/mirrors/playwright
+playwright install chromium
+```
+
+---
+
+**Q: 端口 5000 被占用**
+
+A: 修改 `config.py` 中 `WEB_CONFIG['port']`，或启动时 `app.run(port=5001)`。
+
+---## 📄 许可证
+
+[MIT](LICENSE) © 2026 liuhua1202
+
+---
+
+## 🙏 致谢
+
+- 数据来源：[500 彩票网](https://www.500.com/) / [中彩网](http://www.zhcw.com/) / [福彩官网](https://www.cwl.gov.cn/)
+- 算法灵感：[马尔可夫链蒙特卡洛](https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo) / [K-Means](https://en.wikipedia.org/wiki/K-means_clustering) / [遗传算法](https://en.wikipedia.org/wiki/Genetic_algorithm)
+
+---
+
+> 🎲 再次提醒：**彩票是娱乐，不是投资**。请理性购彩，未成年人禁止购买。

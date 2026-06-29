@@ -7,9 +7,9 @@ import json
 import shutil
 import logging
 from functools import wraps
-from flask import Blueprint, jsonify, request, g
+from flask import Blueprint, jsonify, request, g, current_app
 from datetime import datetime
-from src.crawler import Crawler
+from src.crawler import Crawler, get_crawl_state
 from src.analyzer import Analyzer
 from src.predictor import Predictor
 from src.cache import analysis_cache, prediction_cache, history_cache
@@ -72,6 +72,59 @@ def validate_required_fields(required_fields: list):
     return decorator
 
 
+def require_api_token(f):
+    """写操作 / 算力消耗端点的鉴权装饰器.
+
+    行为:
+      - 如果 config.API_TOKEN 未设置 (开发模式) -> 放行, 但 logger.debug 提示
+      - 如果 config.API_TOKEN 已设置 -> 要求请求头 X-API-Token 与之匹配
+
+    生产部署必须设置 API_TOKEN 环境变量. 生成方法同 SECRET_KEY.
+    """
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        expected = current_app.config.get('API_TOKEN')
+        if not expected:
+            logger.debug(f'API_TOKEN 未设置, 跳过鉴权: {request.path}')
+            return f(*args, **kwargs)
+        provided = request.headers.get('X-API-Token', '')
+        if not provided or provided != expected:
+            logger.warning(f'API_TOKEN 校验失败: {request.path} from {request.remote_addr}')
+            return jsonify({
+                'success': False,
+                'message': '需要有效的 X-API-Token 头'
+            }), 401
+        return f(*args, **kwargs)
+    return decorated
+
+
+def api_error_handler(operation_name: str):
+    """统一异常处理装饰器 (作为 endpoint 的外层兜底).
+
+    行为:
+      - 捕获 endpoint 函数内未被内层 try/except 捕获的 Exception
+      - 记录 logger.error 包含完整堆栈 (exc_info=True)
+      - 返回 {'success': False, 'message': ...} + 500 状态码
+
+    适用场景: endpoint 函数被意外 patch / 导入错误等不可控情况.
+    业务异常处理应该保留 endpoint 自己的 try/except.
+    """
+    def decorator(f):
+        @wraps(f)
+        def wrapped(*args, **kwargs):
+            try:
+                return f(*args, **kwargs)
+            except Exception as e:
+                logger.error(f'{operation_name}失败 (兜底): {e}', exc_info=True)
+                return jsonify({
+                    'success': False,
+                    'message': f'{operation_name}失败: {str(e)}'
+                }), 500
+        return wrapped
+    return decorator
+
+
+@api_error_handler('获取历史数据')
 @api_bp.route('/history')
 def get_history():
     """获取历史数据（带缓存）"""
@@ -103,6 +156,7 @@ def get_history():
         }), 500
 
 
+@api_error_handler('获取原始历史数据')
 @api_bp.route('/history/raw')
 def get_history_raw():
     """获取原始历史数据（用于导出）"""
@@ -121,6 +175,7 @@ def get_history_raw():
         }), 500
 
 
+@api_error_handler('分析数据')
 @api_bp.route('/analysis')
 def get_analysis():
     """获取分析报告（带缓存）"""
@@ -158,7 +213,9 @@ def get_analysis():
         }), 500
 
 
+@api_error_handler('生成预测')
 @api_bp.route('/predict', methods=['POST'])
+@require_api_token
 @validate_json_required
 def predict():
     """生成预测号码（带缓存）"""
@@ -209,6 +266,7 @@ def predict():
         }), 500
 
 
+@api_error_handler('获取统计信息')
 @api_bp.route('/statistics')
 def get_statistics():
     """获取统计信息（带缓存）"""
@@ -247,7 +305,9 @@ def get_statistics():
         }), 500
 
 
+@api_error_handler('检查号码')
 @api_bp.route('/check', methods=['POST'])
+@require_api_token
 @validate_json_required
 @validate_required_fields(['red_balls', 'blue_ball'])
 def check_numbers():
@@ -312,12 +372,14 @@ def check_numbers():
         }), 500
 
 
+@api_error_handler('创建备份')
 @api_bp.route('/backup', methods=['POST'])
+@require_api_token
 def create_backup():
     """手动创建数据备份"""
     try:
         logger.info("手动创建备份")
-        crawler._create_backup()
+        crawler.create_backup()
         return jsonify({
             'success': True,
             'message': '备份创建成功'
@@ -330,6 +392,7 @@ def create_backup():
         }), 500
 
 
+@api_error_handler('获取备份列表')
 @api_bp.route('/backups', methods=['GET'])
 def get_backups():
     """获取备份文件列表"""
@@ -360,17 +423,28 @@ def get_backups():
         }), 500
 
 
+@api_error_handler('删除备份')
+@require_api_token
 @api_bp.route('/backup/<filename>', methods=['DELETE'])
 def delete_backup(filename):
     """删除指定的备份文件"""
     try:
-        if not filename.endswith('.json'):
+        # 防止路径遍历攻击: 取 basename
+        safe_filename = os.path.basename(filename)
+        if not safe_filename.endswith('.json'):
             return jsonify({
                 'success': False,
                 'message': '无效的备份文件'
             }), 400
 
-        backup_path = os.path.join(crawler.backup_dir, filename)
+        backup_path = os.path.join(crawler.backup_dir, safe_filename)
+        # 确认路径仍在 backup_dir 之下
+        if not os.path.abspath(backup_path).startswith(os.path.abspath(crawler.backup_dir)):
+            return jsonify({
+                'success': False,
+                'message': '非法的备份文件路径'
+            }), 400
+
         if not os.path.exists(backup_path):
             return jsonify({
                 'success': False,
@@ -378,10 +452,10 @@ def delete_backup(filename):
             }), 404
 
         os.remove(backup_path)
-        logger.info(f"删除备份：{filename}")
+        logger.info(f"删除备份：{safe_filename}")
         return jsonify({
             'success': True,
-            'message': f'备份文件 "{filename}" 已删除'
+            'message': f'备份文件 "{safe_filename}" 已删除'
         })
     except Exception as e:
         logger.error(f"删除备份失败：{e}")
@@ -391,7 +465,9 @@ def delete_backup(filename):
         }), 500
 
 
+@api_error_handler('恢复备份')
 @api_bp.route('/restore', methods=['POST'])
+@require_api_token
 @validate_json_required
 @validate_required_fields(['filename'])
 def restore_backup():
@@ -408,7 +484,7 @@ def restore_backup():
             }), 404
 
         logger.info(f"恢复备份：{filename}")
-        crawler._create_backup()
+        crawler.create_backup()
         shutil.copy2(backup_path, crawler.history_file)
         
         # 清除缓存
@@ -428,7 +504,9 @@ def restore_backup():
         }), 500
 
 
+@api_error_handler('导入数据')
 @api_bp.route('/import', methods=['POST'])
+@require_api_token
 def import_data():
     """导入历史数据（支持 CSV/JSON 格式）"""
     import csv
@@ -496,7 +574,7 @@ def import_data():
 
                 logger.info(f"JSON 文件包含 {len(data)} 条原始记录")
                 for idx, item in enumerate(data):
-                    record = crawler._parse_record(item)
+                    record = crawler.parse_record(item)
                     if record:
                         new_records.append(record)
                     else:
@@ -519,7 +597,7 @@ def import_data():
                 stream = io.StringIO(text_content)
                 reader = csv.DictReader(stream)
                 for row in reader:
-                    record = crawler._parse_record(row)
+                    record = crawler.parse_record(row)
                     if record:
                         new_records.append(record)
             except UnicodeDecodeError:
@@ -554,7 +632,7 @@ def import_data():
 
                         # 格式 1: 9列 (期号, 日期, 红1, 红2, 红3, 红4, 红5, 红6, 蓝)
                         if len(parts) >= 9:
-                            record = crawler._parse_record({
+                            record = crawler.parse_record({
                                 'issue': parts[0],
                                 'date': parts[1],
                                 'red_balls': parts[2:8],
@@ -563,7 +641,7 @@ def import_data():
                         
                         # 格式 2: 8列 (期号, 红1, 红2, 红3, 红4, 红5, 红6, 蓝)
                         elif len(parts) >= 8:
-                            record = crawler._parse_record({
+                            record = crawler.parse_record({
                                 'issue': parts[0],
                                 'date': None,
                                 'red_balls': parts[1:7],
@@ -572,7 +650,7 @@ def import_data():
                         
                         # 格式 3: 兼容网页复制粘贴格式 (期号, 日期, 连号字符串)
                         elif len(parts) >= 3:
-                            record = crawler._parse_web_copy({
+                            record = crawler.parse_web_copy({
                                 'issue': parts[0],
                                 'date': parts[1] if len(parts) > 1 else None,
                                 'balls': parts[2] if len(parts) > 2 else None
@@ -629,7 +707,9 @@ def import_data():
         }), 500
 
 
+@api_error_handler('导入文本数据')
 @api_bp.route('/import-text', methods=['POST'])
+@require_api_token
 @validate_json_required
 def import_text_data():
     """从文本导入历史数据"""
@@ -672,7 +752,7 @@ def import_text_data():
                 if '\t' in line:
                     parts = line.split('\t')
                     if len(parts) >= 3:
-                        record = crawler._parse_web_copy({
+                        record = crawler.parse_web_copy({
                             'issue': parts[0].strip(),
                             'date': parts[1].strip() if len(parts) > 1 else None,
                             'balls': parts[2].strip() if len(parts) > 2 else None
@@ -682,7 +762,7 @@ def import_text_data():
                 else:
                     parts = line.split(',')
                     if len(parts) >= 8:
-                        record = crawler._parse_record({
+                        record = crawler.parse_record({
                             'issue': parts[0],
                             'red_balls': parts[1:7],
                             'blue_ball': parts[7]
@@ -729,7 +809,9 @@ def import_text_data():
         }), 500
 
 
+@api_error_handler('清空历史数据')
 @api_bp.route('/clear-data', methods=['POST'])
+@require_api_token
 def clear_history_data():
     """清空历史数据"""
     try:
@@ -754,6 +836,7 @@ def clear_history_data():
         }), 500
 
 
+@api_error_handler('获取最新数据')
 @api_bp.route('/latest', methods=['GET'])
 def get_latest():
     """获取最新开奖数据"""
@@ -776,15 +859,33 @@ def get_latest():
         }), 500
 
 
+@api_error_handler('抓取最新开奖')
 @api_bp.route('/fetch-latest', methods=['POST'])
+@require_api_token
 def fetch_latest_from_web():
     """从官方源获取最新开奖信息（使用 crawler 模块）"""
+    crawl_state = get_crawl_state()
+
+    # 1. 检查缓存 - 60s 内的重复请求直接返回
+    cached = crawl_state.get_cached()
+    if cached and cached.get('success') and 'latest' in cached:
+        logger.info("返回缓存的抓取结果 (避免重复抓取)")
+        return jsonify({**cached, 'cached': True})
+
+    # 2. 尝试获取锁 - 防止并发抓取
+    if not crawl_state.try_acquire():
+        logger.warning("抓取正在进行中, 拒绝重复请求")
+        return jsonify({
+            'success': False,
+            'message': '正在抓取中, 请稍后再试'
+        }), 429
+
     try:
         logger.info("正在获取最新开奖信息...")
-        
+
         # 直接使用 crawler 模块（已从 kaijiang.500.com 等多源获取）
         result = crawler.fetch_latest_lottery()
-        
+
         # fetch_latest_lottery 直接返回数据字段，不是嵌套在 'data' 中
         if result.get('success'):
             # 数据直接在 result 中，不需要再从 'data' 中提取
@@ -794,18 +895,19 @@ def fetch_latest_from_web():
                 'red_balls': result.get('red_balls'),
                 'blue_ball': result.get('blue_ball')
             }
-            
-            if not latest.get('issue') or not latest.get('red_balls'): 
+
+            if not latest.get('issue') or not latest.get('red_balls'):
                 error_msg = '返回数据不完整'
                 logger.error(f"获取失败：{error_msg}")
-                return jsonify({
+                response = {
                     'success': False,
                     'message': f'获取失败：{error_msg}'
-                }), 400
-            
+                }
+                return jsonify(response), 400
+
             source = '500彩票网开奖页面'
             logger.info(f"获取成功：期号={latest.get('issue')}, 来源={source}")
-            
+
             # 保存逻辑
             data = _get_cached_history()
             exists = any(r.get('issue') == latest.get('issue') for r in (data or []))
@@ -816,47 +918,67 @@ def fetch_latest_from_web():
                 logger.info(f"新增数据已保存：期号={latest.get('issue')}")
             else:
                 logger.info(f"数据已存在：期号={latest.get('issue')}")
-                
-            return jsonify({
+
+            response = {
                 'success': True,
                 'message': f'获取成功（来源：{source}）',
                 'data': latest
-            })
-        
+            }
+            # 缓存成功结果
+            crawl_state.cache_result({'success': True, 'latest': latest, 'source': source})
+            return jsonify({**response, 'cached': False})
+
         error_msg = result.get('message', '获取失败')
         logger.error(f"获取失败：{error_msg}")
         return jsonify({
             'success': False,
             'message': f'获取失败：{error_msg}'
         }), 400
-        
-    except Exception as e:
-        logger.error(f"获取最新开奖异常：{e}", exc_info=True)
-        return jsonify({'success': False, 'message': f'获取失败：{str(e)}'}), 500
+
+    finally:
+        crawl_state.release()
 
 
+@api_error_handler('抓取历史开奖')
 @api_bp.route('/fetch-history', methods=['POST'])
+@require_api_token
 def fetch_history_from_web():
     """从网络获取历史开奖记录（使用 crawler 模块）"""
+    crawl_state = get_crawl_state()
+
+    # 1. 检查缓存 - 60s 内的重复请求直接返回
+    cached = crawl_state.get_cached()
+    if cached and cached.get('success') and 'history' in cached:
+        logger.info("返回缓存的抓取结果 (避免重复抓取)")
+        return jsonify({**cached['history'], 'cached': True})
+
+    # 2. 尝试获取锁 - 防止并发抓取
+    if not crawl_state.try_acquire():
+        logger.warning("抓取正在进行中, 拒绝重复请求")
+        return jsonify({
+            'success': False,
+            'message': '正在抓取中, 请稍后再试'
+        }), 429
+
     try:
         logger.info("开始从 500彩票网主页获取历史数据")
-        
+
         # 直接从主页获取历史数据（包含最近10期）
         result = crawler.fetch_lottery_history(page=1, page_size=20)
-        
+
         if not result.get('success') or not result.get('data'):
             logger.error("获取数据失败")
             return jsonify({
                 'success': False,
                 'message': result.get('message', '获取失败，请检查网络连接')
             }), 400
-        
+
         new_data = result.get('data', [])
         logger.info(f"500彩票网获取成功，共 {len(new_data)} 条")
-        
+
         # 合并到现有历史数据
         current_data = _get_cached_history() or []
-        
+
         # 去重（以期号为准）
         existing_issues = {record.get('issue') for record in current_data}
         merged_count = 0
@@ -865,27 +987,27 @@ def fetch_history_from_web():
                 current_data.append(record)
                 existing_issues.add(record.get('issue'))
                 merged_count += 1
-        
+
         # 按期号排序（最新的在前）
         current_data.sort(key=lambda x: x.get('issue', ''), reverse=True)
-        
+
         # 保存
         crawler.save_history(current_data)
         _clear_history_cache()
-        
+
         logger.info(f"数据保存成功，总计 {len(current_data)} 条，新增 {merged_count} 条")
-        return jsonify({
+        response = {
             'success': True,
             'message': f'成功获取 {len(new_data)} 条，新增 {merged_count} 条',
             'new_count': merged_count,
             'total': len(current_data)
-        })
-    except Exception as e:
-        logger.error(f"从网络获取历史开奖失败：{e}", exc_info=True)
-        return jsonify({
-            'success': False,
-            'message': f'获取失败：{str(e)}'
-        }), 500
+        }
+        # 缓存成功结果
+        crawl_state.cache_result({'success': True, 'history': response})
+        return jsonify({**response, 'cached': False})
+
+    finally:
+        crawl_state.release()
 
 
 def get_prize_level(red_match: int, blue_match: bool) -> str:
@@ -908,7 +1030,9 @@ def get_prize_level(red_match: int, blue_match: bool) -> str:
         return "未中奖"
 
 
+@api_error_handler('自动检查中奖')
 @api_bp.route('/auto-check', methods=['POST'])
+@require_api_token
 def auto_check_my_numbers():
     """自动检查收藏号码是否中奖"""
     try:
@@ -916,7 +1040,7 @@ def auto_check_my_numbers():
         my_numbers = req_data.get('my_numbers', [])
 
         if not my_numbers:
-            my_numbers_file = "data/my_numbers.json"
+            my_numbers_file = config.MY_NUMBERS_FILE
             if os.path.exists(my_numbers_file):
                 with open(my_numbers_file, 'r', encoding='utf-8') as f:
                     my_numbers = json.load(f)
@@ -979,11 +1103,12 @@ def auto_check_my_numbers():
         }), 500
 
 
+@api_error_handler('获取收藏号码')
 @api_bp.route('/my-numbers', methods=['GET'])
 def get_my_numbers_file():
     """获取收藏号码"""
     try:
-        my_numbers_file = "data/my_numbers.json"
+        my_numbers_file = config.MY_NUMBERS_FILE
         if os.path.exists(my_numbers_file):
             with open(my_numbers_file, 'r', encoding='utf-8') as f:
                 my_numbers = json.load(f)
@@ -1003,7 +1128,9 @@ def get_my_numbers_file():
         }), 500
 
 
+@api_error_handler('保存收藏号码')
 @api_bp.route('/my-numbers', methods=['POST'])
+@require_api_token
 @validate_json_required
 def save_my_numbers_file():
     """保存收藏号码"""
@@ -1024,8 +1151,8 @@ def save_my_numbers_file():
                 'message': '最多保存 100 注号码'
             }), 400
 
-        my_numbers_file = "data/my_numbers.json"
-        os.makedirs("data", exist_ok=True)
+        my_numbers_file = config.MY_NUMBERS_FILE
+        os.makedirs(os.path.dirname(config.MY_NUMBERS_FILE), exist_ok=True)
 
         with open(my_numbers_file, 'w', encoding='utf-8') as f:
             json.dump(my_numbers, f, ensure_ascii=False, indent=2)
@@ -1043,12 +1170,13 @@ def save_my_numbers_file():
         }), 500
 
 
+@api_error_handler('导出收藏号码')
 @api_bp.route('/export/my-numbers', methods=['GET'])
 def export_my_numbers():
     """导出收藏号码，支持 JSON、CSV、TXT 格式"""
     try:
         format_type = request.args.get('format', 'json').lower()
-        my_numbers_file = "data/my_numbers.json"
+        my_numbers_file = config.MY_NUMBERS_FILE
 
         if os.path.exists(my_numbers_file):
             with open(my_numbers_file, 'r', encoding='utf-8') as f:
@@ -1105,6 +1233,7 @@ def export_my_numbers():
         }), 500
 
 
+@api_error_handler('导出历史数据')
 @api_bp.route('/export/history', methods=['GET'])
 def export_history():
     """导出历史数据，支持 JSON、CSV、TXT 格式"""
@@ -1172,6 +1301,7 @@ def export_history():
         }), 500
 
 
+@api_error_handler('健康检查')
 @api_bp.route('/health')
 def health_check():
     """健康检查"""
@@ -1197,6 +1327,7 @@ def health_check():
         }), 500
 
 
+@api_error_handler('获取缓存统计')
 @api_bp.route('/cache/stats', methods=['GET'])
 def get_cache_stats():
     """获取缓存统计信息"""
@@ -1215,7 +1346,9 @@ def get_cache_stats():
         }), 500
 
 
+@api_error_handler('清除缓存')
 @api_bp.route('/cache/clear', methods=['POST'])
+@require_api_token
 def clear_cache():
     """清除所有缓存"""
     try:

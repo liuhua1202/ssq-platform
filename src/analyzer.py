@@ -124,12 +124,22 @@ class Analyzer:
         """
         获取遗漏值统计
         遗漏值：某个号码连续未出现的期数
+
+        前置条件: 调用方应保证 self.data 按 issue 降序 (最新在前).
+        本方法内部会做防御性排序, 但建议上游 (crawler/api) 加载时就排好.
         """
+        # 防御性排序: 按 issue 降序 (最新在前), 不修改 self.data
+        data_sorted = sorted(
+            self.data,
+            key=lambda r: r.get('issue', ''),
+            reverse=True
+        )
+
         missing = defaultdict(int)
         max_missing = defaultdict(int)
 
         # 从最新数据开始往前找
-        for record in self.data:
+        for record in data_sorted:
             current_reds = set(record.get('red_balls', []))
             for num in range(1, 34):
                 if num in current_reds:
@@ -141,10 +151,10 @@ class Analyzer:
                     missing[num] += 1
 
         # 计算平均遗漏值
-        total_periods = len(self.data)
+        total_periods = len(data_sorted)
         avg_missing = {}
         for num in range(1, 34):
-            count = sum(1 for r in self.data if num in r.get('red_balls', []))
+            count = sum(1 for r in data_sorted if num in r.get('red_balls', []))
             if count > 0:
                 avg_missing[num] = total_periods / count
             else:
