@@ -46,7 +46,12 @@ export class AnalysisModule {
             }
 
         } catch (error) {
-            resultsDiv.innerHTML = `<p style="color: #e94560;">加载失败：${error.message}</p>`;
+            console.error('[analysis] full error:', error);
+            resultsDiv.innerHTML = `<div style="color: #e94560; padding: 12px; background: #fef2f2; border-radius: 6px;">
+                    <p><b>加载失败：</b>${error.message}</p>
+                    <p><b>错误名：</b>${error.name}</p>
+                    <pre style="font-size: 11px; background: #fff; padding: 8px; overflow: auto; max-height: 200px;">${(error.stack || '(no stack)').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                </div>`;
         }
     }
 
@@ -54,16 +59,14 @@ export class AnalysisModule {
         const el = document.getElementById('hot-numbers');
         if (!el) return;
 
-        el.innerHTML = hot.overall
-            .map(n => `<span class="ball hot">${n}</span>`).join('');
+        el.innerHTML = (hot.overall || []).map(n => `<span class="ball hot">${n}</span>`).join('');
     }
 
     renderColdNumbers(cold) {
         const el = document.getElementById('cold-numbers');
         if (!el) return;
 
-        el.innerHTML = cold.numbers
-            .map(n => `<span class="ball cold">${n}</span>`).join('');
+        el.innerHTML = (cold.numbers || []).map(n => `<span class="ball cold">${n}</span>`).join('');
     }
 
     renderMissingStats(missingStats) {
@@ -87,11 +90,11 @@ export class AnalysisModule {
         el.innerHTML = `
             <div class="blue-analysis-section">
                 <strong>热号:</strong>
-                ${blue.hot_numbers.map(n => `<span class="ball hot">${n}</span>`).join('')}
+                ${(blue.hot_numbers || []).map(n => `<span class="ball hot">${n}</span>`).join('')}
             </div>
             <div class="blue-analysis-section">
                 <strong>冷号:</strong>
-                ${blue.cold_numbers.map(n => `<span class="ball cold">${n}</span>`).join('')}
+                ${(blue.cold_numbers || []).map(n => `<span class="ball cold">${n}</span>`).join('')}
             </div>
             <div class="blue-analysis-ratio">
                 奇偶比：${blue.odd_even?.ratio || '-'} |

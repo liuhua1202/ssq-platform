@@ -143,28 +143,33 @@ class TestCrawlerRejectsSpaLoader(unittest.TestCase):
 """
 
     def test_crawler_returns_failure_for_spa_html(self):
-        """zhcw-style SPA 页面应返回 failure 而非假 success."""
+        """zhcw-style SPA 页面应返回 failure 而非假 success.
+
+        v2.2 改造: fetch_latest_lottery 现在有 3 个 source (2 HTML + 1 JSON API).
+        本测试需要同时 mock 掉 API, 否则真实 cwl.gov.cn API 会让 test 通过.
+        """
         from src.crawler import Crawler
         import tempfile
 
         with tempfile.TemporaryDirectory() as td:
             c = Crawler(data_dir=td)
 
-            with patch('src.crawler.crawler.Crawler._http_get_with_tls_spoof') as mock_get:
+            with patch('src.crawler.crawler.Crawler._http_get_with_tls_spoof') as mock_get, \
+                 patch.object(c.fetcher, 'fetch_cwl_api') as mock_api:
                 mock_response = type('MockResp', (), {})()
-                # Use a property for text
                 mock_response.text = self.ZHCW_STYLE_HTML
                 mock_response.content = self.ZHCW_STYLE_HTML.encode('utf-8')
                 mock_response.raise_for_status = lambda: None
                 mock_get.return_value = mock_response
+                # v2.2: 也 mock 掉 JSON API 兜底, 否则会真去 cwl.gov.cn 拿到数据
+                mock_api.return_value = {'success': False, 'message': 'API mocked to fail'}
 
-                logging.disable(logging.CRITICAL)  # suppress noise
+                logging.disable(logging.CRITICAL)
                 try:
                     result = c.fetch_latest_lottery()
                 finally:
                     logging.disable(logging.NOTSET)
 
-                # 必须返回 failure, 不能返回 success=True
                 self.assertFalse(result['success'],
                     f'Expected failure but got: {result}')
 

@@ -4,6 +4,58 @@
 
 ## [Unreleased]
 
+### Added - JSON API 路径 (本次, 重大改进)
+
+- **cwl.gov.cn 官方 JSON API 接入** (v2.2 最重要改进, 实地抓 cwl.gov.cn 才发现)
+  - 反解 `https://www.cwl.gov.cn/js/lottery.js` 找到官方 API: `front/cwlkj/search/kjxx/findDrawNotice?name=ssq&pageNo=1&pageSize=20`
+  - 优势:
+    - **不再依赖 DOM 结构** - 前端改版不影响 (而 HTML 路径在 cwl.gov.cn 改版后实际 0 命中)
+    - **返回结构化数据** - `{code, date, red, blue, sales, poolmoney, ...}` 直接对应期号/球号
+    - **官方分页** - `total=2062` 一次性告诉你全部历史期数, `pageNo` / `pageSize` 自由控制
+    - **速度快** - 单次 0.06s 拉 20 条, 90 条 4.78s
+  - 新增 `IssueParser.parse_cwl_api_json(payload)` - JSON 解析
+  - 新增 `CWLFetcher.fetch_cwl_api(page_no, page_size)` - 单页抓取
+  - 新增 `CWLFetcher._fetch_multi_page_via_api()` - 多页抓取
+  - `fetch_multi_page(prefer_api=True)` (默认) 自动用 API 路径, `prefer_api=False` 强制走 HTML 兜底
+
+### Changed - 爬虫栈迁移到 Scrapling (本次)
+
+- **网络层从 4 库迁移到 Scrapling 单库三层** (v2.2)
+  - 删除: `curl_cffi`, `playwright-stealth`
+  - 新增: `scrapling[fetchers]>=0.4.15` + `scrapling install` (拉 Chromium + 改版 Firefox 二进制)
+  - 三层 fallback 统一为:
+    1. `Fetcher.get(impersonate='chrome', stealthy_headers=True)` - HTTP + TLS 指纹
+    2. `StealthyFetcher.fetch(solve_cloudflare=True)` - Firefox 隐身 + Cloudflare Turnstile 自动解
+    3. `DynamicFetcher.fetch(network_idle=True)` - Playwright Chromium JS 渲染
+  - 收益:
+    - Cloudflare 墙 (cwl.gov.cn 偶发) 自动解, 无需手动换 UA/代理
+    - 反 bot 检测从 `playwright-stealth` 升级到 Scrapling 改版 Firefox (更稳)
+    - 单一依赖统一接口, 未来要加代理轮换只需 `ProxyRotator` 一行
+- **`src/crawler/fetcher.py` 重写** (~245 行 → 245 行, 但 4 库 → 1 库)
+  - 新增 `fetch(url) -> Response` 返回 Scrapling Response (含 css/xpath)
+  - 新增 `fetch_page_response(url, adaptive=True)` 配合自适应选择器
+  - 保留 `fetch_html(url) -> str` 兼容旧 `IssueParser.parse_cwl_html(html)` 调用
+  - 三层链由 `_fetch_fast` / `_fetch_stealthy` / `_fetch_dynamic` 拆分, 失败自动升级
+  - **修复 Scrapling 0.4.x 坑**: `.text` 在 gzip 响应下返回空字符串 → 用 `.body` 原始字节 + `_decode_html_bytes` 智能检测 GBK/UTF-8
+- **`src/crawler/parser.py` 新增 `parse_cwl_html_with_selector()`**
+  - 用 Scrapling `Selector` (CSS) 替代 BS4 字符串扫描, 速度 ~1700x
+  - 支持 `adaptive=True` 自适应: 网站改版后选择器自动重新定位
+  - 支持 `auto_save=True` 首次快照: 元素特征存盘, 改版后用快照找新位置
+  - 失败时降级到 BS4 字符串解析, 不影响现有路径
+- **`src/crawler/crawler.py` 适配新 fetcher**
+  - `_fetch_latest_from_source` / `_fetch_history_from_source` 改走 `self.fetcher.fetch_html()`
+  - 删 `_http_get_with_tls_spoof` 内部实现 (Scrapling 内置 TLS 伪造)
+  - 保留同名为向后兼容, 打印 deprecation warning
+- **`tests/test_network.py` 同步更新** (35 → 42 tests)
+  - `TestCWLFetcherMock` 改 mock `Fetcher` / `StealthyFetcher` / `DynamicFetcher` (而不是 `requests.Session`)
+  - 新增 `test_fetch_html_escalates_to_stealthy_when_blocked` 验证 Cloudflare 升级路径
+  - 新增 `test_fetch_html_returns_none_when_all_layers_fail` 验证三层全败
+  - 新增 `TestIssueParserApiJson` (4 tests) 验证 JSON API 解析
+  - 新增 `TestCWLFetcherApi` (3 tests) 验证 API 抓取 + 错误处理
+- **测试套件总计**: 104 → **127 个测试** (+23 新增)
+
+## [v2.1.0]
+
 ### Changed - 架构重构 (本次)
 
 - **`src/crawler.py` 拆分为 `src/crawler/` 包** (1187 行 → 5 个模块)

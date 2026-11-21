@@ -47,3 +47,18 @@ dist/
 test_data/output/
 *.tmp
 *.bak
+# ===== v2.4 Pyodide 运行时 (构建产物, 版本由 pyodide_release.json 指定, 不入库) =====
+node_modules/
+static/pyodide/
+android-assets/
+pyodide_release.json
+
+# ===== 运行时数据 / 测试产物 =====
+data/crawl_test_output_*.json
+logs/
+scripts/.backup_tmp/
+
+# ===== 打包残留 (误复制产生的嵌套目录 / 损坏 zip) =====
+static/python-lib/python-lib/
+*.zip.broken*
+*.bak

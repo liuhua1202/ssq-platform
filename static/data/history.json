@@ -1,0 +1,5001 @@
+[
+  {
+    "issue": "2026073",
+    "date": "2026-06-28",
+    "red_balls": [
+      9,
+      10,
+      13,
+      16,
+      19,
+      21
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-06-30T02:05:45.256024"
+  },
+  {
+    "issue": "2026072",
+    "date": "2026-06-25",
+    "red_balls": [
+      2,
+      7,
+      8,
+      12,
+      15,
+      17
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-06-30T02:05:45.256039"
+  },
+  {
+    "issue": "2026071",
+    "date": "2026-06-23",
+    "red_balls": [
+      3,
+      8,
+      19,
+      25,
+      31,
+      33
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-06-30T02:05:45.256047"
+  },
+  {
+    "issue": "2026070",
+    "date": "2026-06-21",
+    "red_balls": [
+      3,
+      6,
+      8,
+      14,
+      26,
+      27
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-06-30T02:05:45.256053"
+  },
+  {
+    "issue": "2026069",
+    "date": "2026-06-18",
+    "red_balls": [
+      12,
+      14,
+      16,
+      17,
+      18,
+      32
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-06-30T02:05:45.256059"
+  },
+  {
+    "issue": "2026068",
+    "date": "2026-06-16",
+    "red_balls": [
+      3,
+      5,
+      16,
+      18,
+      29,
+      32
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-06-30T02:05:45.256063"
+  },
+  {
+    "issue": "2026067",
+    "date": "2026-06-14",
+    "red_balls": [
+      4,
+      19,
+      27,
+      29,
+      30,
+      32
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-06-30T02:05:45.256068"
+  },
+  {
+    "issue": "2026066",
+    "date": "2026-06-11",
+    "red_balls": [
+      5,
+      11,
+      21,
+      23,
+      24,
+      29
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-06-30T02:05:45.256076"
+  },
+  {
+    "issue": "2026065",
+    "date": "2026-06-09",
+    "red_balls": [
+      7,
+      8,
+      16,
+      24,
+      30,
+      32
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-06-30T02:05:45.256081"
+  },
+  {
+    "issue": "2026064",
+    "date": "2026-06-07",
+    "red_balls": [
+      3,
+      15,
+      18,
+      19,
+      29,
+      31
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-06-30T02:05:45.256088"
+  },
+  {
+    "issue": "2026060",
+    "date": "2026-05-28",
+    "red_balls": [
+      7,
+      9,
+      10,
+      16,
+      22,
+      27
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-06-30T02:05:45.256103"
+  },
+  {
+    "issue": "2026059",
+    "date": "2026-05-26",
+    "red_balls": [
+      8,
+      16,
+      26,
+      28,
+      29,
+      30
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-06-30T02:05:45.256108"
+  },
+  {
+    "issue": "2026057",
+    "date": "2026-05-21",
+    "red_balls": [
+      1,
+      10,
+      22,
+      24,
+      28,
+      30
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-06-30T02:05:45.256115"
+  },
+  {
+    "issue": "2026056",
+    "date": "2026-05-19",
+    "red_balls": [
+      10,
+      19,
+      21,
+      22,
+      31,
+      33
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-06-30T02:05:45.256120"
+  },
+  {
+    "issue": "2026055",
+    "date": "2026-05-17",
+    "red_balls": [
+      4,
+      11,
+      24,
+      25,
+      32,
+      33
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-06-30T02:05:45.256124"
+  },
+  {
+    "issue": "2026054",
+    "date": "2026-05-14",
+    "red_balls": [
+      13,
+      20,
+      25,
+      29,
+      30,
+      33
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-06-30T02:05:45.256129"
+  },
+  {
+    "issue": "2026052",
+    "date": "2026-05-10",
+    "red_balls": [
+      3,
+      11,
+      11,
+      13,
+      22,
+      26
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-06-30T02:05:45.256137"
+  },
+  {
+    "issue": "2026051",
+    "date": "2026-05-07",
+    "red_balls": [
+      9,
+      14,
+      15,
+      16,
+      29,
+      30
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-06-30T02:05:45.256142"
+  },
+  {
+    "issue": "2026050",
+    "date": "2026-05-05",
+    "red_balls": [
+      6,
+      9,
+      25,
+      27,
+      28,
+      30
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-06-30T02:05:45.256147"
+  },
+  {
+    "issue": "2026049",
+    "date": "2026-05-03",
+    "red_balls": [
+      3,
+      4,
+      14,
+      15,
+      18,
+      20
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-06-30T02:05:45.256151"
+  },
+  {
+    "issue": "2026048",
+    "date": "2026-04-30",
+    "red_balls": [
+      9,
+      15,
+      18,
+      24,
+      28,
+      33
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-06-30T02:05:45.256156"
+  },
+  {
+    "issue": "2026047",
+    "date": "2026-04-28",
+    "red_balls": [
+      7,
+      16,
+      21,
+      24,
+      27,
+      30
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-06-30T02:05:45.256160"
+  },
+  {
+    "issue": "2026046",
+    "date": "2026-04-26",
+    "red_balls": [
+      3,
+      10,
+      13,
+      24,
+      29,
+      31
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-06-30T02:05:45.256166"
+  },
+  {
+    "issue": "2026045",
+    "date": "2026-04-23",
+    "red_balls": [
+      4,
+      11,
+      15,
+      17,
+      24,
+      30
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-06-30T02:05:45.256170"
+  },
+  {
+    "issue": "2026044",
+    "date": "2026-04-21",
+    "red_balls": [
+      2,
+      14,
+      17,
+      18,
+      22,
+      30
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-06-30T02:05:45.256175"
+  },
+  {
+    "issue": "2026043",
+    "date": "2026-04-19",
+    "red_balls": [
+      6,
+      9,
+      14,
+      16,
+      25,
+      32
+    ],
+    "blue_ball": 16
+  },
+  {
+    "issue": "2026042",
+    "date": "2026-04-16",
+    "red_balls": [
+      2,
+      7,
+      12,
+      19,
+      24,
+      31
+    ],
+    "blue_ball": 10
+  },
+  {
+    "issue": "20260411",
+    "date": "2026-04-09",
+    "red_balls": [
+      8,
+      17,
+      18,
+      21,
+      25,
+      30
+    ],
+    "blue_ball": 5
+  },
+  {
+    "issue": "2026041",
+    "date": "2026-04-14",
+    "red_balls": [
+      2,
+      8,
+      10,
+      17,
+      19,
+      24
+    ],
+    "blue_ball": 13
+  },
+  {
+    "issue": "2026040",
+    "date": "2026-04-12",
+    "red_balls": [
+      3,
+      4,
+      14,
+      22,
+      23,
+      33
+    ],
+    "blue_ball": 4
+  },
+  {
+    "issue": "2026039",
+    "date": "2026-04-09",
+    "red_balls": [
+      8,
+      17,
+      18,
+      21,
+      25,
+      30
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-04-11T15:15:38.004810"
+  },
+  {
+    "issue": "2026038",
+    "date": "2026-04-07",
+    "red_balls": [
+      2,
+      7,
+      12,
+      13,
+      23,
+      25
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-04-09T18:59:37.372331"
+  },
+  {
+    "issue": "2026037",
+    "date": "2026-04-05",
+    "red_balls": [
+      11,
+      22,
+      27,
+      29,
+      31,
+      33
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-04-09T18:59:37.372341"
+  },
+  {
+    "issue": "2026036",
+    "date": "2026-04-02",
+    "red_balls": [
+      6,
+      10,
+      12,
+      15,
+      22,
+      28
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-04-09T18:59:37.372347"
+  },
+  {
+    "issue": "2026035",
+    "date": "2026-03-31",
+    "red_balls": [
+      2,
+      3,
+      12,
+      24,
+      25,
+      26
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-04-02T01:09:54.959907"
+  },
+  {
+    "issue": "2026034",
+    "date": "2026-03-29",
+    "red_balls": [
+      2,
+      3,
+      7,
+      13,
+      13,
+      22
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-29T22:42:56.024547"
+  },
+  {
+    "issue": "2026033",
+    "date": "2026-03-26",
+    "red_balls": [
+      3,
+      6,
+      13,
+      21,
+      28,
+      29
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.918137",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026032",
+    "date": "2026-03-24",
+    "red_balls": [
+      3,
+      3,
+      11,
+      13,
+      18,
+      31
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-03-28T23:46:35.918156",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026031",
+    "date": "2026-03-22",
+    "red_balls": [
+      3,
+      10,
+      12,
+      13,
+      18,
+      33
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.918167",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026030",
+    "date": "2026-03-19",
+    "red_balls": [
+      10,
+      11,
+      14,
+      19,
+      22,
+      24
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.918174",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026029",
+    "date": "2026-03-17",
+    "red_balls": [
+      3,
+      6,
+      19,
+      22,
+      23,
+      28
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.918180",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026028",
+    "date": "2026-03-15",
+    "red_balls": [
+      2,
+      8,
+      9,
+      17,
+      25,
+      26
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.918187",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026027",
+    "date": "2026-03-12",
+    "red_balls": [
+      7,
+      18,
+      21,
+      25,
+      26,
+      31
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.918195",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026026",
+    "date": "2026-03-10",
+    "red_balls": [
+      2,
+      9,
+      16,
+      22,
+      25,
+      29
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.918202",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026025",
+    "date": "2026-03-08",
+    "red_balls": [
+      2,
+      4,
+      15,
+      20,
+      23,
+      23
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.918207",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026024",
+    "date": "2026-03-05",
+    "red_balls": [
+      2,
+      9,
+      12,
+      13,
+      21,
+      23
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.918212",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026023",
+    "date": "2026-03-03",
+    "red_balls": [
+      2,
+      8,
+      9,
+      10,
+      13,
+      23
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.918218",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026022",
+    "date": "2026-03-01",
+    "red_balls": [
+      15,
+      18,
+      23,
+      25,
+      28,
+      32
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.918225",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026021",
+    "date": "2026-02-26",
+    "red_balls": [
+      3,
+      5,
+      26,
+      30,
+      31,
+      32
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.918232",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026020",
+    "date": "2026-02-24",
+    "red_balls": [
+      4,
+      11,
+      21,
+      24,
+      30,
+      31
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-03-28T23:46:35.918237",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026019",
+    "date": "2026-02-12",
+    "red_balls": [
+      7,
+      8,
+      16,
+      17,
+      18,
+      30
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.918244",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026018",
+    "date": "2026-02-10",
+    "red_balls": [
+      11,
+      15,
+      17,
+      22,
+      25,
+      30
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.918252",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026017",
+    "date": "2026-02-08",
+    "red_balls": [
+      2,
+      3,
+      5,
+      13,
+      18,
+      29
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.918259",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026016",
+    "date": "2026-02-05",
+    "red_balls": [
+      4,
+      5,
+      9,
+      10,
+      27,
+      30
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.918267",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026015",
+    "date": "2026-02-03",
+    "red_balls": [
+      7,
+      10,
+      13,
+      22,
+      27,
+      31
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.918274",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026014",
+    "date": "2026-02-01",
+    "red_balls": [
+      7,
+      13,
+      19,
+      22,
+      26,
+      32
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.918282",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026013",
+    "date": "2026-01-29",
+    "red_balls": [
+      4,
+      9,
+      12,
+      13,
+      16,
+      20
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.918291",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026012",
+    "date": "2026-01-27",
+    "red_balls": [
+      3,
+      5,
+      7,
+      16,
+      20,
+      24
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.918298",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026011",
+    "date": "2026-01-25",
+    "red_balls": [
+      2,
+      3,
+      4,
+      20,
+      23,
+      31
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.918303",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026010",
+    "date": "2026-01-22",
+    "red_balls": [
+      4,
+      9,
+      10,
+      15,
+      19,
+      26
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.918308",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026009",
+    "date": "2026-01-20",
+    "red_balls": [
+      3,
+      6,
+      13,
+      19,
+      23,
+      25
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.918313",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026008",
+    "date": "2026-01-18",
+    "red_balls": [
+      6,
+      9,
+      16,
+      27,
+      31,
+      33
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.918318",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026007",
+    "date": "2026-01-15",
+    "red_balls": [
+      9,
+      13,
+      19,
+      27,
+      29,
+      30
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.918323",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026006",
+    "date": "2026-01-13",
+    "red_balls": [
+      2,
+      8,
+      22,
+      23,
+      24,
+      26
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.918328",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026005",
+    "date": "2026-01-11",
+    "red_balls": [
+      1,
+      20,
+      22,
+      27,
+      30,
+      33
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.918334",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026004",
+    "date": "2026-01-08",
+    "red_balls": [
+      3,
+      7,
+      8,
+      9,
+      18,
+      32
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.918339",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026003",
+    "date": "2026-01-06",
+    "red_balls": [
+      5,
+      6,
+      9,
+      21,
+      28,
+      30
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.918345",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026002",
+    "date": "2026-01-04",
+    "red_balls": [
+      2,
+      3,
+      7,
+      15,
+      18,
+      30
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-03-28T23:46:35.918350",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2026001",
+    "date": "2026-01-01",
+    "red_balls": [
+      3,
+      3,
+      11,
+      12,
+      13,
+      26
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.918355",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025151",
+    "date": "2025-12-30",
+    "red_balls": [
+      8,
+      9,
+      14,
+      22,
+      28,
+      30
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.918360",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025150",
+    "date": "2025-12-28",
+    "red_balls": [
+      6,
+      13,
+      17,
+      19,
+      24,
+      31
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.918364",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025149",
+    "date": "2025-12-25",
+    "red_balls": [
+      2,
+      2,
+      4,
+      6,
+      12,
+      30
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.918370",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025148",
+    "date": "2025-12-23",
+    "red_balls": [
+      3,
+      4,
+      9,
+      10,
+      15,
+      22
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.918375",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025147",
+    "date": "2025-12-21",
+    "red_balls": [
+      3,
+      3,
+      5,
+      8,
+      13,
+      22
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.918380",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025146",
+    "date": "2025-12-18",
+    "red_balls": [
+      5,
+      7,
+      12,
+      24,
+      26,
+      28
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-03-28T23:46:35.918385",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025145",
+    "date": "2025-12-16",
+    "red_balls": [
+      11,
+      12,
+      15,
+      18,
+      25,
+      32
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.918391",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025144",
+    "date": "2025-12-14",
+    "red_balls": [
+      3,
+      3,
+      15,
+      18,
+      20,
+      26
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.918397",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025143",
+    "date": "2025-12-11",
+    "red_balls": [
+      2,
+      4,
+      12,
+      13,
+      15,
+      29
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.918402",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025142",
+    "date": "2025-12-09",
+    "red_balls": [
+      5,
+      21,
+      23,
+      27,
+      31,
+      31
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.918408",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025141",
+    "date": "2025-12-07",
+    "red_balls": [
+      1,
+      3,
+      5,
+      10,
+      12,
+      24
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.918413",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025140",
+    "date": "2025-12-04",
+    "red_balls": [
+      2,
+      4,
+      4,
+      12,
+      13,
+      18
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.918418",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025139",
+    "date": "2025-12-02",
+    "red_balls": [
+      3,
+      3,
+      17,
+      22,
+      25,
+      30
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.918423",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025138",
+    "date": "2025-11-30",
+    "red_balls": [
+      10,
+      13,
+      14,
+      23,
+      24,
+      27
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.918427",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025137",
+    "date": "2025-11-27",
+    "red_balls": [
+      2,
+      9,
+      11,
+      23,
+      27,
+      28
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.918432",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025136",
+    "date": "2025-11-25",
+    "red_balls": [
+      8,
+      10,
+      14,
+      23,
+      28,
+      32
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.918437",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025135",
+    "date": "2025-11-23",
+    "red_balls": [
+      2,
+      3,
+      5,
+      9,
+      12,
+      25
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.918442",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025134",
+    "date": "2025-11-20",
+    "red_balls": [
+      3,
+      5,
+      9,
+      13,
+      26,
+      29
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.918447",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025133",
+    "date": "2025-11-18",
+    "red_balls": [
+      5,
+      14,
+      17,
+      19,
+      20,
+      33
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.918453",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025132",
+    "date": "2025-11-16",
+    "red_balls": [
+      4,
+      8,
+      10,
+      21,
+      23,
+      32
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.918458",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025131",
+    "date": "2025-11-13",
+    "red_balls": [
+      3,
+      4,
+      18,
+      24,
+      31,
+      31
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.918463",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025130",
+    "date": "2025-11-11",
+    "red_balls": [
+      2,
+      3,
+      8,
+      14,
+      15,
+      19
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.918468",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025129",
+    "date": "2025-11-09",
+    "red_balls": [
+      3,
+      4,
+      7,
+      13,
+      20,
+      30
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.918473",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025128",
+    "date": "2025-11-06",
+    "red_balls": [
+      2,
+      10,
+      18,
+      19,
+      24,
+      27
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.918478",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025127",
+    "date": "2025-11-04",
+    "red_balls": [
+      3,
+      9,
+      15,
+      17,
+      19,
+      28
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.918483",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025126",
+    "date": "2025-11-02",
+    "red_balls": [
+      6,
+      19,
+      21,
+      21,
+      25,
+      31
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.918488",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025125",
+    "date": "2025-10-30",
+    "red_balls": [
+      3,
+      9,
+      12,
+      13,
+      26,
+      32
+    ],
+    "blue_ball": 9,
+    "timestamp": "2026-03-28T23:46:35.918494",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025124",
+    "date": "2025-10-28",
+    "red_balls": [
+      3,
+      3,
+      12,
+      18,
+      19,
+      21
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.918499",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025123",
+    "date": "2025-10-26",
+    "red_balls": [
+      7,
+      9,
+      23,
+      24,
+      25,
+      26
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.918503",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025122",
+    "date": "2025-10-23",
+    "red_balls": [
+      16,
+      18,
+      19,
+      20,
+      25,
+      31
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.918509",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025121",
+    "date": "2025-10-21",
+    "red_balls": [
+      6,
+      8,
+      10,
+      25,
+      29,
+      30
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.918514",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025120",
+    "date": "2025-10-19",
+    "red_balls": [
+      2,
+      3,
+      4,
+      7,
+      12,
+      13
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.918519",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025119",
+    "date": "2025-10-16",
+    "red_balls": [
+      6,
+      9,
+      23,
+      26,
+      28,
+      32
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.918524",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025118",
+    "date": "2025-10-14",
+    "red_balls": [
+      1,
+      10,
+      11,
+      16,
+      24,
+      26
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.918530",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025117",
+    "date": "2025-10-12",
+    "red_balls": [
+      6,
+      8,
+      17,
+      20,
+      25,
+      33
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.918535",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025116",
+    "date": "2025-10-09",
+    "red_balls": [
+      1,
+      3,
+      8,
+      24,
+      24,
+      28
+    ],
+    "blue_ball": 9,
+    "timestamp": "2026-03-28T23:46:35.918540",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025115",
+    "date": "2025-10-07",
+    "red_balls": [
+      2,
+      4,
+      8,
+      19,
+      23,
+      30
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-03-28T23:46:35.918546",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025114",
+    "date": "2025-10-05",
+    "red_balls": [
+      1,
+      20,
+      21,
+      25,
+      26,
+      27
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.918551",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025113",
+    "date": "2025-09-30",
+    "red_balls": [
+      8,
+      10,
+      13,
+      15,
+      24,
+      31
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.918557",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025112",
+    "date": "2025-09-28",
+    "red_balls": [
+      3,
+      9,
+      11,
+      13,
+      20,
+      32
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-03-28T23:46:35.918561",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025111",
+    "date": "2025-09-25",
+    "red_balls": [
+      9,
+      14,
+      18,
+      28,
+      31,
+      33
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.918566",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025110",
+    "date": "2025-09-23",
+    "red_balls": [
+      1,
+      9,
+      11,
+      14,
+      15,
+      16
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.918572",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025109",
+    "date": "2025-09-21",
+    "red_balls": [
+      3,
+      5,
+      6,
+      9,
+      17,
+      18
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.918577",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025108",
+    "date": "2025-09-18",
+    "red_balls": [
+      3,
+      3,
+      14,
+      17,
+      19,
+      22
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.918582",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025107",
+    "date": "2025-09-16",
+    "red_balls": [
+      3,
+      3,
+      10,
+      15,
+      23,
+      25
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.918587",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025106",
+    "date": "2025-09-14",
+    "red_balls": [
+      4,
+      5,
+      17,
+      22,
+      26,
+      30
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.918592",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025105",
+    "date": "2025-09-11",
+    "red_balls": [
+      4,
+      7,
+      18,
+      24,
+      26,
+      28
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.918597",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025104",
+    "date": "2025-09-09",
+    "red_balls": [
+      2,
+      3,
+      15,
+      16,
+      24,
+      25
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.918602",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025103",
+    "date": "2025-09-07",
+    "red_balls": [
+      13,
+      16,
+      21,
+      25,
+      28,
+      31
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.918607",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025102",
+    "date": "2025-09-04",
+    "red_balls": [
+      4,
+      9,
+      16,
+      17,
+      18,
+      31
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.918612",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025101",
+    "date": "2025-09-02",
+    "red_balls": [
+      2,
+      5,
+      8,
+      9,
+      10,
+      16
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.918617",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025100",
+    "date": "2025-08-31",
+    "red_balls": [
+      12,
+      16,
+      17,
+      25,
+      30,
+      31
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.918621",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025099",
+    "date": "2025-08-28",
+    "red_balls": [
+      9,
+      11,
+      15,
+      17,
+      22,
+      26
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.918627",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025098",
+    "date": "2025-08-26",
+    "red_balls": [
+      5,
+      8,
+      13,
+      17,
+      18,
+      29
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-03-28T23:46:35.918631",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025097",
+    "date": "2025-08-24",
+    "red_balls": [
+      3,
+      5,
+      16,
+      23,
+      26,
+      31
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.918636",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025096",
+    "date": "2025-08-21",
+    "red_balls": [
+      7,
+      9,
+      11,
+      12,
+      16,
+      29
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.918641",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025095",
+    "date": "2025-08-19",
+    "red_balls": [
+      15,
+      16,
+      22,
+      23,
+      26,
+      32
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.918645",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025094",
+    "date": "2025-08-17",
+    "red_balls": [
+      11,
+      13,
+      17,
+      19,
+      23,
+      29
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.918650",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025093",
+    "date": "2025-08-14",
+    "red_balls": [
+      9,
+      11,
+      12,
+      24,
+      25,
+      26
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.918655",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025092",
+    "date": "2025-08-12",
+    "red_balls": [
+      4,
+      11,
+      17,
+      21,
+      23,
+      24
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.918660",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025091",
+    "date": "2025-08-10",
+    "red_balls": [
+      3,
+      4,
+      17,
+      19,
+      25,
+      27
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.918666",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025090",
+    "date": "2025-08-07",
+    "red_balls": [
+      6,
+      11,
+      12,
+      21,
+      27,
+      28
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.918670",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025089",
+    "date": "2025-08-05",
+    "red_balls": [
+      4,
+      6,
+      8,
+      18,
+      31,
+      33
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.918675",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025088",
+    "date": "2025-08-03",
+    "red_balls": [
+      2,
+      5,
+      13,
+      13,
+      18,
+      21
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.918680",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025087",
+    "date": "2025-07-31",
+    "red_balls": [
+      2,
+      6,
+      14,
+      15,
+      24,
+      26
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.918685",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025086",
+    "date": "2025-07-29",
+    "red_balls": [
+      2,
+      4,
+      8,
+      10,
+      17,
+      26
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.918691",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025085",
+    "date": "2025-07-27",
+    "red_balls": [
+      11,
+      14,
+      15,
+      18,
+      21,
+      24
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.918696",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025084",
+    "date": "2025-07-24",
+    "red_balls": [
+      6,
+      8,
+      10,
+      14,
+      24,
+      33
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.918701",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025083",
+    "date": "2025-07-22",
+    "red_balls": [
+      10,
+      15,
+      16,
+      17,
+      27,
+      29
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.918706",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025082",
+    "date": "2025-07-20",
+    "red_balls": [
+      4,
+      6,
+      9,
+      14,
+      32,
+      33
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.918712",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025081",
+    "date": "2025-07-17",
+    "red_balls": [
+      3,
+      6,
+      18,
+      20,
+      23,
+      28
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.918716",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025080",
+    "date": "2025-07-15",
+    "red_balls": [
+      3,
+      7,
+      8,
+      10,
+      16,
+      19
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.918722",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025079",
+    "date": "2025-07-13",
+    "red_balls": [
+      8,
+      11,
+      14,
+      15,
+      30,
+      32
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.918726",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025078",
+    "date": "2025-07-10",
+    "red_balls": [
+      6,
+      15,
+      17,
+      30,
+      32,
+      33
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.918731",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025077",
+    "date": "2025-07-08",
+    "red_balls": [
+      4,
+      7,
+      8,
+      15,
+      20,
+      21
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.918736",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025076",
+    "date": "2025-07-06",
+    "red_balls": [
+      1,
+      4,
+      9,
+      12,
+      26,
+      30
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.918743",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025075",
+    "date": "2025-07-03",
+    "red_balls": [
+      10,
+      12,
+      14,
+      19,
+      20,
+      21
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.918748",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025074",
+    "date": "2025-07-01",
+    "red_balls": [
+      3,
+      4,
+      12,
+      20,
+      32,
+      33
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.918753",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025073",
+    "date": "2025-06-29",
+    "red_balls": [
+      3,
+      3,
+      10,
+      27,
+      27,
+      30
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.918758",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025072",
+    "date": "2025-06-26",
+    "red_balls": [
+      4,
+      17,
+      21,
+      25,
+      27,
+      29
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.918763",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025071",
+    "date": "2025-06-24",
+    "red_balls": [
+      8,
+      11,
+      21,
+      23,
+      25,
+      28
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.918768",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025070",
+    "date": "2025-06-22",
+    "red_balls": [
+      3,
+      3,
+      15,
+      21,
+      22,
+      23
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.918773",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025069",
+    "date": "2025-06-19",
+    "red_balls": [
+      2,
+      7,
+      19,
+      23,
+      24,
+      30
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.918778",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025068",
+    "date": "2025-06-17",
+    "red_balls": [
+      5,
+      7,
+      8,
+      19,
+      20,
+      31
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.918783",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025067",
+    "date": "2025-06-15",
+    "red_balls": [
+      2,
+      2,
+      10,
+      15,
+      17,
+      20
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.918788",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025066",
+    "date": "2025-06-12",
+    "red_balls": [
+      6,
+      22,
+      24,
+      27,
+      28,
+      30
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.918794",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025065",
+    "date": "2025-06-10",
+    "red_balls": [
+      6,
+      10,
+      13,
+      14,
+      15,
+      20
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.918798",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025064",
+    "date": "2025-06-08",
+    "red_balls": [
+      2,
+      10,
+      13,
+      22,
+      29,
+      33
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.918804",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025063",
+    "date": "2025-06-05",
+    "red_balls": [
+      9,
+      21,
+      21,
+      22,
+      28,
+      30
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.918809",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025062",
+    "date": "2025-06-03",
+    "red_balls": [
+      6,
+      8,
+      9,
+      13,
+      25,
+      31
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.918815",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025061",
+    "date": "2025-06-01",
+    "red_balls": [
+      6,
+      7,
+      9,
+      10,
+      11,
+      32
+    ],
+    "blue_ball": 9,
+    "timestamp": "2026-03-28T23:46:35.918820",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025060",
+    "date": "2025-05-29",
+    "red_balls": [
+      6,
+      14,
+      18,
+      25,
+      28,
+      30
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.918824",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025059",
+    "date": "2025-05-27",
+    "red_balls": [
+      4,
+      10,
+      11,
+      12,
+      13,
+      24
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.918829",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025058",
+    "date": "2025-05-25",
+    "red_balls": [
+      2,
+      6,
+      7,
+      9,
+      10,
+      20
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.918836",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025057",
+    "date": "2025-05-22",
+    "red_balls": [
+      4,
+      9,
+      15,
+      16,
+      25,
+      30
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.918841",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025056",
+    "date": "2025-05-20",
+    "red_balls": [
+      2,
+      3,
+      8,
+      10,
+      12,
+      14
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.918846",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025055",
+    "date": "2025-05-18",
+    "red_balls": [
+      3,
+      3,
+      22,
+      25,
+      27,
+      29
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.918851",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025054",
+    "date": "2025-05-15",
+    "red_balls": [
+      5,
+      7,
+      10,
+      21,
+      24,
+      27
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.918856",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025053",
+    "date": "2025-05-13",
+    "red_balls": [
+      6,
+      9,
+      10,
+      13,
+      30,
+      33
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.918861",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025052",
+    "date": "2025-05-11",
+    "red_balls": [
+      6,
+      7,
+      10,
+      17,
+      20,
+      26
+    ],
+    "blue_ball": 9,
+    "timestamp": "2026-03-28T23:46:35.918866",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025051",
+    "date": "2025-05-08",
+    "red_balls": [
+      2,
+      2,
+      3,
+      4,
+      12,
+      17
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.918871",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025050",
+    "date": "2025-05-06",
+    "red_balls": [
+      9,
+      12,
+      15,
+      18,
+      22,
+      33
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.918876",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025049",
+    "date": "2025-05-04",
+    "red_balls": [
+      3,
+      6,
+      19,
+      27,
+      29,
+      33
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.918880",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025048",
+    "date": "2025-05-01",
+    "red_balls": [
+      16,
+      21,
+      22,
+      23,
+      27,
+      31
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.918887",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025047",
+    "date": "2025-04-29",
+    "red_balls": [
+      4,
+      11,
+      21,
+      22,
+      23,
+      31
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.918896",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025046",
+    "date": "2025-04-27",
+    "red_balls": [
+      3,
+      3,
+      10,
+      16,
+      23,
+      29
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.918903",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025045",
+    "date": "2025-04-24",
+    "red_balls": [
+      4,
+      19,
+      21,
+      24,
+      29,
+      33
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.918908",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025044",
+    "date": "2025-04-22",
+    "red_balls": [
+      2,
+      7,
+      8,
+      8,
+      14,
+      23
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.918913",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025043",
+    "date": "2025-04-20",
+    "red_balls": [
+      6,
+      19,
+      20,
+      21,
+      31,
+      32
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.918918",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025042",
+    "date": "2025-04-17",
+    "red_balls": [
+      7,
+      13,
+      19,
+      23,
+      27,
+      33
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.918923",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025041",
+    "date": "2025-04-15",
+    "red_balls": [
+      3,
+      6,
+      10,
+      17,
+      19,
+      25
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.918928",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025040",
+    "date": "2025-04-13",
+    "red_balls": [
+      2,
+      4,
+      8,
+      9,
+      10,
+      26
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.918938",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025039",
+    "date": "2025-04-10",
+    "red_balls": [
+      8,
+      10,
+      12,
+      15,
+      17,
+      23
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.918945",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025038",
+    "date": "2025-04-08",
+    "red_balls": [
+      6,
+      19,
+      20,
+      23,
+      26,
+      33
+    ],
+    "blue_ball": 9,
+    "timestamp": "2026-03-28T23:46:35.918953",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025037",
+    "date": "2025-04-06",
+    "red_balls": [
+      3,
+      3,
+      6,
+      11,
+      20,
+      21
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.918960",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025036",
+    "date": "2025-04-03",
+    "red_balls": [
+      5,
+      11,
+      13,
+      16,
+      19,
+      32
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.918966",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025035",
+    "date": "2025-04-01",
+    "red_balls": [
+      2,
+      3,
+      5,
+      16,
+      18,
+      18
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.918972",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025034",
+    "date": "2025-03-30",
+    "red_balls": [
+      5,
+      8,
+      13,
+      14,
+      24,
+      26
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.918980",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025033",
+    "date": "2025-03-27",
+    "red_balls": [
+      3,
+      5,
+      18,
+      25,
+      26,
+      33
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.918987",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025032",
+    "date": "2025-03-25",
+    "red_balls": [
+      2,
+      3,
+      8,
+      10,
+      14,
+      16
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.918992",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025031",
+    "date": "2025-03-23",
+    "red_balls": [
+      2,
+      6,
+      8,
+      8,
+      15,
+      23
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.919000",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025030",
+    "date": "2025-03-20",
+    "red_balls": [
+      4,
+      6,
+      7,
+      30,
+      31,
+      33
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.919009",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025029",
+    "date": "2025-03-18",
+    "red_balls": [
+      5,
+      15,
+      16,
+      25,
+      30,
+      33
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.919016",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025028",
+    "date": "2025-03-16",
+    "red_balls": [
+      4,
+      9,
+      14,
+      15,
+      18,
+      25
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.919022",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025027",
+    "date": "2025-03-13",
+    "red_balls": [
+      5,
+      7,
+      8,
+      15,
+      16,
+      23
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.919028",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025026",
+    "date": "2025-03-11",
+    "red_balls": [
+      9,
+      10,
+      12,
+      14,
+      19,
+      32
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.919033",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025025",
+    "date": "2025-03-09",
+    "red_balls": [
+      12,
+      15,
+      21,
+      23,
+      25,
+      30
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-03-28T23:46:35.919038",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025024",
+    "date": "2025-03-06",
+    "red_balls": [
+      10,
+      11,
+      22,
+      27,
+      30,
+      32
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.919043",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025023",
+    "date": "2025-03-04",
+    "red_balls": [
+      9,
+      12,
+      13,
+      24,
+      25,
+      33
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.919047",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025022",
+    "date": "2025-03-02",
+    "red_balls": [
+      11,
+      17,
+      18,
+      20,
+      28,
+      30
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.919052",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025021",
+    "date": "2025-02-27",
+    "red_balls": [
+      7,
+      8,
+      16,
+      18,
+      25,
+      32
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.919057",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025020",
+    "date": "2025-02-25",
+    "red_balls": [
+      4,
+      11,
+      13,
+      16,
+      26,
+      30
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.919062",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025019",
+    "date": "2025-02-23",
+    "red_balls": [
+      5,
+      13,
+      17,
+      18,
+      22,
+      23
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919068",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025018",
+    "date": "2025-02-20",
+    "red_balls": [
+      3,
+      9,
+      18,
+      21,
+      28,
+      29
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919074",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025017",
+    "date": "2025-02-18",
+    "red_balls": [
+      4,
+      12,
+      15,
+      18,
+      28,
+      29
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.919079",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025016",
+    "date": "2025-02-16",
+    "red_balls": [
+      2,
+      9,
+      12,
+      16,
+      20,
+      23
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.919084",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025015",
+    "date": "2025-02-13",
+    "red_balls": [
+      4,
+      11,
+      15,
+      24,
+      25,
+      33
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.919088",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025014",
+    "date": "2025-02-11",
+    "red_balls": [
+      6,
+      7,
+      9,
+      13,
+      21,
+      27
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.919093",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025013",
+    "date": "2025-02-09",
+    "red_balls": [
+      4,
+      14,
+      16,
+      23,
+      24,
+      30
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.919098",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025012",
+    "date": "2025-02-06",
+    "red_balls": [
+      7,
+      11,
+      13,
+      18,
+      27,
+      31
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919102",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025011",
+    "date": "2025-01-26",
+    "red_balls": [
+      6,
+      13,
+      17,
+      22,
+      24,
+      29
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919108",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025010",
+    "date": "2025-01-23",
+    "red_balls": [
+      4,
+      6,
+      7,
+      16,
+      17,
+      21
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.919112",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025009",
+    "date": "2025-01-21",
+    "red_balls": [
+      2,
+      5,
+      11,
+      12,
+      23,
+      24
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.919117",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025008",
+    "date": "2025-01-19",
+    "red_balls": [
+      9,
+      14,
+      16,
+      17,
+      25,
+      33
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919123",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025007",
+    "date": "2025-01-16",
+    "red_balls": [
+      7,
+      8,
+      14,
+      18,
+      21,
+      27
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919129",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025006",
+    "date": "2025-01-14",
+    "red_balls": [
+      2,
+      2,
+      8,
+      17,
+      17,
+      20
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.919134",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025005",
+    "date": "2025-01-12",
+    "red_balls": [
+      10,
+      16,
+      19,
+      27,
+      28,
+      30
+    ],
+    "blue_ball": 9,
+    "timestamp": "2026-03-28T23:46:35.919138",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025004",
+    "date": "2025-01-09",
+    "red_balls": [
+      3,
+      7,
+      17,
+      27,
+      29,
+      32
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.919143",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025003",
+    "date": "2025-01-07",
+    "red_balls": [
+      10,
+      19,
+      20,
+      26,
+      28,
+      29
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.919148",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025002",
+    "date": "2025-01-05",
+    "red_balls": [
+      9,
+      12,
+      13,
+      15,
+      22,
+      26
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919153",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2025001",
+    "date": "2025-01-02",
+    "red_balls": [
+      3,
+      3,
+      17,
+      18,
+      22,
+      23
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.919158",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024151",
+    "date": "2024-12-31",
+    "red_balls": [
+      5,
+      10,
+      16,
+      19,
+      29,
+      32
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.919162",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024150",
+    "date": "2024-12-29",
+    "red_balls": [
+      13,
+      14,
+      20,
+      22,
+      26,
+      32
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-03-28T23:46:35.919167",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024149",
+    "date": "2024-12-26",
+    "red_balls": [
+      3,
+      9,
+      16,
+      17,
+      18,
+      22
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.919173",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024148",
+    "date": "2024-12-24",
+    "red_balls": [
+      2,
+      3,
+      15,
+      16,
+      21,
+      26
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919178",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024147",
+    "date": "2024-12-22",
+    "red_balls": [
+      5,
+      11,
+      13,
+      16,
+      21,
+      30
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.919182",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024146",
+    "date": "2024-12-19",
+    "red_balls": [
+      2,
+      3,
+      11,
+      22,
+      24,
+      27
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.919188",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024145",
+    "date": "2024-12-17",
+    "red_balls": [
+      2,
+      3,
+      13,
+      16,
+      22,
+      30
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.919194",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024144",
+    "date": "2024-12-15",
+    "red_balls": [
+      1,
+      7,
+      11,
+      20,
+      29,
+      30
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919200",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024143",
+    "date": "2024-12-12",
+    "red_balls": [
+      3,
+      3,
+      11,
+      22,
+      25,
+      30
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.919205",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024142",
+    "date": "2024-12-10",
+    "red_balls": [
+      4,
+      6,
+      13,
+      21,
+      22,
+      25
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.919210",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024141",
+    "date": "2024-12-08",
+    "red_balls": [
+      2,
+      7,
+      9,
+      12,
+      15,
+      24
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.919216",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024140",
+    "date": "2024-12-05",
+    "red_balls": [
+      4,
+      7,
+      8,
+      17,
+      22,
+      26
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.919220",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024139",
+    "date": "2024-12-03",
+    "red_balls": [
+      15,
+      16,
+      20,
+      22,
+      23,
+      29
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.919226",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024138",
+    "date": "2024-12-01",
+    "red_balls": [
+      2,
+      8,
+      11,
+      21,
+      27,
+      27
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-03-28T23:46:35.919231",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024137",
+    "date": "2024-11-28",
+    "red_balls": [
+      4,
+      9,
+      10,
+      19,
+      26,
+      27
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.919235",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024136",
+    "date": "2024-11-26",
+    "red_balls": [
+      5,
+      11,
+      21,
+      25,
+      26,
+      31
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.919240",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024135",
+    "date": "2024-11-24",
+    "red_balls": [
+      5,
+      11,
+      17,
+      18,
+      30,
+      31
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.919246",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024134",
+    "date": "2024-11-21",
+    "red_balls": [
+      1,
+      8,
+      13,
+      16,
+      20,
+      24
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.919252",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024133",
+    "date": "2024-11-19",
+    "red_balls": [
+      5,
+      11,
+      11,
+      27,
+      30,
+      33
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.919257",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024132",
+    "date": "2024-11-17",
+    "red_balls": [
+      3,
+      3,
+      14,
+      25,
+      27,
+      28
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.919261",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024131",
+    "date": "2024-11-14",
+    "red_balls": [
+      4,
+      5,
+      11,
+      15,
+      20,
+      32
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.919266",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024130",
+    "date": "2024-11-12",
+    "red_balls": [
+      2,
+      4,
+      12,
+      17,
+      18,
+      19
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.919271",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024129",
+    "date": "2024-11-10",
+    "red_balls": [
+      9,
+      10,
+      13,
+      19,
+      24,
+      32
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.919276",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024128",
+    "date": "2024-11-07",
+    "red_balls": [
+      2,
+      6,
+      13,
+      18,
+      18,
+      20
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.919280",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024127",
+    "date": "2024-11-05",
+    "red_balls": [
+      2,
+      3,
+      13,
+      20,
+      25,
+      27
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.919286",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024126",
+    "date": "2024-11-03",
+    "red_balls": [
+      14,
+      18,
+      23,
+      24,
+      26,
+      33
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.919457",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024125",
+    "date": "2024-10-31",
+    "red_balls": [
+      2,
+      6,
+      13,
+      14,
+      18,
+      30
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.919472",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024124",
+    "date": "2024-10-29",
+    "red_balls": [
+      4,
+      15,
+      17,
+      21,
+      25,
+      30
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919480",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024123",
+    "date": "2024-10-27",
+    "red_balls": [
+      5,
+      21,
+      22,
+      26,
+      30,
+      33
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.919486",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024122",
+    "date": "2024-10-24",
+    "red_balls": [
+      5,
+      7,
+      9,
+      16,
+      17,
+      29
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.919492",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024121",
+    "date": "2024-10-22",
+    "red_balls": [
+      3,
+      3,
+      10,
+      13,
+      17,
+      27
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.919497",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024120",
+    "date": "2024-10-20",
+    "red_balls": [
+      1,
+      7,
+      9,
+      11,
+      15,
+      18
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.919503",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024119",
+    "date": "2024-10-17",
+    "red_balls": [
+      2,
+      3,
+      26,
+      27,
+      29,
+      31
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.919511",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024118",
+    "date": "2024-10-15",
+    "red_balls": [
+      1,
+      4,
+      5,
+      6,
+      11,
+      23
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.919525",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024117",
+    "date": "2024-10-13",
+    "red_balls": [
+      4,
+      16,
+      21,
+      29,
+      31,
+      32
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.919536",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024116",
+    "date": "2024-10-10",
+    "red_balls": [
+      5,
+      11,
+      20,
+      22,
+      31,
+      32
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.919545",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024115",
+    "date": "2024-10-08",
+    "red_balls": [
+      3,
+      10,
+      11,
+      19,
+      27,
+      28
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.919551",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024114",
+    "date": "2024-10-06",
+    "red_balls": [
+      7,
+      11,
+      18,
+      24,
+      27,
+      32
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.919556",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024113",
+    "date": "2024-09-29",
+    "red_balls": [
+      4,
+      5,
+      23,
+      24,
+      26,
+      31
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919561",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024112",
+    "date": "2024-09-26",
+    "red_balls": [
+      8,
+      11,
+      16,
+      25,
+      29,
+      32
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.919568",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024111",
+    "date": "2024-09-24",
+    "red_balls": [
+      2,
+      2,
+      11,
+      12,
+      14,
+      30
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.919574",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024110",
+    "date": "2024-09-22",
+    "red_balls": [
+      4,
+      13,
+      17,
+      23,
+      25,
+      33
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.919579",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024109",
+    "date": "2024-09-19",
+    "red_balls": [
+      3,
+      4,
+      24,
+      28,
+      29,
+      33
+    ],
+    "blue_ball": 9,
+    "timestamp": "2026-03-28T23:46:35.919584",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024108",
+    "date": "2024-09-17",
+    "red_balls": [
+      2,
+      4,
+      9,
+      18,
+      23,
+      30
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.919589",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024107",
+    "date": "2024-09-15",
+    "red_balls": [
+      1,
+      8,
+      9,
+      13,
+      16,
+      17
+    ],
+    "blue_ball": 9,
+    "timestamp": "2026-03-28T23:46:35.919594",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024106",
+    "date": "2024-09-12",
+    "red_balls": [
+      3,
+      8,
+      11,
+      22,
+      31,
+      33
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.919599",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024105",
+    "date": "2024-09-10",
+    "red_balls": [
+      3,
+      3,
+      17,
+      19,
+      25,
+      29
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.919603",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024104",
+    "date": "2024-09-08",
+    "red_balls": [
+      5,
+      16,
+      23,
+      24,
+      26,
+      29
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.919608",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024103",
+    "date": "2024-09-05",
+    "red_balls": [
+      12,
+      21,
+      23,
+      27,
+      32,
+      33
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.919612",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024102",
+    "date": "2024-09-03",
+    "red_balls": [
+      9,
+      15,
+      18,
+      21,
+      22,
+      25
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.919618",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024101",
+    "date": "2024-09-01",
+    "red_balls": [
+      8,
+      12,
+      15,
+      17,
+      19,
+      30
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.919622",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024100",
+    "date": "2024-08-29",
+    "red_balls": [
+      13,
+      14,
+      19,
+      20,
+      27,
+      30
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.919627",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024099",
+    "date": "2024-08-27",
+    "red_balls": [
+      4,
+      12,
+      17,
+      24,
+      26,
+      27
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.919632",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024098",
+    "date": "2024-08-25",
+    "red_balls": [
+      3,
+      3,
+      8,
+      10,
+      20,
+      30
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.919636",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024097",
+    "date": "2024-08-22",
+    "red_balls": [
+      4,
+      10,
+      12,
+      13,
+      18,
+      30
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.919641",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024096",
+    "date": "2024-08-20",
+    "red_balls": [
+      2,
+      7,
+      14,
+      18,
+      23,
+      24
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.919646",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024095",
+    "date": "2024-08-18",
+    "red_balls": [
+      2,
+      4,
+      6,
+      9,
+      14,
+      16
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.919650",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024094",
+    "date": "2024-08-15",
+    "red_balls": [
+      6,
+      13,
+      17,
+      22,
+      25,
+      27
+    ],
+    "blue_ball": 9,
+    "timestamp": "2026-03-28T23:46:35.919655",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024093",
+    "date": "2024-08-13",
+    "red_balls": [
+      1,
+      5,
+      7,
+      11,
+      12,
+      15
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.919660",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024092",
+    "date": "2024-08-11",
+    "red_balls": [
+      3,
+      8,
+      11,
+      12,
+      18,
+      29
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.919665",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024091",
+    "date": "2024-08-08",
+    "red_balls": [
+      13,
+      15,
+      16,
+      19,
+      20,
+      24
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.919669",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024090",
+    "date": "2024-08-06",
+    "red_balls": [
+      7,
+      11,
+      17,
+      24,
+      31,
+      32
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.919674",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024089",
+    "date": "2024-08-04",
+    "red_balls": [
+      3,
+      3,
+      6,
+      9,
+      15,
+      18
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919679",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024088",
+    "date": "2024-08-01",
+    "red_balls": [
+      3,
+      8,
+      10,
+      17,
+      30,
+      32
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.919684",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024087",
+    "date": "2024-07-30",
+    "red_balls": [
+      3,
+      9,
+      18,
+      19,
+      20,
+      26
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919688",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024086",
+    "date": "2024-07-28",
+    "red_balls": [
+      3,
+      17,
+      19,
+      20,
+      23,
+      25
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.919693",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024085",
+    "date": "2024-07-25",
+    "red_balls": [
+      2,
+      7,
+      15,
+      15,
+      21,
+      23
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.919698",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024084",
+    "date": "2024-07-23",
+    "red_balls": [
+      2,
+      9,
+      10,
+      13,
+      18,
+      19
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.919704",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024083",
+    "date": "2024-07-21",
+    "red_balls": [
+      3,
+      9,
+      14,
+      29,
+      32,
+      33
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.919709",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024082",
+    "date": "2024-07-18",
+    "red_balls": [
+      2,
+      9,
+      12,
+      13,
+      16,
+      17
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.919714",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024081",
+    "date": "2024-07-16",
+    "red_balls": [
+      2,
+      5,
+      12,
+      16,
+      17,
+      23
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.919719",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024080",
+    "date": "2024-07-14",
+    "red_balls": [
+      6,
+      11,
+      12,
+      27,
+      29,
+      30
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.919723",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024079",
+    "date": "2024-07-11",
+    "red_balls": [
+      2,
+      6,
+      6,
+      7,
+      16,
+      23
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.919728",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024078",
+    "date": "2024-07-09",
+    "red_balls": [
+      5,
+      9,
+      14,
+      21,
+      22,
+      26
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.919734",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024077",
+    "date": "2024-07-07",
+    "red_balls": [
+      2,
+      2,
+      6,
+      14,
+      14,
+      17
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.919739",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024076",
+    "date": "2024-07-04",
+    "red_balls": [
+      4,
+      22,
+      27,
+      29,
+      32,
+      32
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.919745",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024075",
+    "date": "2024-07-02",
+    "red_balls": [
+      3,
+      5,
+      8,
+      18,
+      22,
+      28
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.919750",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024074",
+    "date": "2024-06-30",
+    "red_balls": [
+      7,
+      8,
+      10,
+      22,
+      24,
+      32
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.919755",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024073",
+    "date": "2024-06-27",
+    "red_balls": [
+      3,
+      9,
+      12,
+      18,
+      28,
+      30
+    ],
+    "blue_ball": 1,
+    "timestamp": "2026-03-28T23:46:35.919759",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024072",
+    "date": "2024-06-25",
+    "red_balls": [
+      4,
+      11,
+      20,
+      21,
+      23,
+      27
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.919763",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024071",
+    "date": "2024-06-23",
+    "red_balls": [
+      1,
+      3,
+      19,
+      28,
+      28,
+      30
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.919768",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024070",
+    "date": "2024-06-20",
+    "red_balls": [
+      4,
+      13,
+      18,
+      20,
+      22,
+      28
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.919773",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024069",
+    "date": "2024-06-18",
+    "red_balls": [
+      6,
+      13,
+      20,
+      21,
+      24,
+      32
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.919777",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024068",
+    "date": "2024-06-16",
+    "red_balls": [
+      1,
+      2,
+      7,
+      9,
+      12,
+      20
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919783",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024067",
+    "date": "2024-06-13",
+    "red_balls": [
+      7,
+      11,
+      11,
+      25,
+      29,
+      31
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.919788",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024066",
+    "date": "2024-06-11",
+    "red_balls": [
+      8,
+      9,
+      12,
+      22,
+      26,
+      32
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.919793",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024065",
+    "date": "2024-06-09",
+    "red_balls": [
+      3,
+      5,
+      9,
+      10,
+      19,
+      22
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.919797",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024064",
+    "date": "2024-06-06",
+    "red_balls": [
+      6,
+      8,
+      17,
+      18,
+      28,
+      30
+    ],
+    "blue_ball": 5,
+    "timestamp": "2026-03-28T23:46:35.919802",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024063",
+    "date": "2024-06-04",
+    "red_balls": [
+      7,
+      14,
+      16,
+      23,
+      28,
+      32
+    ],
+    "blue_ball": 4,
+    "timestamp": "2026-03-28T23:46:35.919806",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024062",
+    "date": "2024-06-02",
+    "red_balls": [
+      2,
+      7,
+      10,
+      16,
+      17,
+      18
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.919811",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024061",
+    "date": "2024-05-30",
+    "red_balls": [
+      2,
+      8,
+      18,
+      19,
+      22,
+      25
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-03-28T23:46:35.919816",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024060",
+    "date": "2024-05-28",
+    "red_balls": [
+      2,
+      6,
+      8,
+      10,
+      12,
+      22
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.919820",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024059",
+    "date": "2024-05-26",
+    "red_balls": [
+      3,
+      3,
+      13,
+      14,
+      25,
+      31
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.919825",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024058",
+    "date": "2024-05-23",
+    "red_balls": [
+      8,
+      12,
+      13,
+      17,
+      27,
+      29
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.919829",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024057",
+    "date": "2024-05-21",
+    "red_balls": [
+      3,
+      8,
+      17,
+      18,
+      23,
+      31
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.919834",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024056",
+    "date": "2024-05-19",
+    "red_balls": [
+      5,
+      18,
+      20,
+      24,
+      25,
+      26
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.919838",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024055",
+    "date": "2024-05-16",
+    "red_balls": [
+      2,
+      6,
+      7,
+      9,
+      16,
+      24
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.919843",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024054",
+    "date": "2024-05-14",
+    "red_balls": [
+      8,
+      13,
+      20,
+      25,
+      31,
+      32
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.919847",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024053",
+    "date": "2024-05-12",
+    "red_balls": [
+      7,
+      14,
+      21,
+      22,
+      28,
+      33
+    ],
+    "blue_ball": 7,
+    "timestamp": "2026-03-28T23:46:35.919852",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024052",
+    "date": "2024-05-09",
+    "red_balls": [
+      2,
+      7,
+      10,
+      11,
+      15,
+      17
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.919857",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024051",
+    "date": "2024-05-07",
+    "red_balls": [
+      5,
+      9,
+      13,
+      20,
+      23,
+      28
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.919861",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024050",
+    "date": "2024-05-05",
+    "red_balls": [
+      3,
+      3,
+      7,
+      10,
+      13,
+      22
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-03-28T23:46:35.919867",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024049",
+    "date": "2024-05-02",
+    "red_balls": [
+      12,
+      15,
+      17,
+      23,
+      26,
+      32
+    ],
+    "blue_ball": 11,
+    "timestamp": "2026-03-28T23:46:35.919871",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024048",
+    "date": "2024-04-30",
+    "red_balls": [
+      2,
+      8,
+      15,
+      19,
+      26,
+      29
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-03-28T23:46:35.919876",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024047",
+    "date": "2024-04-28",
+    "red_balls": [
+      7,
+      8,
+      21,
+      26,
+      29,
+      30
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.919881",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024046",
+    "date": "2024-04-25",
+    "red_balls": [
+      2,
+      9,
+      10,
+      11,
+      17,
+      26
+    ],
+    "blue_ball": 15,
+    "timestamp": "2026-03-28T23:46:35.919886",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024045",
+    "date": "2024-04-23",
+    "red_balls": [
+      2,
+      6,
+      19,
+      23,
+      24,
+      28
+    ],
+    "blue_ball": 3,
+    "timestamp": "2026-03-28T23:46:35.919898",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024044",
+    "date": "2024-04-21",
+    "red_balls": [
+      3,
+      3,
+      17,
+      25,
+      26,
+      32
+    ],
+    "blue_ball": 6,
+    "timestamp": "2026-03-28T23:46:35.919903",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024043",
+    "date": "2024-04-18",
+    "red_balls": [
+      4,
+      6,
+      7,
+      14,
+      15,
+      24
+    ],
+    "blue_ball": 8,
+    "timestamp": "2026-03-28T23:46:35.919908",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024042",
+    "date": "2024-04-16",
+    "red_balls": [
+      2,
+      3,
+      5,
+      14,
+      24,
+      26
+    ],
+    "blue_ball": 14,
+    "timestamp": "2026-03-28T23:46:35.919913",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024041",
+    "date": "2024-04-14",
+    "red_balls": [
+      3,
+      3,
+      12,
+      22,
+      25,
+      29
+    ],
+    "blue_ball": 16,
+    "timestamp": "2026-03-28T23:46:35.919918",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024040",
+    "date": "2024-04-11",
+    "red_balls": [
+      11,
+      14,
+      18,
+      19,
+      23,
+      26
+    ],
+    "blue_ball": 2,
+    "timestamp": "2026-03-28T23:46:35.919925",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024039",
+    "date": "2024-04-09",
+    "red_balls": [
+      1,
+      3,
+      12,
+      26,
+      29,
+      30
+    ],
+    "blue_ball": 10,
+    "timestamp": "2026-03-28T23:46:35.919929",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024038",
+    "date": "2024-04-07",
+    "red_balls": [
+      3,
+      8,
+      10,
+      18,
+      23,
+      27
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.919934",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024037",
+    "date": "2024-04-04",
+    "red_balls": [
+      1,
+      4,
+      5,
+      6,
+      12,
+      14
+    ],
+    "blue_ball": 13,
+    "timestamp": "2026-03-28T23:46:35.919939",
+    "source": "manual_import"
+  },
+  {
+    "issue": "2024036",
+    "date": "2024-04-02",
+    "red_balls": [
+      1,
+      2,
+      3,
+      9,
+      12,
+      28
+    ],
+    "blue_ball": 12,
+    "timestamp": "2026-03-28T23:46:35.919944",
+    "source": "manual_import"
+  }
+]

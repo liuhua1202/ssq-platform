@@ -14,7 +14,7 @@
 
 ---## ✨ 特性
 
-- 🕷️ **多源爬虫** — 500 彩票网 / 中彩网 / 福彩官网，自动 fallback，**Playwright 兜底** JS 渲染
+- 🕷️ **多源爬虫** — 500 彩票网 / 中彩网 / 福彩官网，自动 fallback，**Scrapling 三层链兜底** (HTTP+TLS指纹 → Firefox 隐身反 Cloudflare → Playwright JS 渲染)
 - 🧮 **13 种预测算法** — 加权随机、马尔可夫链、K-Means 聚类、遗传算法、蒙特卡洛、综合推荐等
 - 📊 **历史数据分析** — 热号 / 冷号 / 遗漏值 / 和值分布 / 奇偶比 / 连号 / AC 指数
 - 💾 **收藏号码 + 自动对奖** — 一键检查最新一期是否中奖，奖金等级自动判定
@@ -29,7 +29,7 @@
 
 - **Python 3.9+**（推荐 3.11）
 - **pip** 包管理
-- **Playwright 浏览器**（仅首次运行爬虫时需要）
+- **Scrapling 浏览器二进制**（仅首次运行爬虫时需要，执行 `scrapling install` 拉 Chromium + 改版 Firefox）
 
 ### 安装
 
@@ -139,8 +139,8 @@ const resp = await fetch('/api/predict', {
 
 - **[Flask 3.0](https://flask.palletsprojects.com/)** — Web 框架
 - **[Flask-Limiter](https://flask-limiter.readthedocs.io/)** — 全局限流（`200/天, 50/小时`，开发模式默认内存存储，生产建议配 Redis）
-- **[Playwright + playwright-stealth](https://playwright.dev/python/)** — 反爬虫对抗 + JS 渲染兜底
-- **[beautifulsoup4](https://www.crummy.com/software/BeautifulSoup/)** — HTML 解析
+- **[Scrapling](https://github.com/D4Vinci/Scrapling)** — 单库三层爬虫栈: `Fetcher` (HTTP+TLS 指纹) / `StealthyFetcher` (Firefox 隐身 + Cloudflare Turnstile 自动解) / `DynamicFetcher` (Playwright JS 渲染) + 自适应选择器 (`adaptive=True`, 网站改版后自动重新定位元素)
+- **[beautifulsoup4](https://www.crummy.com/software/BeautifulSoup/)** — HTML 解析 (Scrapling Selector 兜底)
 - **[fake-useragent](https://github.com/fake-useragent/fake-useragent)** — UA 随机化
 - **自研内存缓存** — TTL + LRU 淘汰，零外部依赖
 - **PyInstaller** — Windows 单文件打包（可选）
@@ -180,7 +180,7 @@ ssq-platform/
 │   │   ├── state.py              #   CrawlState - 防阻塞 + 60s 缓存
 │   │   ├── backup.py             #   BackupManager - 备份/清理/恢复
 │   │   ├── parser.py             #   IssueParser - 期号/记录解析 (纯函数)
-│   │   ├── fetcher.py            #   CWLFetcher - 网络层 (curl_cffi + playwright)
+│   │   ├── fetcher.py            #   CWLFetcher - 网络层 (Scrapling 三层 fallback)
 │   │   └── crawler.py            #   Crawler - 顶层协调器
 │   └── predictor.py             # 算法调度器 + LRU 实例缓存
 │
@@ -316,9 +316,10 @@ fetch('/api/predict', {
 **Q: 爬虫抓取失败**
 
 A: 500 彩票网 / 中彩网经常更新反爬策略，可能需要：
-1. 检查 `playwright install chromium` 是否完成
+1. 检查 `scrapling install` 是否完成（下载 Chromium + 改版 Firefox）
 2. 查看 `logs/app.log` 详细错误
 3. 如果用了 VPN / 代理，可能被识别
+4. **网站改版导致选择器失效**：用 `IssueParser.parse_cwl_html_with_selector(response, adaptive=True, auto_save=True)` 切换到 Scrapling 自适应解析（首次 auto_save 抓快照，之后 adaptive 自动重新定位）
 
 > ⚠️ **法律提示**：高频爬取第三方网站可能违反其服务条款 / robots.txt。请控制频率（默认 `delay=1s`），并将本工具定位为**个人学习**用途。
 

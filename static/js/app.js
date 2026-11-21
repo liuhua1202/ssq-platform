@@ -57,27 +57,45 @@ async function loadModule(modulePath, moduleName) {
  * 初始化应用
  */
 async function initApp() {
-    console.log('%c 双色球预测平台 (Switch 主题版) 启动中...', 'color: #4CAF50; font-weight: bold; font-size: 14px;');
-    console.log(`版本：20260403 - 优化版`);
+    console.log('%c 双色球预测平台 (Pyodide/WebView 版) 启动中...', 'color: #4CAF50; font-weight: bold; font-size: 14px;');
+    console.log(`版本：20260429 - Pyodide 离线版`);
 
     const loadingEl = document.getElementById('loading');
     if (loadingEl) {
-        loadingEl.innerHTML = '<p style="color: #666;">正在加载模块...</p>';
+        loadingEl.innerHTML = '<p style="color: #666;">正在初始化 Python 运行时...</p>';
+    }
+
+    // 等待 Pyodide + 算法 + IndexedDB seed 完成
+    try {
+        if (window.pyBridge && window.pyBridge.ready) {
+            // api.js 顶层 await 会等待 Pyodide + IndexedDB seed 完成
+            // v2.3.7 fix: 重写 fetchLatestLottery / fetchHistoryLottery 走 cwl.gov.cn JSON API
+            //              之前两个 parser (_parseZhcwHtml/_parseCwlHtml) 都是 TODO stub
+            await import('./modules/api.js?v=2.3.7');
+            console.log('api.js loaded, data seeded');
+        }
+    } catch (e) {
+        console.error('Pyodide 初始化失败:', e);
+        if (loadingEl) {
+            loadingEl.innerHTML = `<p style="color: #f44336;">Python 运行时加载失败: ${e.message}</p>
+                <p style="color: #666; font-size: 12px;">请检查网络连接后刷新页面</p>`;
+        }
+        return;
     }
 
     try {
         // 异步加载所有模块，带错误处理
         const modules = {};
         const moduleList = [
-            { path: './modules/predict.js', name: 'PredictModule', key: 'predict' },
-            { path: './modules/history.js', name: 'HistoryModule', key: 'history' },
-            { path: './modules/analysis.js', name: 'AnalysisModule', key: 'analysis' },
-            { path: './modules/check.js', name: 'CheckModule', key: 'check' },
-            { path: './modules/myNumbers.js', name: 'MyNumbersModule', key: 'myNumbers' },
-            { path: './modules/dataManager.js', name: 'DataManagerModule', key: 'dataManager' },
-            { path: './modules/export.js', name: 'ExportModule', key: 'export' },
-            { path: './modules/onlineFetch.js', name: 'OnlineFetchModule', key: 'onlineFetch' },
-            { path: './modules/utils.js', name: 'getCachedHistory', key: 'utils' }
+            { path: './modules/predict.js?v=2.3.6', name: 'PredictModule', key: 'predict' },
+            { path: './modules/history.js?v=2.3.6', name: 'HistoryModule', key: 'history' },
+            { path: './modules/analysis.js?v=2.3.6', name: 'AnalysisModule', key: 'analysis' },
+            { path: './modules/check.js?v=2.3.6', name: 'CheckModule', key: 'check' },
+            { path: './modules/myNumbers.js?v=2.3.6', name: 'MyNumbersModule', key: 'myNumbers' },
+            { path: './modules/dataManager.js?v=2.3.6', name: 'DataManagerModule', key: 'dataManager' },
+            { path: './modules/export.js?v=2.3.6', name: 'ExportModule', key: 'export' },
+            { path: './modules/onlineFetch.js?v=2.3.6', name: 'OnlineFetchModule', key: 'onlineFetch' },
+            { path: './modules/utils.js?v=2.3.6', name: 'getCachedHistory', key: 'utils' }
         ];
 
         // 逐个加载模块，避免一个失败全部失败
@@ -146,6 +164,11 @@ async function initApp() {
         if (loadingEl) {
             loadingEl.innerHTML = '<p style="color: #4CAF50;">✓ 平台已就绪</p>';
             setTimeout(() => loadingEl.style.display = 'none', 1000);
+        }
+
+        // 隐藏 Pyodide splash
+        if (typeof window.__HIDE_SPLASH__ === 'function') {
+            window.__HIDE_SPLASH__();
         }
 
         console.log('%c 双色球预测平台初始化完成', 'color: #4CAF50; font-weight: bold;');

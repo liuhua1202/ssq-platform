@@ -5,7 +5,7 @@
 Flask==3.0.3
 Werkzeug==3.0.3
 
-# HTTP 请求库
+# HTTP 请求库 (保留作为 scrapling 未安装时的兜底)
 requests==2.32.3
 urllib3==2.2.2
 
@@ -17,9 +17,22 @@ lxml==5.2.2
 Flask-Limiter==3.8.0
 limits==3.13.0
 
-# 反爬虫对抗
+# ============================================================
+# 爬虫栈 (v2.2 重构: 全面切换为 Scrapling)
+# ============================================================
+# 单一库替换旧的 requests + curl_cffi + playwright + playwright-stealth 四件套
+# 三层 fallback:
+#   Layer 1: scrapling.fetchers.Fetcher         (HTTP + Chrome TLS 指纹, 最快)
+#   Layer 2: scrapling.fetchers.StealthyFetcher  (改版 Firefox + Cloudflare Turnstile 自动解)
+#   Layer 3: scrapling.fetchers.DynamicFetcher   (复用 Playwright Chromium, JS 渲染)
+scrapling[fetchers]>=0.4.15
+
+# 浏览器二进制 (Playwright Chromium + Scrapling 改版 Firefox)
+# 首次安装后必须执行: scrapling install
+# 只在首次需要时下载 (~150MB Chromium + ~150MB Firefox)
 playwright==1.48.0
-playwright-stealth==1.0.6
+
+# 可选: fake-useragent (Scrapling 自带, 保留作为兜底)
 fake-useragent==1.5.1
 
 # 数据处理（已移除 numpy，使用内置函数替代）

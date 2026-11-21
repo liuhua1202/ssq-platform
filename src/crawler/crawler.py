@@ -145,9 +145,10 @@ class Crawler:
     def fetch_latest_lottery(self) -> Dict:
         """从多个来源获取最新一期开奖信息 (支持备用数据源).
 
-        数据源优先级 (按可靠性):
+        数据源优先级 (按可靠性, v2.2 改造):
           1. 500彩票网开奖页面 (HTML 结构稳定, 但常被反爬截断)
-          2. 福彩官网 (cwl.gov.cn) - 注意此站有反爬墙 (返回 403 时需 Playwright)
+          2. 福彩官网 HTML (cwl.gov.cn) - 此站是搜索表单, 多数情况下 0 记录
+          3. **cwl.gov.cn 官方 JSON API** (新接入, 最稳, 推荐)
 
         注意: 中彩网 (zhcw.com) 已移除 - 它是 Vue SPA, requests 拿到的只是骨架 HTML
         + Vue 模板占位符, BeautifulSoup 解析会误把 loader/demo 元素当作开奖数据.
@@ -212,6 +213,32 @@ class Crawler:
                 logger.error(f"{source['name']} 异常: {repr(e)}")
                 continue
 
+        # v2.2 新增: 走 cwl.gov.cn 官方 JSON API (前两个 HTML 源都失败时兜底)
+        logger.info("HTML 源全部失败, 尝试 cwl.gov.cn 官方 JSON API")
+        try:
+            api_result = self.fetcher.fetch_cwl_api(page_no=1, page_size=1)
+            if api_result.get('success') and api_result.get('data'):
+                first = api_result['data'][0]
+                issue = first.get('issue')
+                red_balls = first.get('red_balls', [])
+                blue_ball = first.get('blue_ball')
+                if is_valid_lottery_data(issue, red_balls, blue_ball, ''):
+                    logger.info(f"成功从 cwl.gov.cn JSON API 获取数据")
+                    return {
+                        'success': True,
+                        'issue': issue,
+                        'date': first.get('date'),
+                        'red_balls': red_balls,
+                        'blue_ball': blue_ball,
+                        'source': 'cwl.gov.cn JSON API',
+                    }
+            failed_sources.append('cwl.gov.cn JSON API')
+            last_error = api_result.get('message', 'API 响应无数据')
+        except Exception as e:
+            failed_sources.append('cwl.gov.cn JSON API')
+            last_error = repr(e)
+            logger.error(f"cwl.gov.cn JSON API 异常: {repr(e)}")
+
         error_detail = (
             f"所有数据源均获取失败. 失败源: {', '.join(failed_sources)}. "
             f"最后错误: {last_error}. "
@@ -234,48 +261,31 @@ class Crawler:
 
     @staticmethod
     def _http_get_with_tls_spoof(url: str, headers: dict, timeout: int = 15):
-        """HTTP GET, curl_cffi 优先 (TLS 指纹伪造), 回退 requests.
+        """向后兼容的 HTTP GET 入口 (v2.2 起已迁移到 Scrapling, 此方法仅保留签名).
 
-        抛出的异常:
-          - requests.RequestException (或其子类): 网络错误, 4xx/5xx
-          - 其他: 不可恢复错误
+        实际抓取走 self.fetcher.fetch_html(url), 此方法已废弃,
+        仅在老测试或外部代码中可能被引用, 留作 noop 桥接.
+
+        Returns:
+            None  (实际抓取已由 _fetch_latest_from_source 内部完成)
         """
-        # 优先 curl_cffi
-        try:
-            from curl_cffi import requests as curl_requests
-            logger.debug(f"使用 curl_cffi 抓取: {url}")
-            return curl_requests.get(
-                url, headers=headers, impersonate="chrome120", timeout=timeout
-            )
-        except ImportError:
-            logger.debug("curl_cffi 未安装, 回退到标准 requests")
-        except Exception as e:
-            logger.warning(f"curl_cffi 失败, 回退 requests: {e}")
+        logger.debug(
+            "_http_get_with_tls_spoof 已废弃, 请改用 self.fetcher.fetch_html(url). "
+            "此方法保留仅为向后兼容."
+        )
+        return None
 
-        # 回退: 标准 requests
-        return requests.get(url, headers=headers, timeout=timeout)
+    def _fetch_latest_from_source(self, url: str, encoding: str = 'utf-8', headers: Optional[dict] = None) -> Dict:
+        """从指定 URL 获取最新开奖信息 (走 Scrapling 三层 fallback 链).
 
-    def _fetch_latest_from_source(self, url: str, encoding: str, headers: dict) -> Dict:
-        """从指定 URL 获取最新开奖信息 (curl_cffi 优先, 回退 requests).
-
-        curl_cffi 通过模拟 Chrome 120 的 TLS 指纹来绕过反爬墙,
-        对国内彩票站反爬更有效 (500网, cwl.gov.cn 等).
+        底层走 CWLFetcher -> Fetcher/StealthyFetcher/DynamicFetcher,
+        encoding 参数保留仅为向后兼容 (Scrapling 自动处理编码).
         """
         try:
-            response = self._http_get_with_tls_spoof(url, headers, timeout=15)
-            response.raise_for_status()
-
-            # 处理编码问题
-            if encoding == 'gbk':
-                try:
-                    html = response.content.decode('gbk')
-                except UnicodeDecodeError:
-                    try:
-                        html = response.content.decode('gb18030')
-                    except UnicodeDecodeError:
-                        html = response.content.decode('utf-8', errors='ignore')
-            else:
-                html = response.text
+            # 走新的 Scrapling 三层链 (Fetcher → StealthyFetcher → DynamicFetcher)
+            html = self.fetcher.fetch_html(url)
+            if not html:
+                return {'success': False, 'message': f'所有层都失败: {url}'}
 
             soup = BeautifulSoup(html, 'html.parser')
 
@@ -372,7 +382,33 @@ class Crawler:
     # ============================================================
 
     def fetch_lottery_history(self, page: int = 1, page_size: int = 20) -> Dict:
-        """从 500 彩票网主页面获取最近 10 期历史开奖记录."""
+        """从多个来源获取历史开奖记录 (v2.2 改造: 优先 JSON API).
+
+        数据源优先级 (按可靠性):
+          1. **cwl.gov.cn 官方 JSON API** (最稳, 优先)
+          2. 500 彩票网主页面 HTML (500.com, 经常被反爬截断)
+
+        返回:
+          成功: {'success': True, 'data': [{issue, date, red_balls, blue_ball}, ...], 'source': str}
+          失败: {'success': False, 'message': str}
+        """
+        # 1) 优先走 cwl.gov.cn JSON API
+        # 一次拉 page_size 条数据, page_no 从 1 开始
+        logger.info("优先尝试 cwl.gov.cn JSON API 获取历史数据")
+        try:
+            api_result = self.fetcher.fetch_cwl_api(page_no=page, page_size=min(page_size, 30))
+            if api_result.get('success') and api_result.get('data'):
+                return {
+                    'success': True,
+                    'data': api_result['data'],
+                    'source': 'cwl.gov.cn JSON API',
+                    'total': api_result.get('total', len(api_result['data'])),
+                }
+        except Exception as e:
+            logger.warning(f"cwl.gov.cn JSON API 历史抓取异常: {e}")
+
+        # 2) 降级到 500.com HTML
+        logger.info("JSON API 失败, 降级到 500.com HTML")
         source = {
             'url': "https://kaijiang.500.com/ssq.shtml",
             'encoding': 'utf-8',
@@ -387,18 +423,26 @@ class Crawler:
             result = self._fetch_history_from_source(
                 source['url'], source['encoding'], source['headers'], page_size
             )
+            if result.get('success'):
+                result['source'] = '500.com (HTML)'
             return result
         except Exception as e:
             logger.warning(f"历史抓取异常: {e}")
             return {'success': False, 'message': f'所有数据源均获取失败: {e}'}
 
-    def _fetch_history_from_source(self, url: str, encoding: str,
-                                   headers: dict, page_size: int) -> Dict:
-        """从指定 URL 获取历史开奖记录 (500 彩票网专用解析)."""
-        response = requests.get(url, headers=headers, timeout=15)
-        response.raise_for_status()
+    def _fetch_history_from_source(self, url: str, encoding: str = 'utf-8',
+                                   headers: Optional[dict] = None,
+                                   page_size: int = 20) -> Dict:
+        """从指定 URL 获取历史开奖记录 (500 彩票网专用解析).
 
-        html = response.content.decode(encoding, errors='ignore') if encoding == 'gbk' else response.text
+        底层走 CWLFetcher (Scrapling 三层 fallback).
+        encoding/headers 参数保留仅为向后兼容 (Scrapling 自动处理).
+        """
+        # 走新的 Scrapling 三层链
+        html = self.fetcher.fetch_html(url)
+        if not html:
+            return {'success': False, 'message': f'所有层都失败: {url}', 'data': []}
+
         soup = BeautifulSoup(html, 'html.parser')
         lottery_data: List[Dict] = []
 

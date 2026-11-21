@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta name="theme-color" content="#6366f1">
     <meta name="description" content="双色球预测平台 - 基于历史数据分析与智能算法的号码预测系统">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>双色球预测平台 - Bunny Scholar 风格</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,6 +31,72 @@
         window.__API_TOKEN_REQUIRED__ = false;
     </script>
     {% endif %}
+
+    <!-- ============ Pyodide / WebView 模式加载 ============
+         pyodide-runner.js: 加载 Pyodide runtime (~14MB) + 算法 zip
+         db.js: IndexedDB 封装 (替代后端 history.json)
+         两个都是 IIFE, 在 window 上挂 pyBridge 和 ssqDB, 同步加载即可
+         启动 splash 由 pyodide-runner.js 内部显示
+    -->
+    <script src="/static/js/pyodide-runner.js?v=2.3.6"></script>
+    <script src="/static/js/db.js?v=2.3.6"></script>
+
+    <!-- 启动 splash (Pyodide 加载期间显示, ready 后由 app.js 隐藏) -->
+    <style>
+        #pyodide-splash {
+            position: fixed; inset: 0; z-index: 9999;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            transition: opacity 0.4s ease;
+        }
+        #pyodide-splash .spinner {
+            width: 56px; height: 56px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 24px;
+        }
+        #pyodide-splash h1 { margin: 0 0 8px 0; font-size: 28px; font-weight: 700; }
+        #pyodide-splash p { margin: 0; opacity: 0.85; font-size: 14px; }
+        #pyodide-splash .progress {
+            margin-top: 24px; font-size: 13px; opacity: 0.7;
+            min-height: 20px; max-width: 80vw; text-align: center;
+            font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+    <div id="pyodide-splash">
+        <div class="spinner"></div>
+        <h1>双色球预测平台</h1>
+        <p>正在加载 Python 运行时…</p>
+        <div class="progress" id="pyodide-progress">初始化中</div>
+    </div>
+    <script>
+        // 监听 pyBridge.log, 更新 splash 进度文字
+        (function () {
+            const el = document.getElementById('pyodide-progress');
+            const origLog = console.log;
+            console.log = function (...args) {
+                origLog.apply(console, args);
+                const msg = args.join(' ');
+                if (msg.includes('[pyBridge]')) {
+                    el.textContent = msg.replace('[pyBridge] ', '');
+                }
+            };
+            // 全局暴露给 app.js: 隐藏 splash
+            window.__HIDE_SPLASH__ = function () {
+                const splash = document.getElementById('pyodide-splash');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    setTimeout(() => splash.remove(), 400);
+                }
+            };
+        })();
+    </script>
     <!-- 注意: api.js 是 ES module, 由 app.js 通过 import() 动态加载,
          不能用 <script src="..."> 加载 (会重复执行并违反 module 语义) -->
 </head>
@@ -512,7 +581,7 @@
         </footer>
     </div>
 
-    <script type="module" src="/static/js/app.js?v=20260429"></script>
+    <script type="module" src="/static/js/app.js?v=2.3.6"></script>
     
     <!-- 暗色模式切换脚本 -->
     <script>

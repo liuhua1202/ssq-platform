@@ -9,9 +9,12 @@
   - IssueParser.parse_seven_numbers(s)              : 解析 7 号码字符串
   - IssueParser.parse_cwl_html(html)                : 从福彩网 HTML 抽取多条记录
 """
+import logging
 import re
 from datetime import datetime
 from typing import List, Dict, Optional, Any
+
+logger = logging.getLogger(__name__)
 
 try:
     from bs4 import BeautifulSoup
@@ -358,5 +361,180 @@ class IssueParser:
                         'red_balls': red_balls,
                         'blue_ball': blue_ball
                     })
+
+        return records
+
+    # ============================================================
+    # Scrapling 自适应解析 (新增, 建议网站改版后切换)
+    # ============================================================
+
+    @staticmethod
+    def parse_cwl_api_json(payload: Dict) -> List[Dict]:
+        """从 cwl.gov.cn 官方 JSON API 响应解析多条历史记录.
+
+        字段映射:
+          payload['result']: list of
+            {
+              'code': '2026104',                 # 期号
+              'date': '2026-09-08(周二)',
+              'red': '11,12,13,19,20,31',         # 6 个红球, 逗号分隔
+              'blue': '03',                       # 1 个蓝球
+              'sales': '333116798',
+              'poolmoney': '798557035',
+              ...
+            }
+
+        Returns:
+            list of {issue, date, red_balls, blue_ball} (与 parse_cwl_html 输出一致)
+        """
+        results = payload.get('result', []) if isinstance(payload, dict) else []
+        if not results:  # None / [] / 缺失都按空处理
+            return []
+        records = []
+
+        for r in results:
+            try:
+                code = r.get('code', '').strip()
+                if not code:
+                    continue
+
+                # 红球 (逗号分隔的 6 个 1-33 数字)
+                red_str = r.get('red', '')
+                red_balls = []
+                for part in red_str.split(','):
+                    part = part.strip()
+                    if part.isdigit():
+                        v = int(part)
+                        if 1 <= v <= 33:
+                            red_balls.append(v)
+
+                # 蓝球 (1 个 1-16 数字)
+                blue_str = r.get('blue', '').strip()
+                blue_ball = int(blue_str) if blue_str.isdigit() else None
+
+                # 校验
+                if len(red_balls) != 6 or blue_ball is None:
+                    continue
+                if not (1 <= blue_ball <= 16):
+                    continue
+
+                # 日期: '2026-09-08(周二)' → '2026-09-08'
+                date_raw = r.get('date', '')
+                date = date_raw.split('(')[0].strip() if date_raw else None
+
+                records.append({
+                    'issue': code,
+                    'date': date,
+                    'red_balls': red_balls,
+                    'blue_ball': blue_ball,
+                })
+            except Exception as e:
+                logger.debug(f"解析单条 API 记录失败: {e}, record={r}")
+                continue
+
+        return records
+
+    @staticmethod
+    def parse_cwl_html_with_selector(response, adaptive: bool = True,
+                                    auto_save: bool = False) -> List[Dict]:
+        """用 Scrapling Selector 解析福彩网历史数据 (支持 adaptive 自适应).
+
+        与 parse_cwl_html 区别:
+          - 接收 Scrapling Response (不是纯字符串)
+          - 使用 CSS selector 替代 BS4 字符串扫描
+          - adaptive=True 时, 网站改版后选择器自动重新定位
+          - 速度比 BS4+html5lib 快 ~1700x (Scrapling benchmark)
+
+        Args:
+            response: Scrapling Fetcher/StealthyFetcher/DynamicFetcher 返回的 Response 对象
+            adaptive: 是否启用自适应选择器 (网站改版后自动找元素)
+            auto_save: 首次调用时设为 True, 之后改为 False (Scrapling 会把元素特征存盘)
+
+        Returns:
+            list of {issue, date, red_balls, blue_ball} 字典
+
+        用法:
+            from src.crawler.fetcher import CWLFetcher
+            fetcher = CWLFetcher()
+            resp = fetcher.fetch('https://www.cwl.gov.cn/ygkj/wqkjgg/ssq/')
+            records = IssueParser.parse_cwl_html_with_selector(
+                resp, adaptive=True, auto_save=True   # 首次
+            )
+            # 后续调用只传 adaptive=True
+        """
+        if response is None:
+            return []
+
+        records = []
+
+        try:
+            # 主选择器: 表格的每一行 (历史开奖记录)
+            rows = response.css('table tr', adaptive=adaptive, auto_save=auto_save)
+        except Exception as e:
+            logger.debug(f"CSS selector 失败, 降级到 BS4 解析: {e}")
+            # 降级: 转字符串 + 老 parser (注意 Scrapling Response 的 text 在 gzip 下可能为空, 用 html_content)
+            html_str = str(response.html_content) if hasattr(response, 'html_content') and response.html_content \
+                else (response.text if hasattr(response, 'text') else str(response))
+            return IssueParser.parse_cwl_html(html_str)
+
+        for row in rows:
+            try:
+                cells = row.css('td, th')
+                if len(cells) < 3:
+                    continue
+
+                cell_texts = [c.text.strip() for c in cells if c.text]
+                full_text = ' '.join(cell_texts)
+
+                # 跳过表头或统计行
+                if '期号' in full_text or '开奖日期' in full_text or '销售额' in full_text:
+                    continue
+
+                nums = re.findall(r'\d+', full_text)
+                if len(nums) < 8:
+                    continue
+
+                # 1. 期号
+                potential_issue = [n for n in nums if len(n) == 7 and n.startswith('20')]
+                if not potential_issue:
+                    continue
+                issue = potential_issue[0]
+
+                # 2. 日期
+                date = None
+                potential_date = [n for n in nums if len(n) == 8 and n.startswith('20')]
+                if potential_date:
+                    date = potential_date[0]
+                    if len(date) == 8:
+                        date = f"{date[:4]}-{date[4:6]}-{date[6:]}"
+
+                # 3. 球号
+                skip_set = {issue}
+                if date:
+                    for part in date.split('-'):
+                        skip_set.add(part)
+                        skip_set.add(part.lstrip('0') or '0')
+
+                temp_balls = []
+                for n in nums:
+                    if n in skip_set:
+                        continue
+                    val = int(n)
+                    if 1 <= val <= 33:
+                        temp_balls.append(val)
+
+                if len(temp_balls) >= 7:
+                    red_balls = temp_balls[:6]
+                    blue_ball = temp_balls[6]
+
+                    if all(1 <= r <= 33 for r in red_balls) and 1 <= blue_ball <= 16:
+                        records.append({
+                            'issue': issue,
+                            'date': date,
+                            'red_balls': red_balls,
+                            'blue_ball': blue_ball
+                        })
+            except Exception:
+                continue
 
         return records

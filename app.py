@@ -143,8 +143,11 @@ def after_request_handler(response):
 
     # 静态文件缓存优化：根据文件类型设置不同缓存时间
     if request.path.startswith('/static/'):
+        # v2.3 修复: src.zip 频繁更新, 加 no-store 防止浏览器 HTTP 缓存阻挠
+        if '/python-lib/' in request.path or request.path.endswith('sw.js'):
+            response.headers['Cache-Control'] = 'no-store, must-revalidate'
         # JS/CSS 文件缓存 1 天（通过文件名哈希更新）
-        if request.path.endswith(('.js', '.css')):
+        elif request.path.endswith(('.js', '.css')):
             response.headers['Cache-Control'] = 'public, max-age=86400, immutable'
         # 图片文件缓存 7 天
         elif request.path.endswith(('.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico')):
@@ -152,8 +155,8 @@ def after_request_handler(response):
         # 其他静态文件缓存 1 小时
         else:
             response.headers['Cache-Control'] = 'public, max-age=3600'
-        
-        response.headers['X-Version'] = '20260429'  # 版本号用于强制更新
+
+        response.headers['X-Version'] = '2.3.1'  # 版本号用于强制更新
 
     return response
 

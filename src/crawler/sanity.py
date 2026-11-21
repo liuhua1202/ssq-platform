@@ -70,13 +70,16 @@ def is_valid_lottery_data(issue, red_balls, blue_ball, source_html: str) -> bool
         return False
 
     # 7) source_html 不能为空或太小 (loader 截断标志)
-    if not source_html or len(source_html) < 5000:
-        return False
+    #    注意: JSON API 路径会传 source_html='', 此处跳过 HTML 相关检查
+    if source_html:
+        if len(source_html) < 5000:
+            return False
 
-    # 8) source_html 必须包含 lottery 关键词 (双色 / 开奖 / 等)
-    lottery_keywords = ['双色球', '开奖', '红球', '蓝球', 'SSQ', 'ssq']
-    keyword_found = any(kw in source_html for kw in lottery_keywords)
-    if not keyword_found:
-        return False
+        # 8) source_html 必须包含 lottery 关键词 (双色 / 开奖 / 等)
+        lottery_keywords = ['双色球', '开奖', '红球', '蓝球', 'SSQ', 'ssq']
+        keyword_found = any(kw in source_html for kw in lottery_keywords)
+        if not keyword_found:
+            return False
+    # else: JSON API 路径, 1-6 项已校验数据本身, 信任即可
 
     return True
